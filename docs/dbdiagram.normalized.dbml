@@ -1,19 +1,32 @@
 Project normalized_resume_profile {
   database_type: 'PostgreSQL'
-  Note: 'Normalized resume schema. ESCO is used as reference DB; normalized result is stored here.'
+  Note: '''
+    Normalized resume schema. ESCO is used as reference DB; normalized result is stored here.
+    Field mapping: see docs/field-mapping.md for full source_section / extractor_mode details.
+  '''
 }
 
-Table candidates {
-  candidate_id varchar [pk, note: 'UUIDなど']
-  source_dataset varchar [not null, note: '1st_data | 2nd_data | 3rd_data | 4th_data | 5th_data']
-  source_record_id varchar [not null]
-  normalizer_version varchar [not null]
-  normalized_at timestamp [not null]
-  normalization_status varchar [not null, note: 'success | partial | failed']
+// ────────────────────────────────────────────────────────────────
+// HTML Section Types (from Issue #6 re-analysis):
+//   NAME (99.8%) | SUMM (99.9%) | HILT (90.5%) | EXPR (100.0%)
+//   EDUC (99.6%) | SKLL (96.5%) | TSKL (1.9%)  | ACCM (52.4%)
+//   AFIL (31.4%) | ADDI (20.4%) | CERT (13.4%)
+//
+// Extractor modes:
+//   as_is | generated | regex | heuristic | esco_matcher | computed | llm_fallback
+// ────────────────────────────────────────────────────────────────
 
-  current_location varchar
-  resume_text text [not null]
-  extraction_confidence decimal(6,5)
+Table candidates {
+  candidate_id varchar [pk, note: 'generated: UUID v4']
+  source_dataset varchar [not null, note: 'as_is: "1st_data" | "2nd_data" | ...']
+  source_record_id varchar [not null, note: 'as_is: MongoDB source_record_id']
+  normalizer_version varchar [not null, note: 'generated: script version string']
+  normalized_at timestamp [not null, note: 'generated: execution timestamp']
+  normalization_status varchar [not null, note: 'computed: success | partial | failed']
+
+  current_location varchar [note: 'section=NAME, mode=regex→llm_fallback, pattern: City, ST']
+  resume_text text [not null, note: 'as_is: full resume_text from source']
+  extraction_confidence decimal(6,5) [note: 'computed: weighted avg of child confidences']
 
   indexes {
     (source_dataset, source_record_id) [unique, name: 'uq_candidates_source_record']
@@ -23,20 +36,21 @@ Table candidates {
 }
 
 Table candidate_occupation_candidates {
+  // source_section: NAME (title) > SUMM (occupation phrase) > EXPR (job titles)
   id bigint [pk, increment]
   candidate_id varchar [not null, ref: > candidates.candidate_id]
 
-  raw_text text [not null]
-  esco_id varchar
-  preferred_label varchar
-  confidence decimal(6,5) [not null]
+  raw_text text [not null, note: 'section=NAME>SUMM>EXPR, mode=heuristic']
+  esco_id varchar [note: 'mode=esco_matcher: exact→alt→fuzzy→graph']
+  preferred_label varchar [note: 'mode=esco_matcher']
+  confidence decimal(6,5) [not null, note: 'mode=esco_matcher']
 
   match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
-  rank int [not null]
-  is_primary boolean [not null, default: false]
+  rank int [not null, note: 'computed: confidence DESC']
+  is_primary boolean [not null, default: false, note: 'computed: rank=1→true']
 
-  hierarchy_json jsonb
-  source_span text
+  hierarchy_json jsonb [note: 'mode=esco_matcher: broaderRelationsOccPillar']
+  source_span text [note: 'heuristic: extraction position info']
 
   indexes {
     (candidate_id, rank) [name: 'idx_occ_candidate_rank']
@@ -46,20 +60,21 @@ Table candidate_occupation_candidates {
 }
 
 Table candidate_skill_candidates {
+  // source_section: SKLL > HILT > TSKL > EXPR (supplementary)
   id bigint [pk, increment]
   candidate_id varchar [not null, ref: > candidates.candidate_id]
 
-  raw_text text [not null]
-  esco_id varchar
-  preferred_label varchar
-  confidence decimal(6,5) [not null]
+  raw_text text [not null, note: 'section=SKLL>HILT>TSKL>EXPR, mode=heuristic, split by comma/bullet/semicolon']
+  esco_id varchar [note: 'mode=esco_matcher: exact→alt→fuzzy']
+  preferred_label varchar [note: 'mode=esco_matcher']
+  confidence decimal(6,5) [not null, note: 'mode=esco_matcher']
 
   match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
-  rank int [not null]
-  is_primary boolean [not null, default: false]
+  rank int [not null, note: 'computed: confidence DESC']
+  is_primary boolean [not null, default: false, note: 'computed: rank=1→true']
 
-  hierarchy_json jsonb
-  source_span text
+  hierarchy_json jsonb [note: 'mode=esco_matcher: broaderRelationsSkillPillar']
+  source_span text [note: 'heuristic: extraction position info']
 
   indexes {
     (candidate_id, rank) [name: 'idx_skill_candidate_rank']
@@ -69,18 +84,19 @@ Table candidate_skill_candidates {
 }
 
 Table candidate_experiences {
+  // source_section: EXPR (split into multiple records per job block)
   experience_id bigint [pk, increment]
   candidate_id varchar [not null, ref: > candidates.candidate_id]
 
-  title varchar
-  raw_title varchar
-  company varchar
-  start_date date
-  end_date date
-  is_current boolean [not null, default: false]
-  location varchar
-  duration_months int
-  description_raw text
+  title varchar [note: 'section=EXPR, mode=regex→llm_fallback']
+  raw_title varchar [note: 'section=EXPR, mode=heuristic: pre-normalization text']
+  company varchar [note: 'section=EXPR, mode=regex→llm_fallback, pattern: Company Name']
+  start_date date [note: 'section=EXPR, mode=regex, pattern: MM/YYYY | Month YYYY']
+  end_date date [note: 'section=EXPR, mode=regex, Current/Present→null+is_current']
+  is_current boolean [not null, default: false, note: 'section=EXPR, mode=heuristic']
+  location varchar [note: 'section=EXPR, mode=regex, pattern: City, State']
+  duration_months int [note: 'computed: end_date - start_date in months']
+  description_raw text [note: 'section=EXPR, mode=as_is: full job block text']
 
   indexes {
     (candidate_id) [name: 'idx_exp_candidate']
@@ -89,19 +105,20 @@ Table candidate_experiences {
 }
 
 Table experience_occupation_candidates {
+  // source: candidate_experiences.title → ESCO matching
   id bigint [pk, increment]
   experience_id bigint [not null, ref: > candidate_experiences.experience_id]
 
-  raw_text text [not null]
-  esco_id varchar
-  preferred_label varchar
-  confidence decimal(6,5) [not null]
+  raw_text text [not null, note: 'from experience.title, mode=heuristic']
+  esco_id varchar [note: 'mode=esco_matcher: exact→alt→fuzzy→graph']
+  preferred_label varchar [note: 'mode=esco_matcher']
+  confidence decimal(6,5) [not null, note: 'mode=esco_matcher']
 
   match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
-  rank int [not null]
-  is_primary boolean [not null, default: false]
+  rank int [not null, note: 'computed: confidence DESC']
+  is_primary boolean [not null, default: false, note: 'computed: rank=1→true']
 
-  hierarchy_json jsonb
+  hierarchy_json jsonb [note: 'mode=esco_matcher: broaderRelationsOccPillar']
 
   indexes {
     (experience_id, rank) [name: 'idx_exp_occ_rank']
@@ -111,16 +128,17 @@ Table experience_occupation_candidates {
 }
 
 Table candidate_educations {
+  // source_section: EDUC (split into multiple records per education block)
   education_id bigint [pk, increment]
   candidate_id varchar [not null, ref: > candidates.candidate_id]
 
-  institution varchar
-  degree varchar
-  field_of_study varchar
-  start_date date
-  end_date date
-  graduation_year varchar
-  location varchar
+  institution varchar [note: 'section=EDUC, mode=regex→llm_fallback, max 100 chars guard']
+  degree varchar [note: 'section=EDUC, mode=regex→llm_fallback, pattern: Bachelor|Master|PhD|Associate']
+  field_of_study varchar [note: 'section=EDUC, mode=regex→llm_fallback, pattern: in [Field] | : [Field]']
+  start_date date [note: 'section=EDUC, mode=regex, YYYY pattern']
+  end_date date [note: 'section=EDUC, mode=regex, YYYY pattern']
+  graduation_year varchar [note: 'section=EDUC, mode=regex, fallback to end_date year']
+  location varchar [note: 'section=EDUC, mode=regex, pattern: City, State']
 
   indexes {
     (candidate_id) [name: 'idx_edu_candidate']
