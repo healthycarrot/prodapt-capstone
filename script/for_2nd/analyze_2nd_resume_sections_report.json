@@ -1,0 +1,324 @@
+{
+  "summary": {
+    "total_rows": 962,
+    "rows_with_summary": 153,
+    "rows_with_experience": 439,
+    "rows_with_skill": 962,
+    "rows_with_education": 812,
+    "rows_with_all_four": 86,
+    "rows_with_three_or_more": 411,
+    "rows_with_two_or_more": 907,
+    "rows_with_date_ranges": 399,
+    "rows_with_bullet_like_markers": 962,
+    "median_text_length": 2355.0,
+    "median_newline_count": 68.0
+  },
+  "categories": [
+    {
+      "category": "Advocate",
+      "count": 20,
+      "pct_summary": 10.0,
+      "pct_experience": 10.0,
+      "pct_skill": 100.0,
+      "pct_education": 90.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Arts",
+      "count": 36,
+      "pct_summary": 0.0,
+      "pct_experience": 66.67,
+      "pct_skill": 100.0,
+      "pct_education": 66.67,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Automation Testing",
+      "count": 26,
+      "pct_summary": 84.62,
+      "pct_experience": 23.08,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 23.08
+    },
+    {
+      "category": "Blockchain",
+      "count": 40,
+      "pct_summary": 0.0,
+      "pct_experience": 20.0,
+      "pct_skill": 100.0,
+      "pct_education": 60.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Business Analyst",
+      "count": 28,
+      "pct_summary": 7.14,
+      "pct_experience": 28.57,
+      "pct_skill": 100.0,
+      "pct_education": 71.43,
+      "pct_all_four": 7.14
+    },
+    {
+      "category": "Civil Engineer",
+      "count": 24,
+      "pct_summary": 33.33,
+      "pct_experience": 50.0,
+      "pct_skill": 100.0,
+      "pct_education": 66.67,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Data Science",
+      "count": 40,
+      "pct_summary": 20.0,
+      "pct_experience": 60.0,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 20.0
+    },
+    {
+      "category": "Database",
+      "count": 33,
+      "pct_summary": 9.09,
+      "pct_experience": 63.64,
+      "pct_skill": 100.0,
+      "pct_education": 81.82,
+      "pct_all_four": 9.09
+    },
+    {
+      "category": "DevOps Engineer",
+      "count": 55,
+      "pct_summary": 30.91,
+      "pct_experience": 67.27,
+      "pct_skill": 100.0,
+      "pct_education": 67.27,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "DotNet Developer",
+      "count": 28,
+      "pct_summary": 0.0,
+      "pct_experience": 71.43,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "ETL Developer",
+      "count": 40,
+      "pct_summary": 40.0,
+      "pct_experience": 40.0,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 20.0
+    },
+    {
+      "category": "Electrical Engineering",
+      "count": 30,
+      "pct_summary": 0.0,
+      "pct_experience": 60.0,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "HR",
+      "count": 44,
+      "pct_summary": 0.0,
+      "pct_experience": 0.0,
+      "pct_skill": 100.0,
+      "pct_education": 90.91,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Hadoop",
+      "count": 42,
+      "pct_summary": 28.57,
+      "pct_experience": 14.29,
+      "pct_skill": 100.0,
+      "pct_education": 57.14,
+      "pct_all_four": 14.29
+    },
+    {
+      "category": "Health and fitness",
+      "count": 30,
+      "pct_summary": 16.67,
+      "pct_experience": 33.33,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 16.67
+    },
+    {
+      "category": "Java Developer",
+      "count": 84,
+      "pct_summary": 7.14,
+      "pct_experience": 42.86,
+      "pct_skill": 100.0,
+      "pct_education": 85.71,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Mechanical Engineer",
+      "count": 40,
+      "pct_summary": 0.0,
+      "pct_experience": 60.0,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Network Security Engineer",
+      "count": 25,
+      "pct_summary": 0.0,
+      "pct_experience": 80.0,
+      "pct_skill": 100.0,
+      "pct_education": 80.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Operations Manager",
+      "count": 40,
+      "pct_summary": 50.0,
+      "pct_experience": 100.0,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 50.0
+    },
+    {
+      "category": "PMO",
+      "count": 30,
+      "pct_summary": 33.33,
+      "pct_experience": 100.0,
+      "pct_skill": 100.0,
+      "pct_education": 66.67,
+      "pct_all_four": 33.33
+    },
+    {
+      "category": "Python Developer",
+      "count": 48,
+      "pct_summary": 0.0,
+      "pct_experience": 50.0,
+      "pct_skill": 100.0,
+      "pct_education": 100.0,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "SAP Developer",
+      "count": 24,
+      "pct_summary": 16.67,
+      "pct_experience": 33.33,
+      "pct_skill": 100.0,
+      "pct_education": 83.33,
+      "pct_all_four": 0.0
+    },
+    {
+      "category": "Sales",
+      "count": 40,
+      "pct_summary": 20.0,
+      "pct_experience": 20.0,
+      "pct_skill": 100.0,
+      "pct_education": 80.0,
+      "pct_all_four": 20.0
+    },
+    {
+      "category": "Testing",
+      "count": 70,
+      "pct_summary": 14.29,
+      "pct_experience": 14.29,
+      "pct_skill": 100.0,
+      "pct_education": 85.71,
+      "pct_all_four": 14.29
+    },
+    {
+      "category": "Web Designing",
+      "count": 45,
+      "pct_summary": 0.0,
+      "pct_experience": 60.0,
+      "pct_skill": 100.0,
+      "pct_education": 80.0,
+      "pct_all_four": 0.0
+    }
+  ],
+  "samples": {
+    "random": [
+      {
+        "row_index": 654,
+        "category": "Network Security Engineer",
+        "text_length": 2911,
+        "newline_count": 80,
+        "bullet_like": true,
+        "date_range_count": 3,
+        "summary": false,
+        "experience": true,
+        "skill": true,
+        "education": true,
+        "detected_sections": [
+          "experience",
+          "skill",
+          "education"
+        ],
+        "preview": "Skill Set â¢ Experience in Implementing, and troubleshooting network security solutions â¢ Planning and Implementation knowledge of multi vendor firewalls (Cisco ASA, Checkpoint (Upto R.80) Juniper/Netscreen, Fortinet, FWSM) â¢ Familiarity with the latest hardware and network security technologies â¢ Excellent anal"
+      }
+    ],
+    "all_four": [
+      {
+        "row_index": 7,
+        "category": "Data Science",
+        "text_length": 8192,
+        "newline_count": 258,
+        "bullet_like": true,
+        "date_range_count": 0,
+        "summary": true,
+        "experience": true,
+        "skill": true,
+        "education": true,
+        "detected_sections": [
+          "summary",
+          "experience",
+          "skill",
+          "education"
+        ],
+        "preview": "Education Details B.Tech Rayat and Bahra Institute of Engineering and Biotechnology Data Science Data Science Skill Details Numpy- Exprience - Less than 1 year months Machine Learning- Exprience - Less than 1 year months Tensorflow- Exprience - Less than 1 year months Scikit- Exprience - Less than 1 year months Python-"
+      }
+    ],
+    "missing_any": [
+      {
+        "row_index": 0,
+        "category": "Data Science",
+        "text_length": 4786,
+        "newline_count": 80,
+        "bullet_like": true,
+        "date_range_count": 0,
+        "summary": false,
+        "experience": true,
+        "skill": true,
+        "education": true,
+        "detected_sections": [
+          "experience",
+          "skill",
+          "education"
+        ],
+        "preview": "Skills * Programming Languages: Python (pandas, numpy, scipy, scikit-learn, matplotlib), Sql, Java, JavaScript/JQuery. * Machine learning: Regression, SVM, NaÃ¯ve Bayes, KNN, Random Forest, Decision Trees, Boosting techniques, Cluster Analysis, Word Embedding, Sentiment Analysis, Natural Language processing, Dimensiona"
+      }
+    ],
+    "sparse": [
+      {
+        "row_index": 93,
+        "category": "Advocate",
+        "text_length": 354,
+        "newline_count": 22,
+        "bullet_like": true,
+        "date_range_count": 1,
+        "summary": false,
+        "experience": false,
+        "skill": true,
+        "education": false,
+        "detected_sections": [
+          "skill"
+        ],
+        "preview": "â¢ Hard working â¢ Quick learnerEducation Details June 2014 to May 2017 LLB LAW Mumbai, Maharashtra mumbai university January 2014 B.Com Commerce Mumbai, Maharashtra Mumbai university January 2011 HSC Maharashtra board January 2009 SSC Maharashtra board Advocate Skill Details Company Details company - The vidishtra d"
+      }
+    ]
+  }
+}

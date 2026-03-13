@@ -1,0 +1,269 @@
+{
+  "summary": {
+    "total_rows": 2484,
+    "rows_with_1plus_sections": 2483,
+    "rows_with_2plus_sections": 2483,
+    "rows_with_3plus_sections": 2481,
+    "rows_with_any_date_range": 2422,
+    "rows_with_bullet_like_markers": 1343,
+    "rows_with_newlines": 1171,
+    "rows_with_large_space_blocks": 2484,
+    "median_text_length": 5886.5,
+    "median_newline_count": 0.0,
+    "mean_structure_score": 8.727,
+    "median_structure_score": 9.0
+  },
+  "categories": [
+    {
+      "category": "AGRICULTURE",
+      "count": 63,
+      "avg_structure_score": 9.048,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 96.83
+    },
+    {
+      "category": "DIGITAL-MEDIA",
+      "count": 96,
+      "avg_structure_score": 8.875,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.92
+    },
+    {
+      "category": "BPO",
+      "count": 22,
+      "avg_structure_score": 8.864,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 95.45
+    },
+    {
+      "category": "FITNESS",
+      "count": 117,
+      "avg_structure_score": 8.855,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 100.0
+    },
+    {
+      "category": "HEALTHCARE",
+      "count": 115,
+      "avg_structure_score": 8.843,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.39
+    },
+    {
+      "category": "ENGINEERING",
+      "count": 118,
+      "avg_structure_score": 8.839,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 98.31
+    },
+    {
+      "category": "AUTOMOBILE",
+      "count": 36,
+      "avg_structure_score": 8.833,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.22
+    },
+    {
+      "category": "PUBLIC-RELATIONS",
+      "count": 111,
+      "avg_structure_score": 8.811,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.3
+    },
+    {
+      "category": "HR",
+      "count": 110,
+      "avg_structure_score": 8.8,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 98.18
+    },
+    {
+      "category": "TEACHER",
+      "count": 102,
+      "avg_structure_score": 8.794,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 98.04
+    },
+    {
+      "category": "ACCOUNTANT",
+      "count": 118,
+      "avg_structure_score": 8.788,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 96.61
+    },
+    {
+      "category": "INFORMATION-TECHNOLOGY",
+      "count": 120,
+      "avg_structure_score": 8.775,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.5
+    },
+    {
+      "category": "CHEF",
+      "count": 118,
+      "avg_structure_score": 8.771,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.46
+    },
+    {
+      "category": "CONSULTANT",
+      "count": 115,
+      "avg_structure_score": 8.757,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.39
+    },
+    {
+      "category": "ADVOCATE",
+      "count": 118,
+      "avg_structure_score": 8.754,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 98.31
+    },
+    {
+      "category": "BANKING",
+      "count": 115,
+      "avg_structure_score": 8.722,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 96.52
+    },
+    {
+      "category": "CONSTRUCTION",
+      "count": 112,
+      "avg_structure_score": 8.679,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 99.11
+    },
+    {
+      "category": "FINANCE",
+      "count": 118,
+      "avg_structure_score": 8.678,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 96.61
+    },
+    {
+      "category": "DESIGNER",
+      "count": 107,
+      "avg_structure_score": 8.636,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 96.26
+    },
+    {
+      "category": "ARTS",
+      "count": 103,
+      "avg_structure_score": 8.631,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 100.0
+    },
+    {
+      "category": "BUSINESS-DEVELOPMENT",
+      "count": 120,
+      "avg_structure_score": 8.592,
+      "pct_with_sections": 99.17,
+      "pct_with_dates": 95.83
+    },
+    {
+      "category": "APPAREL",
+      "count": 97,
+      "avg_structure_score": 8.588,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 97.94
+    },
+    {
+      "category": "SALES",
+      "count": 116,
+      "avg_structure_score": 8.457,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 95.69
+    },
+    {
+      "category": "AVIATION",
+      "count": 117,
+      "avg_structure_score": 8.402,
+      "pct_with_sections": 100.0,
+      "pct_with_dates": 96.58
+    }
+  ],
+  "samples": {
+    "random": [
+      {
+        "resume_id": "63145386",
+        "category": "CONSTRUCTION",
+        "text_length": 5692,
+        "newline_count": 2,
+        "space_block_count": 56,
+        "bullet_like": true,
+        "section_hits": [
+          "summary",
+          "skills",
+          "experience",
+          "education",
+          "projects"
+        ],
+        "section_count": 5,
+        "date_range_count": 5,
+        "uppercase_section_count": 0,
+        "structure_score": 10,
+        "preview": "CONSTRUCTION PROJECT MANAGER Professional Summary Highly motivated and determined individual seeking full-time position where my previous financial, purchasing, construction, and project controlling experiences will drive the corporation's goals toward success Core Qualifications Proficient in the f"
+      }
+    ],
+    "high_structure": [
+      {
+        "resume_id": "10751444",
+        "category": "DESIGNER",
+        "text_length": 9259,
+        "newline_count": 18,
+        "space_block_count": 163,
+        "bullet_like": true,
+        "section_hits": [
+          "summary",
+          "skills",
+          "experience",
+          "education"
+        ],
+        "section_count": 4,
+        "date_range_count": 15,
+        "uppercase_section_count": 2,
+        "structure_score": 11,
+        "preview": "PRODUCT DESIGNER Professional Summary 4-5 years engineering experience and 1-2 years working experience. Able to work independently and under pressure, detail oriented, excellent problem solver, Innovator. Efficient Mechanical Engineer leveraging a strong technical background in bringing products fr"
+      }
+    ],
+    "medium_structure": [
+      {
+        "resume_id": "10712803",
+        "category": "ENGINEERING",
+        "text_length": 9807,
+        "newline_count": 0,
+        "space_block_count": 104,
+        "bullet_like": true,
+        "section_hits": [
+          "summary",
+          "skills",
+          "experience",
+          "education",
+          "projects"
+        ],
+        "section_count": 5,
+        "date_range_count": 0,
+        "uppercase_section_count": 0,
+        "structure_score": 5,
+        "preview": "ENGINEERING SERVICES MANAGER Executive Profile A results driven Controls Engineer and Project Manager with over 20 years of experience in manufacturing. Skilled in Industrial Automation and Process Engineering with a strong mechanical design background. Proven ability to lead and motivate high perfo"
+      }
+    ],
+    "low_structure": [
+      {
+        "resume_id": "12632728",
+        "category": "BUSINESS-DEVELOPMENT",
+        "text_length": 21,
+        "newline_count": 0,
+        "space_block_count": 1,
+        "bullet_like": false,
+        "section_hits": [],
+        "section_count": 0,
+        "date_range_count": 0,
+        "uppercase_section_count": 0,
+        "structure_score": 0,
+        "preview": ""
+      }
+    ]
+  }
+}

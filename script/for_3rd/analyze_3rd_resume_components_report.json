@@ -1,0 +1,276 @@
+{
+  "summary": {
+    "total_people": 54933,
+    "rows_with_summary": 0,
+    "rows_with_experience": 54933,
+    "rows_with_skill": 54933,
+    "rows_with_education": 48075,
+    "rows_with_all_four": 0,
+    "rows_with_three_or_more": 48075,
+    "rows_with_two_or_more": 54933,
+    "rows_with_experience_and_skill": 54933,
+    "rows_with_skill_and_education": 48075,
+    "median_experience_count": 4,
+    "median_education_count": 1,
+    "median_skill_like_count": 47,
+    "mean_experience_count": 4.831,
+    "mean_education_count": 1.383,
+    "mean_skill_like_count": 67.407,
+    "source_summary_note": "3rd_data is relational and has no dedicated summary table/column, so summary is treated as unavailable in the source schema."
+  },
+  "top_names": [
+    {
+      "name": "Network Administrator",
+      "count": 1416
+    },
+    {
+      "name": "Python Developer",
+      "count": 1092
+    },
+    {
+      "name": "Java Developer",
+      "count": 948
+    },
+    {
+      "name": "Database Administrator",
+      "count": 939
+    },
+    {
+      "name": "Front End Developer",
+      "count": 864
+    },
+    {
+      "name": "Oracle Database Administrator",
+      "count": 714
+    },
+    {
+      "name": "IT Security Analyst",
+      "count": 645
+    },
+    {
+      "name": "IT Project Manager",
+      "count": 564
+    },
+    {
+      "name": "Project Manager",
+      "count": 465
+    },
+    {
+      "name": "Job Seeker",
+      "count": 426
+    }
+  ],
+  "samples": {
+    "random": [
+      {
+        "person_id": "41906",
+        "name": "Siddharth Parmar",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "experience_count": 6,
+        "education_count": 1,
+        "skill_count": 18,
+        "ability_count": 6,
+        "total_skill_like_count": 24,
+        "preview_experience_titles": [
+          "Front-end Engineer",
+          "Contract Software Developer",
+          "Web Development Instructor"
+        ],
+        "preview_education_programs": [
+          "B.E. in Chemical Engineering"
+        ],
+        "preview_skills": [
+          "React",
+          "Redux",
+          "Jest",
+          "Built large-scale Invoicing solution",
+          "Contributed in building a one-stop all Financial Solutions online marketplace"
+        ]
+      },
+      {
+        "person_id": "7297",
+        "name": "Technical Project Manager",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "experience_count": 6,
+        "education_count": 1,
+        "skill_count": 22,
+        "ability_count": 9,
+        "total_skill_like_count": 31,
+        "preview_experience_titles": [
+          "Technical Project Manager",
+          "Infrastructure Technical Manager",
+          "Technical Project Manager"
+        ],
+        "preview_education_programs": [
+          "MS degree in Information Technology"
+        ],
+        "preview_skills": [
+          "Project Management",
+          "Windows 10 Upgrade",
+          "Project Delivery",
+          "Planning and Organizing",
+          "Work Planning and Management"
+        ]
+      }
+    ],
+    "complete_profiles": [
+      {
+        "person_id": "1",
+        "name": "Database Administrator",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "experience_count": 2,
+        "education_count": 1,
+        "skill_count": 40,
+        "ability_count": 49,
+        "total_skill_like_count": 89,
+        "preview_experience_titles": [
+          "Database Administrator",
+          "Database Administrator"
+        ],
+        "preview_education_programs": [
+          "Bachelor of Science"
+        ],
+        "preview_skills": [
+          "Database administration",
+          "Database",
+          "Ms sql server",
+          "Installation and Building Server",
+          "Running Backups"
+        ]
+      },
+      {
+        "person_id": "2",
+        "name": "Database Administrator",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "experience_count": 1,
+        "education_count": 1,
+        "skill_count": 17,
+        "ability_count": 21,
+        "total_skill_like_count": 38,
+        "preview_experience_titles": [
+          "Database Administrator"
+        ],
+        "preview_education_programs": [
+          "bsc in computer science"
+        ],
+        "preview_skills": [
+          "sql server management studio",
+          "visual studio",
+          "sql",
+          "database management systems administration",
+          "developing and maintaining database"
+        ]
+      }
+    ],
+    "sparse_profiles": [
+      {
+        "person_id": "2571",
+        "name": "Oracle Database Administrator",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": false,
+        "experience_count": 1,
+        "education_count": 0,
+        "skill_count": 1,
+        "ability_count": 1,
+        "total_skill_like_count": 2,
+        "preview_experience_titles": [
+          "Oracle Database Administrator"
+        ],
+        "preview_education_programs": [],
+        "preview_skills": [
+          "Oracle Database",
+          "Oracle Database Administrator"
+        ]
+      },
+      {
+        "person_id": "16729",
+        "name": "Network Administrator",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": false,
+        "experience_count": 1,
+        "education_count": 0,
+        "skill_count": 1,
+        "ability_count": 1,
+        "total_skill_like_count": 2,
+        "preview_experience_titles": [
+          "Network Administrator"
+        ],
+        "preview_education_programs": [],
+        "preview_skills": [
+          "Network Administration",
+          "Network Administration"
+        ]
+      }
+    ],
+    "skill_rich_profiles": [
+      {
+        "person_id": "17566",
+        "name": "Python Developer",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": false,
+        "experience_count": 3,
+        "education_count": 0,
+        "skill_count": 441,
+        "ability_count": 116,
+        "total_skill_like_count": 557,
+        "preview_experience_titles": [
+          "Python Developer",
+          "Python Developer",
+          "Python Developer"
+        ],
+        "preview_education_programs": [],
+        "preview_skills": [
+          "Python",
+          "Django",
+          "AWS",
+          "Python",
+          "Scala"
+        ]
+      },
+      {
+        "person_id": "35877",
+        "name": "Python Developer",
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": false,
+        "experience_count": 3,
+        "education_count": 0,
+        "skill_count": 441,
+        "ability_count": 116,
+        "total_skill_like_count": 557,
+        "preview_experience_titles": [
+          "Python Developer",
+          "Python Developer",
+          "Python Developer"
+        ],
+        "preview_education_programs": [],
+        "preview_skills": [
+          "Python",
+          "Django",
+          "AWS",
+          "Python",
+          "Scala"
+        ]
+      }
+    ]
+  }
+}
