@@ -1,0 +1,1561 @@
+{
+  "extractor_version": "extract_fields_v1.0",
+  "elapsed_seconds": 73.37,
+  "stats": {
+    "total": 2484,
+    "html": 2313,
+    "text": 170,
+    "none": 1,
+    "errors": 0
+  },
+  "method_distribution": [
+    {
+      "_id": "html",
+      "count": 2313
+    },
+    {
+      "_id": "text",
+      "count": 170
+    },
+    {
+      "_id": "none",
+      "count": 1
+    }
+  ],
+  "experience_count_distribution": [
+    {
+      "_id": 0,
+      "count": 76
+    },
+    {
+      "_id": 1,
+      "count": 48
+    },
+    {
+      "_id": 2,
+      "count": 73
+    },
+    {
+      "_id": 3,
+      "count": 618
+    },
+    {
+      "_id": 4,
+      "count": 806
+    },
+    {
+      "_id": 5,
+      "count": 258
+    },
+    {
+      "_id": 6,
+      "count": 209
+    },
+    {
+      "_id": 7,
+      "count": 150
+    },
+    {
+      "_id": 8,
+      "count": 104
+    },
+    {
+      "_id": 9,
+      "count": 57
+    },
+    {
+      "_id": 10,
+      "count": 43
+    },
+    {
+      "_id": 11,
+      "count": 15
+    },
+    {
+      "_id": 12,
+      "count": 11
+    },
+    {
+      "_id": 13,
+      "count": 7
+    },
+    {
+      "_id": 14,
+      "count": 4
+    },
+    {
+      "_id": 15,
+      "count": 2
+    },
+    {
+      "_id": 17,
+      "count": 1
+    },
+    {
+      "_id": 18,
+      "count": 1
+    },
+    {
+      "_id": 25,
+      "count": 1
+    }
+  ],
+  "education_count_distribution": [
+    {
+      "_id": 0,
+      "count": 67
+    },
+    {
+      "_id": 1,
+      "count": 721
+    },
+    {
+      "_id": 2,
+      "count": 877
+    },
+    {
+      "_id": 3,
+      "count": 468
+    },
+    {
+      "_id": 4,
+      "count": 184
+    },
+    {
+      "_id": 5,
+      "count": 73
+    },
+    {
+      "_id": 6,
+      "count": 33
+    },
+    {
+      "_id": 7,
+      "count": 21
+    },
+    {
+      "_id": 8,
+      "count": 9
+    },
+    {
+      "_id": 9,
+      "count": 1
+    },
+    {
+      "_id": 10,
+      "count": 9
+    },
+    {
+      "_id": 11,
+      "count": 1
+    },
+    {
+      "_id": 13,
+      "count": 2
+    },
+    {
+      "_id": 14,
+      "count": 1
+    },
+    {
+      "_id": 16,
+      "count": 1
+    },
+    {
+      "_id": 17,
+      "count": 1
+    },
+    {
+      "_id": 18,
+      "count": 1
+    },
+    {
+      "_id": 19,
+      "count": 2
+    },
+    {
+      "_id": 21,
+      "count": 2
+    },
+    {
+      "_id": 22,
+      "count": 1
+    },
+    {
+      "_id": 23,
+      "count": 1
+    },
+    {
+      "_id": 26,
+      "count": 1
+    },
+    {
+      "_id": 28,
+      "count": 1
+    },
+    {
+      "_id": 31,
+      "count": 1
+    },
+    {
+      "_id": 32,
+      "count": 1
+    },
+    {
+      "_id": 35,
+      "count": 1
+    },
+    {
+      "_id": 36,
+      "count": 1
+    },
+    {
+      "_id": 38,
+      "count": 1
+    },
+    {
+      "_id": 51,
+      "count": 1
+    }
+  ],
+  "skill_aggregates": [
+    {
+      "_id": null,
+      "avg_skills": 29.312399355877616,
+      "min_skills": 0,
+      "max_skills": 244
+    }
+  ],
+  "field_fill_rates": {
+    "current_location": {
+      "mean": 0.002,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 5,
+      "non_zero_pct": 0.2
+    },
+    "edu_avg_confidence": {
+      "mean": 0.7674,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2417,
+      "non_zero_pct": 97.3
+    },
+    "edu_degree": {
+      "mean": 0.8814,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2363,
+      "non_zero_pct": 95.1
+    },
+    "edu_field_of_study": {
+      "mean": 0.7093,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2152,
+      "non_zero_pct": 86.6
+    },
+    "edu_graduation_year": {
+      "mean": 0.675,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 1940,
+      "non_zero_pct": 78.1
+    },
+    "edu_institution": {
+      "mean": 0.8523,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2347,
+      "non_zero_pct": 94.5
+    },
+    "exp_avg_confidence": {
+      "mean": 0.9037,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2408,
+      "non_zero_pct": 96.9
+    },
+    "exp_company": {
+      "mean": 0.8977,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2311,
+      "non_zero_pct": 93.0
+    },
+    "exp_description": {
+      "mean": 0.9427,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2408,
+      "non_zero_pct": 96.9
+    },
+    "exp_end_date_or_current": {
+      "mean": 0.8831,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2277,
+      "non_zero_pct": 91.7
+    },
+    "exp_location": {
+      "mean": 0.8477,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2231,
+      "non_zero_pct": 89.8
+    },
+    "exp_start_date": {
+      "mean": 0.9001,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2285,
+      "non_zero_pct": 92.0
+    },
+    "exp_title": {
+      "mean": 0.9313,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2384,
+      "non_zero_pct": 96.0
+    },
+    "has_educations": {
+      "mean": 0.973,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2417,
+      "non_zero_pct": 97.3
+    },
+    "has_experiences": {
+      "mean": 0.9694,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2408,
+      "non_zero_pct": 96.9
+    },
+    "has_occupation_candidates": {
+      "mean": 0.9605,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2386,
+      "non_zero_pct": 96.1
+    },
+    "has_skills": {
+      "mean": 0.9328,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2317,
+      "non_zero_pct": 93.3
+    },
+    "name_title": {
+      "mean": 0.9279,
+      "min": 0.0,
+      "max": 1.0,
+      "non_zero_count": 2305,
+      "non_zero_pct": 92.8
+    },
+    "skill_count": {
+      "mean": 29.3124,
+      "min": 0.0,
+      "max": 244.0,
+      "non_zero_count": 2317,
+      "non_zero_pct": 93.3
+    }
+  },
+  "error_ids": [],
+  "sample_verification": [
+    {
+      "source_record_id": "68240723",
+      "category": "DESIGNER",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 1,
+      "skill_count": 7,
+      "name_title": "DESIGNER",
+      "location": null,
+      "first_exp": {
+        "title": "DESIGNER",
+        "company": "Company Name",
+        "start_date": "2013-10",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "The Fashion Institute of Design and Merchandising",
+        "degree": "Associate of Arts",
+        "field_of_study": "Fashion Design",
+        "graduation_year": "2009",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "11842348",
+      "category": "BANKING",
+      "method": "html",
+      "exp_count": 6,
+      "edu_count": 3,
+      "skill_count": 33,
+      "name_title": "SVP, REGIONAL SALES DIRECTOR WEALTH MANAGEMENT",
+      "location": null,
+      "first_exp": {
+        "title": "SVP, Regional Sales Director Wealth Management",
+        "company": "Company Name",
+        "start_date": "2014-09",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Babson College Executive Education",
+        "degree": "MA",
+        "field_of_study": "Executive Leadership Management Programme",
+        "graduation_year": "2011",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "34051710",
+      "category": "DESIGNER",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 1,
+      "skill_count": 57,
+      "name_title": "SR. GRAPHICS DESIGNER",
+      "location": null,
+      "first_exp": {
+        "title": "Sr. Graphics Designer",
+        "company": "Company Name",
+        "start_date": "2007-02",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Indiana University of Pennsylvania",
+        "degree": "B.A",
+        "field_of_study": "English",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "32265203",
+      "category": "CONSTRUCTION",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 1,
+      "name_title": "CONSTRUCTION & RESIDENTIAL CLEANING",
+      "location": null,
+      "first_exp": {
+        "title": "Construction & Residential Cleaning",
+        "company": "Company Name",
+        "start_date": "2013-01",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Bristol Eastern Adult ED",
+        "degree": "GED",
+        "field_of_study": null,
+        "graduation_year": null,
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "62870550",
+      "category": "FITNESS",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 1,
+      "skill_count": 36,
+      "name_title": "CUSTOMER CARE REPRESENTATIVE",
+      "location": null,
+      "first_exp": {
+        "title": "Customer Care Representative",
+        "company": "Company Name",
+        "start_date": "2013-06",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": null,
+        "degree": "Associate of Applied Business Administration",
+        "field_of_study": "Human Resources, Management Studies, Payroll Records and Accounting, and Business Law",
+        "graduation_year": null,
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "22182279",
+      "category": "ARTS",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 21,
+      "name_title": "ADMINISTRATIVE ASSISTANT/SITE CLERK",
+      "location": null,
+      "first_exp": {
+        "title": "Administrative Assistant/Site Clerk",
+        "company": "Company Name",
+        "start_date": "2007-03",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Valley High School",
+        "degree": "High School Diploma",
+        "field_of_study": "General Education",
+        "graduation_year": "2000",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "10659182",
+      "category": "ADVOCATE",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 2,
+      "skill_count": 28,
+      "name_title": "SUBSTITUTE TEACHER",
+      "location": null,
+      "first_exp": {
+        "title": "Substitute Teacher",
+        "company": "Company Name",
+        "start_date": "2014-08",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "GOVERNOR STATE UNIVERSITY",
+        "degree": "Bachelor of Arts",
+        "field_of_study": "Psychology /minor Social Work",
+        "graduation_year": "2012",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "36149549",
+      "category": "ENGINEERING",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 2,
+      "skill_count": 40,
+      "name_title": "ENGINEERING PROJECT MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Engineering Project Manager",
+        "company": "Company Name",
+        "start_date": "2005-11",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Charter College",
+        "degree": "Business Certification",
+        "field_of_study": null,
+        "graduation_year": "2/1997",
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "21007083",
+      "category": "APPAREL",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 3,
+      "name_title": "PRODUCT PHOTOGRAPHER",
+      "location": null,
+      "first_exp": {
+        "title": "Product Photographer",
+        "company": "Company Name",
+        "start_date": "2014-06",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Antonelli Institute of Art and Photography",
+        "degree": "Associate of Science",
+        "field_of_study": "Photography",
+        "graduation_year": "2012",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "25497147",
+      "category": "FINANCE",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 37,
+      "name_title": "FINANCE ACCOUNTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Finance Accountant",
+        "company": "Company Name",
+        "start_date": "2012-05",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Midwest Business College",
+        "degree": "Associate of Arts",
+        "field_of_study": "Business Business Management",
+        "graduation_year": "1978",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "13836471",
+      "category": "INFORMATION-TECHNOLOGY",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 54,
+      "name_title": "INFORMATION TECHNOLOGY MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Information Technology Manager",
+        "company": "Company Name",
+        "start_date": "2007-04",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Fundacion Universidad Autonoma de Colombia",
+        "degree": "BS",
+        "field_of_study": "Computer System Engineer",
+        "graduation_year": "January 29 2000",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "29161565",
+      "category": "AVIATION",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 2,
+      "name_title": "RADIOLOGICAL CONTROL TECHNICIAN",
+      "location": null,
+      "first_exp": {
+        "title": "Radiological Control Technician",
+        "company": "Company Name",
+        "start_date": "2016-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Thomas Edison",
+        "degree": null,
+        "field_of_study": "NUCLEAR ENGINEERING TECHNOLOGY",
+        "graduation_year": "2016",
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "22754014",
+      "category": "PUBLIC-RELATIONS",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 2,
+      "skill_count": 0,
+      "name_title": "CONTENT STRATEGIST",
+      "location": null,
+      "first_exp": {
+        "title": "Content Strategist",
+        "company": "Company Name",
+        "start_date": "2015-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Marion Technical College",
+        "degree": "Associate of Applied Science",
+        "field_of_study": "Marketing & Project Management",
+        "graduation_year": "2016",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "21321598",
+      "category": "PUBLIC-RELATIONS",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 8,
+      "name_title": "APPLECARE CPU ADVISOR",
+      "location": null,
+      "first_exp": {
+        "title": "AppleCare CPU Advisor",
+        "company": "Company Name",
+        "start_date": "2014-07",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "University of Phoenix",
+        "degree": "B.S",
+        "field_of_study": "Business",
+        "graduation_year": "Present",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "73448369",
+      "category": "ADVOCATE",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 13,
+      "name_title": "PATIENT ADVOCATE",
+      "location": null,
+      "first_exp": {
+        "title": "Patient Advocate",
+        "company": "Company Name",
+        "start_date": "2009-09",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Instituto Tecnico Dental 90",
+        "degree": "Associate of Science",
+        "field_of_study": "Dental Technician",
+        "graduation_year": "2000",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "14589288",
+      "category": "AVIATION",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 4,
+      "name_title": "ASSEMBLY MECHANIC",
+      "location": null,
+      "first_exp": {
+        "title": "Assembly Mechanic",
+        "company": "Company Name",
+        "start_date": "2014-09",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": null,
+        "degree": "High School Diploma",
+        "field_of_study": null,
+        "graduation_year": "1999",
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "11584809",
+      "category": "INFORMATION-TECHNOLOGY",
+      "method": "html",
+      "exp_count": 2,
+      "edu_count": 2,
+      "skill_count": 0,
+      "name_title": "MANAGER - INFORMATION TECHNOLOGY AND BUILDING AUTOMATION SYSTEMS",
+      "location": null,
+      "first_exp": {
+        "title": "Manager - Information Technology and Building Automation Systems",
+        "company": "Company Name",
+        "start_date": "2014-10",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "University of Houston",
+        "degree": "Master of Science",
+        "field_of_study": "Computer & Information Science",
+        "graduation_year": "2015",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "29839396",
+      "category": "BANKING",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 3,
+      "skill_count": 35,
+      "name_title": "INVESTMENT BANKING SUMMER ANALYST",
+      "location": null,
+      "first_exp": {
+        "title": "INVESTMENT BANKING SUMMER ANALYST",
+        "company": "Company Name",
+        "start_date": "2013-05",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "UNDERGRADUATE SCHOOL",
+        "degree": "Bachelor of Degree MONTH",
+        "field_of_study": null,
+        "graduation_year": null,
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "17421910",
+      "category": "BUSINESS-DEVELOPMENT",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 7,
+      "name_title": "BUSINESS DEVELOPMENT EXECUTIVE",
+      "location": null,
+      "first_exp": {
+        "title": "Business Development Executive",
+        "company": "Company Name",
+        "start_date": "2010-06",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Zicklin School of Business, Baruch College",
+        "degree": "Master of Science",
+        "field_of_study": "Finance",
+        "graduation_year": "2011",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "11877150",
+      "category": "FINANCE",
+      "method": "html",
+      "exp_count": 2,
+      "edu_count": 2,
+      "skill_count": 7,
+      "name_title": "FINANCE",
+      "location": null,
+      "first_exp": {
+        "title": "Finance",
+        "company": "Company Name",
+        "start_date": "2013-07",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Kwik Kian Gie School of Business",
+        "degree": "S.E",
+        "field_of_study": "Accounting",
+        "graduation_year": "2013",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "37360517",
+      "category": "SALES",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 14,
+      "name_title": "SALES CLERK",
+      "location": null,
+      "first_exp": {
+        "title": "Sales Clerk",
+        "company": "Company Name",
+        "start_date": "2013-12",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Stone Mountain High",
+        "degree": "Diploma",
+        "field_of_study": null,
+        "graduation_year": null,
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "11065180",
+      "category": "BANKING",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 59,
+      "name_title": "OPERATIONS MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Operations Manager",
+        "company": "Company Name",
+        "start_date": "2010-02",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "DeVry Institute of Technology",
+        "degree": "Bachelor of Professional Studies",
+        "field_of_study": "Computer Information Systems",
+        "graduation_year": "2003",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "20880935",
+      "category": "FINANCE",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 0,
+      "skill_count": 5,
+      "name_title": "SPECIAL FINANCE MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Special Finance Manager",
+        "company": "Company Name",
+        "start_date": "2011-12",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": null
+    },
+    {
+      "source_record_id": "15297298",
+      "category": "INFORMATION-TECHNOLOGY",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 2,
+      "skill_count": 82,
+      "name_title": "PRACTICE MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Practice Manager",
+        "company": "Company Name",
+        "start_date": "2014-08",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Keller Graduate School of Management",
+        "degree": "Master of Business Administration (MBA)",
+        "field_of_study": null,
+        "graduation_year": null,
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "29647215",
+      "category": "CONSULTANT",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 2,
+      "skill_count": 98,
+      "name_title": "CONSULTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Consultant",
+        "company": "Company Name",
+        "start_date": "2006-11",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Point Park University",
+        "degree": "MBA",
+        "field_of_study": "Business",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "17823436",
+      "category": "BANKING",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 104,
+      "name_title": "BUSINESS ANALYST SR. TECHNICAL BUSINESS ANALYST",
+      "location": null,
+      "first_exp": {
+        "title": "Business Analyst Sr. Technical Business Analyst",
+        "company": "Company Name",
+        "start_date": null,
+        "is_current": false,
+        "confidence": 0.5
+      },
+      "first_edu": {
+        "institution": "University of Mumbai",
+        "degree": "Bachelor of Engineering",
+        "field_of_study": "Information Technology",
+        "graduation_year": "6 2008",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "16887936",
+      "category": "ARTS",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 10,
+      "name_title": "COORDINATOR, DONOR RELATIONS",
+      "location": null,
+      "first_exp": {
+        "title": "Coordinator, Donor Relations",
+        "company": "Company Name",
+        "start_date": "2013-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Southern University and A&M College",
+        "degree": "Bachelor of Arts",
+        "field_of_study": "Mass Communications",
+        "graduation_year": "December 2008",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "20544228",
+      "category": "ADVOCATE",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 39,
+      "name_title": "LEAD PHARMACY TECHNICIAN ADVOCATE - SUPERVISOR",
+      "location": null,
+      "first_exp": {
+        "title": "Lead Pharmacy Technician Advocate - Supervisor",
+        "company": "Company Name",
+        "start_date": "2005-06",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Bellevue University",
+        "degree": "Bachelors",
+        "field_of_study": "Behavior Science",
+        "graduation_year": "March 2015",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "37058472",
+      "category": "DESIGNER",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 0,
+      "name_title": "DESIGNER",
+      "location": null,
+      "first_exp": {
+        "title": "Designer",
+        "company": "Company Name",
+        "start_date": "2014-03",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Santa Monica College",
+        "degree": "Associate of Arts",
+        "field_of_study": "Interior and Furniture Design",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "19545827",
+      "category": "ACCOUNTANT",
+      "method": "html",
+      "exp_count": 8,
+      "edu_count": 3,
+      "skill_count": 83,
+      "name_title": "ACCOUNTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Accountant",
+        "company": "Company Name",
+        "start_date": "2014-08",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Dallas Theological Seminary",
+        "degree": "Master of Arts",
+        "field_of_study": "Christian Education",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "24709432",
+      "category": "CHEF",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 3,
+      "skill_count": 31,
+      "name_title": "MATERIAL LOGISTICS SPECIALIST",
+      "location": null,
+      "first_exp": {
+        "title": "Material Logistics Specialist",
+        "company": null,
+        "start_date": "2000-04",
+        "is_current": true,
+        "confidence": 0.75
+      },
+      "first_edu": {
+        "institution": null,
+        "degree": "Certificate of Achievement - Business Administration, CTU, Santa Ana, CA 08/10 Certificate of Achievement - Operations Management, CTU, Santa Ana, CA",
+        "field_of_study": null,
+        "graduation_year": "5 2014",
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "35483925",
+      "category": "BANKING",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 2,
+      "skill_count": 43,
+      "name_title": "PARTNER ACCOUNT MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Partner Account Manager",
+        "company": "Company Name",
+        "start_date": "2014-04",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Coleman University",
+        "degree": "M.S",
+        "field_of_study": "Information System Management",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "49285644",
+      "category": "TEACHER",
+      "method": "html",
+      "exp_count": 6,
+      "edu_count": 2,
+      "skill_count": 5,
+      "name_title": "TEACHER",
+      "location": null,
+      "first_exp": {
+        "title": "Teacher",
+        "company": "Company Name",
+        "start_date": "2010-10",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "The College of Saint Scholastica",
+        "degree": "Graduate Teaching Licensure",
+        "field_of_study": "Education",
+        "graduation_year": "May 21, 2010",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "27165830",
+      "category": "HR",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 3,
+      "skill_count": 1,
+      "name_title": "TERRITORY HR MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Territory HR Manager",
+        "company": "Company Name",
+        "start_date": "2010-10",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Metropolitan State College of Denver",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Business Management",
+        "graduation_year": "1995",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "22894544",
+      "category": "CONSTRUCTION",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 13,
+      "name_title": "DRIVER/MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Driver/Manager",
+        "company": "Company Name",
+        "start_date": "2015-06",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": null,
+        "degree": "High School Diploma",
+        "field_of_study": null,
+        "graduation_year": null,
+        "confidence": 0.25
+      }
+    },
+    {
+      "source_record_id": "24643412",
+      "category": "CONSULTANT",
+      "method": "html",
+      "exp_count": 8,
+      "edu_count": 2,
+      "skill_count": 93,
+      "name_title": "CONSULTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Consultant",
+        "company": "Company Name",
+        "start_date": "2002-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "University of Pittsburgh",
+        "degree": "Master of Science",
+        "field_of_study": "Computer Science",
+        "graduation_year": "1989",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "28013287",
+      "category": "TEACHER",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 26,
+      "name_title": "TEACHER",
+      "location": null,
+      "first_exp": {
+        "title": "Teacher",
+        "company": "Company Name",
+        "start_date": "2015-08",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Schreiner University",
+        "degree": "Bachelor of Arts",
+        "field_of_study": "Education",
+        "graduation_year": "2010",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "59487170",
+      "category": "FITNESS",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 1,
+      "skill_count": 3,
+      "name_title": "INTERIM MEMBERSHIP DIRECTOR",
+      "location": null,
+      "first_exp": {
+        "title": "Interim Membership Director",
+        "company": "Company Name",
+        "start_date": "2016-02",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Northwest Nazrene University",
+        "degree": "Bachelor of Arts",
+        "field_of_study": "Liberal Arts",
+        "graduation_year": "2003",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "94503308",
+      "category": "CONSTRUCTION",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 2,
+      "skill_count": 20,
+      "name_title": "FACILITIES CONSTRUCTION MANAGER",
+      "location": null,
+      "first_exp": {
+        "title": "Facilities Construction Manager",
+        "company": "Company Name",
+        "start_date": "2005-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "University of Nebraska",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Construction Management",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "15053703",
+      "category": "AGRICULTURE",
+      "method": "html",
+      "exp_count": 5,
+      "edu_count": 2,
+      "skill_count": 30,
+      "name_title": "ADMINISTRATION OFFICE ASSISTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Administration Office Assistant",
+        "company": "Company Name",
+        "start_date": "2010-06",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Rota High School",
+        "degree": "High School Diploma",
+        "field_of_study": "General",
+        "graduation_year": "2013",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "32042584",
+      "category": "BUSINESS-DEVELOPMENT",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 1,
+      "skill_count": 33,
+      "name_title": "BUSINESS DEVELOPMENT INTERN",
+      "location": null,
+      "first_exp": {
+        "title": "Business Development Intern",
+        "company": "Company Name",
+        "start_date": "2013-05",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Kennesaw State University",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Sociology Statistics",
+        "graduation_year": "May 2013",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "70892619",
+      "category": "TEACHER",
+      "method": "html",
+      "exp_count": 7,
+      "edu_count": 2,
+      "skill_count": 8,
+      "name_title": "TEACHER ASSISTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Teacher Assistant",
+        "company": "Company Name",
+        "start_date": "2013-01",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "California State University, Los Angeles",
+        "degree": "Associate of Arts",
+        "field_of_study": "Psychology",
+        "graduation_year": "2019",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "22776912",
+      "category": "INFORMATION-TECHNOLOGY",
+      "method": "html",
+      "exp_count": 2,
+      "edu_count": 3,
+      "skill_count": 91,
+      "name_title": "DIRECTOR OF INFORMATION TECHNOLOGY /CHIEF TECHNOLOGY OFFICER",
+      "location": null,
+      "first_exp": {
+        "title": "Director of Information Technology /Chief Technology Officer",
+        "company": "Company Name",
+        "start_date": "2007-01",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Western Oregon University",
+        "degree": "BS",
+        "field_of_study": "Information Technology",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "82649935",
+      "category": "ACCOUNTANT",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 1,
+      "skill_count": 11,
+      "name_title": "SENIOR ACCOUNTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Senior Accountant",
+        "company": "Company Name",
+        "start_date": "2015-05",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "City College of New York",
+        "degree": "Bachelor of Arts",
+        "field_of_study": "Economics",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    },
+    {
+      "source_record_id": "29306433",
+      "category": "FITNESS",
+      "method": "html",
+      "exp_count": 3,
+      "edu_count": 1,
+      "skill_count": 23,
+      "name_title": "TEAM MEMBER / PRICER",
+      "location": null,
+      "first_exp": {
+        "title": "Team Member / Pricer",
+        "company": "Company Name",
+        "start_date": "2012-07",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Moraine Valley Community College",
+        "degree": "Business Administration curriculum Bally Total Fitness--monthly training/meetings to increase skill level in management, sales, marketing, and accounting.",
+        "field_of_study": null,
+        "graduation_year": null,
+        "confidence": 0.5
+      }
+    },
+    {
+      "source_record_id": "10428916",
+      "category": "FITNESS",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 1,
+      "name_title": "RECREATION & SPORTS COORDINATOR",
+      "location": null,
+      "first_exp": {
+        "title": "Recreation & Sports Coordinator",
+        "company": "Company Name",
+        "start_date": "2015-03",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "East Carolina University",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Kinesiology",
+        "graduation_year": "2012",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "86322251",
+      "category": "TEACHER",
+      "method": "html",
+      "exp_count": 7,
+      "edu_count": 2,
+      "skill_count": 3,
+      "name_title": "READING TEACHER",
+      "location": null,
+      "first_exp": {
+        "title": "Reading Teacher",
+        "company": "Company Name",
+        "start_date": "2006-08",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "University of South Florida",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Varying Exceptionalities& ESOL",
+        "graduation_year": "2002",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "29772450",
+      "category": "CHEF",
+      "method": "html",
+      "exp_count": 6,
+      "edu_count": 4,
+      "skill_count": 17,
+      "name_title": "SENIOR EXECUTIVE CHEF",
+      "location": null,
+      "first_exp": {
+        "title": "Senior Executive Chef",
+        "company": "Company Name",
+        "start_date": "2012-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Washburne TradeSchool",
+        "degree": "Associate of Arts",
+        "field_of_study": "Culinary Arts",
+        "graduation_year": "1985",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "31684925",
+      "category": "ENGINEERING",
+      "method": "html",
+      "exp_count": 4,
+      "edu_count": 1,
+      "skill_count": 41,
+      "name_title": "ENGINEERING ASSISTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Engineering Assistant",
+        "company": "Company Name",
+        "start_date": "2013-05",
+        "is_current": false,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "George Mason University",
+        "degree": "Bachelor of Science",
+        "field_of_study": "Civil Engineer Civil",
+        "graduation_year": "2014",
+        "confidence": 1.0
+      }
+    },
+    {
+      "source_record_id": "17915015",
+      "category": "FITNESS",
+      "method": "html",
+      "exp_count": 9,
+      "edu_count": 3,
+      "skill_count": 21,
+      "name_title": "ADMINISTRATIVE OFFICE ASSISTANT",
+      "location": null,
+      "first_exp": {
+        "title": "Administrative Office Assistant",
+        "company": "Company Name",
+        "start_date": "2015-01",
+        "is_current": true,
+        "confidence": 1.0
+      },
+      "first_edu": {
+        "institution": "Virginia Polytechnic Institute and State University (Virginia Tech)",
+        "degree": "M.S",
+        "field_of_study": "Ed, Health Promotion & Physical Education",
+        "graduation_year": null,
+        "confidence": 0.75
+      }
+    }
+  ]
+}
