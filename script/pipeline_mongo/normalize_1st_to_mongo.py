@@ -1,20 +1,50 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
 import uuid
 from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date, datetime
+from pathlib import Path
 from typing import Any
 
 from pymongo import MongoClient, ReplaceOne, UpdateOne
 from rapidfuzz import fuzz, process
 
+try:
+    from dotenv import load_dotenv
+except Exception:
+    load_dotenv = None
+
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
 
 NORMALIZER_VERSION = "v0.1.0"
 FUZZY_THRESHOLD = 0.85
+LLM_DEFAULT_MODEL = "gpt-4.1-mini"
+
+GENERIC_TERMS = {
+    "construction",
+    "material",
+    "materials",
+    "methods",
+    "software",
+    "management",
+    "specifications",
+    "skills",
+    "experience",
+    "education",
+    "company",
+    "state",
+    "city",
+}
 
 
 # ---------------------------
@@ -90,6 +120,11 @@ class FuzzyMatcher(BaseMatcher):
         if not key:
             return []
 
+        key_tokens = [t for t in re.findall(r"[a-z]{2,}", key) if t not in GENERIC_TERMS]
+        # Avoid noisy fuzzy matching for short/single-token phrases
+        if len(key_tokens) < 2:
+            return []
+
         result = process.extract(
             key,
             index.search_labels,
@@ -102,13 +137,19 @@ class FuzzyMatcher(BaseMatcher):
             conf = score / 100.0
             if conf < self.threshold:
                 continue
+
+            label_tokens = set(re.findall(r"[a-z]{2,}", label_norm))
+            overlap = len(set(key_tokens) & label_tokens)
+            if len(key_tokens) >= 2 and overlap == 0:
+                continue
+
             for entry in index.label_to_entries.get(label_norm, []):
                 out.append(
                     MatchCandidate(
                         esco_id=entry.esco_id,
                         preferred_label=entry.preferred_label,
                         raw_text=phrase,
-                        confidence=round(conf, 5),
+                        confidence=round(conf * 0.92, 5),
                         match_method="fuzzy",
                         hierarchy=index.get_hierarchy(entry.esco_id),
                         source_span=phrase,
@@ -213,39 +254,71 @@ MONTH_MAP = {
     "dec": 12,
 }
 
+TITLE_PATTERN = re.compile(
+    r"\b([A-Z][A-Za-z/&-]*(?:\s+[A-Z][A-Za-z/&-]*){0,4}\s+"
+    r"(?:Manager|Engineer|Developer|Analyst|Estimator|Consultant|Agent|Assistant|Architect|Administrator|Officer|Specialist|Coordinator|Supervisor|Director|Technician))\b"
+)
+
 
 def normalize_text(value: str) -> str:
     return " ".join((value or "").lower().strip().split())
 
 
+def normalize_spaces(value: str) -> str:
+    return " ".join((value or "").split())
+
+
+def extract_section_text(
+    resume_text: str,
+    start_pattern: str,
+    stop_pattern: str = r"experience|education|projects?|certifications?|skills?|summary|objective|profile",
+) -> str:
+    text = normalize_spaces(resume_text)
+    if not text:
+        return ""
+    regex = re.compile(rf"\b(?:{start_pattern})\b\s*:?\s*(.+?)(?=\b(?:{stop_pattern})\b|$)", re.IGNORECASE)
+    m = regex.search(text)
+    return m.group(1).strip() if m else ""
+
+
 def split_skill_phrases(resume_text: str) -> list[str]:
-    text = resume_text or ""
-    m = re.search(r"skills?\s*[:\n](.*)", text, flags=re.IGNORECASE | re.DOTALL)
-    if m:
-        section = m.group(1)
-        stop = SECTION_BREAK.search(section)
-        if stop:
-            section = section[: stop.start()]
-    else:
-        section = text[:1500]
+    text = normalize_spaces(resume_text)
+    section = extract_section_text(text, r"skills?")
+    if not section:
+        section = text[:1200]
 
     raw_parts = re.split(r"[\n,;|•\-]+", section)
     phrases = [" ".join(p.strip().split()) for p in raw_parts]
-    phrases = [p for p in phrases if 2 <= len(p) <= 80]
+    phrases = [p for p in phrases if 3 <= len(p) <= 64]
+
+    filtered: list[str] = []
+    for p in phrases:
+        p_norm = normalize_text(p)
+        tokens = re.findall(r"[a-z]{2,}", p_norm)
+        if not tokens:
+            continue
+        if len(tokens) == 1 and tokens[0] in GENERIC_TERMS:
+            continue
+        if len(tokens) > 8:
+            continue
+        filtered.append(p)
 
     seen: set[str] = set()
     out: list[str] = []
-    for p in phrases:
+    for p in filtered:
         key = p.lower()
         if key not in seen:
             seen.add(key)
             out.append(p)
-    return out[:30]
+    return out[:24]
 
 
 def extract_experience_titles(resume_text: str) -> list[str]:
+    text = normalize_spaces(resume_text)
+    titles = [m.group(1).strip() for m in TITLE_PATTERN.finditer(text)]
+
+    # fallback for line-preserved resumes
     lines = [l.strip() for l in (resume_text or "").splitlines() if l.strip()]
-    titles: list[str] = []
     for i, line in enumerate(lines):
         if DATE_RANGE_RE.search(line):
             for offset in (1, 2):
@@ -255,11 +328,17 @@ def extract_experience_titles(resume_text: str) -> list[str]:
     dedup: list[str] = []
     seen: set[str] = set()
     for t in titles:
+        if re.search(r"\b(summary|objective|profile)\b", t, re.IGNORECASE):
+            continue
+        if re.match(r"^(experience|accomplishments|highlights|summary)\b", t.strip(), re.IGNORECASE):
+            continue
+        if len(t.split()) > 6:
+            continue
         key = t.lower()
         if key not in seen:
             seen.add(key)
             dedup.append(t)
-    return dedup[:30]
+    return dedup[:20]
 
 
 def parse_date_token(token: str) -> date | None:
@@ -303,22 +382,28 @@ def months_between(start: date | None, end: date | None, is_current: bool) -> in
 
 
 def extract_experiences(resume_text: str) -> list[dict[str, Any]]:
-    lines = [l.strip() for l in (resume_text or "").splitlines() if l.strip()]
+    exp_text = extract_section_text(resume_text, r"experience")
+    base_text = exp_text if exp_text else normalize_spaces(resume_text)
     out: list[dict[str, Any]] = []
-
-    for i, line in enumerate(lines):
-        m = DATE_RANGE_RE.search(line)
-        if not m:
-            continue
-
+    matches = list(DATE_RANGE_RE.finditer(base_text))
+    for i, m in enumerate(matches):
         start_token = m.group("start")
         end_token = m.group("end")
         start_dt = parse_date_token(start_token)
         end_dt = parse_date_token(end_token)
         is_current = end_token.lower() in {"present", "current"}
 
-        title = lines[i - 1] if i - 1 >= 0 else None
-        company = lines[i - 2] if i - 2 >= 0 else None
+        seg_start = max(0, m.start() - 120)
+        seg_end = matches[i + 1].start() if i + 1 < len(matches) else min(len(base_text), m.end() + 500)
+        segment = base_text[seg_start:seg_end].strip()
+
+        title_match = TITLE_PATTERN.search(segment)
+        title = title_match.group(1).strip() if title_match else None
+
+        company = None
+        company_match = re.search(r"\bCompany Name\b", segment, re.IGNORECASE)
+        if company_match:
+            company = "Company Name"
 
         out.append(
             {
@@ -330,41 +415,57 @@ def extract_experiences(resume_text: str) -> list[dict[str, Any]]:
                 "is_current": is_current,
                 "location": None,
                 "duration_months": months_between(start_dt, end_dt, is_current),
-                "description_raw": line,
+                "description_raw": segment[:400],
             }
         )
 
-    return out[:30]
+    return out[:15]
 
 
 def extract_educations(resume_text: str) -> list[dict[str, Any]]:
-    lines = [l.strip() for l in (resume_text or "").splitlines() if l.strip()]
+    edu_text = extract_section_text(resume_text, r"education")
+    if not edu_text:
+        return []
+
+    chunks = [c.strip() for c in re.split(r"(?=\b(?:19|20)\d{2}\b)", edu_text) if c.strip()]
+    lines = chunks if chunks else [edu_text]
     out: list[dict[str, Any]] = []
-    edu_keywords = re.compile(r"university|college|bachelor|master|phd|degree", re.IGNORECASE)
+    edu_keywords = re.compile(r"university|college|bachelor|master|phd|degree|school", re.IGNORECASE)
 
     for line in lines:
         if not edu_keywords.search(line):
             continue
+        line = line[:220]
+
+        degree_match = re.search(r"(bachelor[^,.;]*|master[^,.;]*|phd[^,.;]*|degree[^,.;]*)", line, re.IGNORECASE)
+        institution_match = re.search(r"([A-Z][A-Za-z&\-\s]*(University|College|School))", line)
+        grad_year_match = re.search(r"\b(19|20)\d{2}\b", line)
         out.append(
             {
-                "institution": line if re.search(r"university|college", line, re.IGNORECASE) else None,
-                "degree": line if re.search(r"bachelor|master|phd|degree", line, re.IGNORECASE) else None,
+                "institution": institution_match.group(1).strip() if institution_match else None,
+                "degree": degree_match.group(1).strip() if degree_match else None,
                 "field_of_study": None,
                 "start_date": None,
                 "end_date": None,
-                "graduation_year": None,
+                "graduation_year": grad_year_match.group(0) if grad_year_match else None,
                 "location": None,
             }
         )
-    return out[:15]
+    return out[:8]
 
 
 def detect_current_location(resume_text: str) -> str | None:
-    lines = [l.strip() for l in (resume_text or "").splitlines() if l.strip()]
-    # heuristic only
-    for line in lines[:20]:
-        if re.search(r"[A-Za-z]+,\s*[A-Za-z]{2,}", line):
-            return line[:120]
+    header = normalize_spaces(resume_text)
+    header = re.split(r"\b(summary|skills?|experience|education)\b", header, flags=re.IGNORECASE)[0]
+    if len(header) > 240:
+        header = header[:240]
+
+    m = re.search(r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*),\s*([A-Z]{2}|[A-Z][a-z]+)\b", header)
+    if m:
+        city = m.group(1).strip()
+        if city.lower() in {"specialist", "manager", "director", "analyst", "assistant", "engineer"}:
+            return None
+        return f"{city}, {m.group(2)}"
     return None
 
 
@@ -379,6 +480,30 @@ def rank_candidates(candidates: list[MatchCandidate]) -> list[dict[str, Any]]:
             best_by_esco[cand.esco_id] = cand
 
     ranked = sorted(best_by_esco.values(), key=lambda x: x.confidence, reverse=True)
+
+    # precision-first suppression:
+    # 1) if a raw_text has exact/alt hit, drop fuzzy for same raw_text
+    # 2) otherwise keep only best fuzzy hit per raw_text
+    has_non_fuzzy_raw = {c.raw_text for c in ranked if c.match_method != "fuzzy"}
+    best_fuzzy_by_raw: dict[str, MatchCandidate] = {}
+    for c in ranked:
+        if c.match_method != "fuzzy":
+            continue
+        prev = best_fuzzy_by_raw.get(c.raw_text)
+        if prev is None or c.confidence > prev.confidence:
+            best_fuzzy_by_raw[c.raw_text] = c
+
+    filtered: list[MatchCandidate] = []
+    for c in ranked:
+        if c.match_method != "fuzzy":
+            filtered.append(c)
+            continue
+        if c.raw_text in has_non_fuzzy_raw:
+            continue
+        if best_fuzzy_by_raw.get(c.raw_text) is c:
+            filtered.append(c)
+
+    ranked = filtered
 
     out: list[dict[str, Any]] = []
     for i, cand in enumerate(ranked, start=1):
@@ -396,6 +521,100 @@ def rank_candidates(candidates: list[MatchCandidate]) -> list[dict[str, Any]]:
             }
         )
     return out
+
+
+def should_use_llm_rerank(candidates: list[dict[str, Any]], margin_threshold: float) -> bool:
+    if len(candidates) < 2:
+        return False
+    c1 = candidates[0].get("confidence")
+    c2 = candidates[1].get("confidence")
+    if c1 is None or c2 is None:
+        return False
+    if c1 < 0.92:
+        return True
+    return (c1 - c2) <= margin_threshold
+
+
+def llm_rerank_occupation_candidates(
+    resume_text: str,
+    candidates: list[dict[str, Any]],
+    llm_client: Any,
+    llm_model: str,
+    max_candidates: int,
+    max_resume_chars: int,
+) -> list[dict[str, Any]]:
+    if not llm_client or not candidates:
+        return candidates
+
+    top = candidates[:max_candidates]
+    resume_excerpt = normalize_spaces(resume_text)[:max_resume_chars]
+
+    input_payload = {
+        "resume_excerpt": resume_excerpt,
+        "candidates": [
+            {
+                "esco_id": c.get("esco_id"),
+                "preferred_label": c.get("preferred_label"),
+                "raw_text": c.get("raw_text"),
+            }
+            for c in top
+        ],
+        "task": "Rank occupation candidates by best fit to the resume. Return strict JSON only.",
+        "output_format": {
+            "ranked_esco_ids": ["esco_id_1", "esco_id_2"],
+            "reason": "one short sentence"
+        },
+    }
+
+    try:
+        response = llm_client.responses.create(
+            model=llm_model,
+            input=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are an occupation reranker for ESCO. "
+                        "Return strict JSON only with key ranked_esco_ids as an ordered list."
+                    ),
+                },
+                {"role": "user", "content": json.dumps(input_payload, ensure_ascii=False)},
+            ],
+            temperature=0,
+        )
+        text = (response.output_text or "").strip()
+        if not text:
+            return candidates
+
+        parsed = json.loads(text)
+        ranked_ids = parsed.get("ranked_esco_ids") if isinstance(parsed, dict) else None
+        if not isinstance(ranked_ids, list):
+            return candidates
+
+        cand_by_id = {c.get("esco_id"): c for c in top if c.get("esco_id")}
+        reranked_top: list[dict[str, Any]] = []
+        used: set[str] = set()
+        for esco_id in ranked_ids:
+            if esco_id in cand_by_id and esco_id not in used:
+                row = dict(cand_by_id[esco_id])
+                row["match_method"] = f"{row.get('match_method', 'unknown')}+llm_rerank"
+                reranked_top.append(row)
+                used.add(esco_id)
+
+        for c in top:
+            esco_id = c.get("esco_id")
+            if esco_id and esco_id not in used:
+                reranked_top.append(c)
+
+        merged = reranked_top + candidates[max_candidates:]
+        out: list[dict[str, Any]] = []
+        for i, c in enumerate(merged, start=1):
+            row = dict(c)
+            row["rank"] = i
+            row["is_primary"] = i == 1
+            out.append(row)
+        return out
+    except Exception:
+        return candidates
 
 
 def run_matchers(
@@ -475,6 +694,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fetch-batch-size", type=int, default=200)
     parser.add_argument("--no-fuzzy-fallback-only", action="store_true")
     parser.add_argument("--workers", type=int, default=1, help="Parallel worker threads for per-resume normalization.")
+    parser.add_argument("--enable-llm-rerank", action="store_true", help="Use OpenAI to rerank top occupation candidates for ambiguous cases.")
+    parser.add_argument("--llm-model", default=LLM_DEFAULT_MODEL)
+    parser.add_argument("--llm-max-candidates", type=int, default=5)
+    parser.add_argument("--llm-max-resume-chars", type=int, default=2500)
+    parser.add_argument("--llm-ambiguity-margin", type=float, default=0.06)
     return parser.parse_args()
 
 
@@ -482,10 +706,12 @@ def build_upsert_op(
     src: dict[str, Any],
     occ_index: ConceptIndex,
     skill_index: ConceptIndex,
-    matchers: list[BaseMatcher],
+    occ_matchers: list[BaseMatcher],
+    skill_matchers: list[BaseMatcher],
     fuzzy_fallback_only: bool,
     occ_cache: dict[str, list[dict[str, Any]]] | None,
     skill_cache: dict[str, list[dict[str, Any]]] | None,
+    llm_cfg: dict[str, Any] | None,
 ) -> UpdateOne:
     source_dataset = "1st_data"
     source_record_id = str(src.get("source_record_id", "")).strip()
@@ -500,17 +726,40 @@ def build_upsert_op(
     occupation_candidates = run_matchers(
         occupation_phrases,
         occ_index,
-        matchers,
+        occ_matchers,
         cache=occ_cache,
         fuzzy_fallback_only=fuzzy_fallback_only,
     )
     skill_candidates = run_matchers(
         skill_phrases,
         skill_index,
-        matchers,
+        skill_matchers,
         cache=skill_cache,
         fuzzy_fallback_only=fuzzy_fallback_only,
     )
+
+    # precision-first post-filtering
+    if occupation_candidates:
+        has_occ_non_fuzzy = any(c.get("match_method") != "fuzzy" for c in occupation_candidates)
+        if has_occ_non_fuzzy:
+            occupation_candidates = [c for c in occupation_candidates if c.get("match_method") != "fuzzy"]
+        else:
+            occupation_candidates = occupation_candidates[:1]
+
+    if skill_candidates:
+        has_skill_non_fuzzy = any(c.get("match_method") != "fuzzy" for c in skill_candidates)
+        if has_skill_non_fuzzy:
+            skill_candidates = [c for c in skill_candidates if c.get("match_method") != "fuzzy"]
+
+    if llm_cfg and llm_cfg.get("enabled") and should_use_llm_rerank(occupation_candidates, llm_cfg.get("ambiguity_margin", 0.06)):
+        occupation_candidates = llm_rerank_occupation_candidates(
+            resume_text=resume_text,
+            candidates=occupation_candidates,
+            llm_client=llm_cfg.get("client"),
+            llm_model=llm_cfg.get("model", LLM_DEFAULT_MODEL),
+            max_candidates=llm_cfg.get("max_candidates", 5),
+            max_resume_chars=llm_cfg.get("max_resume_chars", 2500),
+        )
 
     experiences = extract_experiences(resume_text)
     for exp in experiences:
@@ -518,7 +767,7 @@ def build_upsert_op(
         exp["normalized_occupation_candidates"] = run_matchers(
             exp_phrases,
             occ_index,
-            matchers,
+            occ_matchers,
             cache=occ_cache,
             fuzzy_fallback_only=fuzzy_fallback_only,
         )
@@ -567,8 +816,29 @@ def build_upsert_op(
 def main() -> None:
     args = parse_args()
 
+    dotenv_path = Path(__file__).with_name(".env")
+    if load_dotenv is not None and dotenv_path.exists():
+        load_dotenv(dotenv_path)
+
     client = MongoClient(args.mongo_uri)
     db = client[args.db_name]
+
+    llm_cfg: dict[str, Any] = {
+        "enabled": False,
+        "client": None,
+        "model": args.llm_model,
+        "max_candidates": args.llm_max_candidates,
+        "max_resume_chars": args.llm_max_resume_chars,
+        "ambiguity_margin": args.llm_ambiguity_margin,
+    }
+    if args.enable_llm_rerank:
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        if api_key and OpenAI is not None:
+            llm_cfg["enabled"] = True
+            llm_cfg["client"] = OpenAI(api_key=api_key)
+            print(f"LLM rerank enabled with model: {args.llm_model}")
+        else:
+            print("LLM rerank disabled: OPENAI_API_KEY or openai package is unavailable.")
 
     # Build ESCO indexes from raw collections
     occ_rows = list(db["raw_esco_occupations"].find({}, {"_id": 0}))
@@ -580,7 +850,8 @@ def main() -> None:
     occ_index = ConceptIndex(occ_rows, broader_occ_rows)
     skill_index = ConceptIndex(skill_rows, broader_skill_rows)
 
-    matchers: list[BaseMatcher] = [ExactMatcher(), AltLabelMatcher(), FuzzyMatcher(args.fuzzy_threshold)]
+    occ_matchers: list[BaseMatcher] = [ExactMatcher(), AltLabelMatcher(), FuzzyMatcher(max(args.fuzzy_threshold, 0.92), limit=3)]
+    skill_matchers: list[BaseMatcher] = [ExactMatcher(), AltLabelMatcher(), FuzzyMatcher(max(args.fuzzy_threshold, 0.90), limit=3)]
     # future: matchers.append(LLMMatcher())
 
     occ_cache: dict[str, list[dict[str, Any]]] = {}
@@ -623,10 +894,12 @@ def main() -> None:
                         src,
                         occ_index,
                         skill_index,
-                        matchers,
+                        occ_matchers,
+                        skill_matchers,
                         not args.no_fuzzy_fallback_only,
                         None,
                         None,
+                        llm_cfg,
                     ),
                     source_batch,
                 )
@@ -649,10 +922,12 @@ def main() -> None:
                     src,
                     occ_index,
                     skill_index,
-                    matchers,
+                    occ_matchers,
+                    skill_matchers,
                     not args.no_fuzzy_fallback_only,
                     occ_cache,
                     skill_cache,
+                    llm_cfg,
                 )
                 writes.append(op)
                 count += 1
