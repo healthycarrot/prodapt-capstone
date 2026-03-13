@@ -1,0 +1,894 @@
+{
+  "parser_version": "parse_sections_v1.0",
+  "stats": {
+    "total": 2484,
+    "html": 2313,
+    "whitespace": 170,
+    "none": 1,
+    "errors": 0
+  },
+  "method_distribution": [
+    {
+      "_id": "html",
+      "count": 2313
+    },
+    {
+      "_id": "whitespace",
+      "count": 170
+    },
+    {
+      "_id": "none",
+      "count": 1
+    }
+  ],
+  "section_type_distribution": [
+    {
+      "_id": "SKLL",
+      "count": 2476
+    },
+    {
+      "_id": "EDUC",
+      "count": 2422
+    },
+    {
+      "_id": "EXPR",
+      "count": 2417
+    },
+    {
+      "_id": "NAME",
+      "count": 2305
+    },
+    {
+      "_id": "SUMM",
+      "count": 2243
+    },
+    {
+      "_id": "HILT",
+      "count": 1794
+    },
+    {
+      "_id": "ACCM",
+      "count": 918
+    },
+    {
+      "_id": "ADDI",
+      "count": 485
+    },
+    {
+      "_id": "AFIL",
+      "count": 439
+    },
+    {
+      "_id": "CERT",
+      "count": 298
+    },
+    {
+      "_id": "INTR",
+      "count": 243
+    },
+    {
+      "_id": "LANG",
+      "count": 239
+    },
+    {
+      "_id": "PREAMBLE",
+      "count": 170
+    },
+    {
+      "_id": "PRIN",
+      "count": 127
+    },
+    {
+      "_id": "PUBL",
+      "count": 47
+    },
+    {
+      "_id": "WRKH",
+      "count": 44
+    },
+    {
+      "_id": "PRES",
+      "count": 41
+    },
+    {
+      "_id": "CUST",
+      "count": 32
+    },
+    {
+      "_id": "MILI",
+      "count": 26
+    },
+    {
+      "_id": "COMS",
+      "count": 24
+    },
+    {
+      "_id": "TSKL",
+      "count": 16
+    },
+    {
+      "_id": "AWAR",
+      "count": 15
+    },
+    {
+      "_id": "ALNK",
+      "count": 11
+    },
+    {
+      "_id": "RELO",
+      "count": 11
+    },
+    {
+      "_id": "EXFU",
+      "count": 8
+    },
+    {
+      "_id": "EXCA",
+      "count": 4
+    },
+    {
+      "_id": "DISS",
+      "count": 3
+    },
+    {
+      "_id": "RTTL",
+      "count": 3
+    },
+    {
+      "_id": "EEXP",
+      "count": 2
+    },
+    {
+      "_id": "CLNT",
+      "count": 2
+    },
+    {
+      "_id": "OBJC",
+      "count": 2
+    },
+    {
+      "_id": "PORT",
+      "count": 1
+    }
+  ],
+  "section_count_distribution": [
+    {
+      "_id": 0,
+      "count": 1
+    },
+    {
+      "_id": 4,
+      "count": 77
+    },
+    {
+      "_id": 5,
+      "count": 326
+    },
+    {
+      "_id": 6,
+      "count": 694
+    },
+    {
+      "_id": 7,
+      "count": 728
+    },
+    {
+      "_id": 8,
+      "count": 386
+    },
+    {
+      "_id": 9,
+      "count": 177
+    },
+    {
+      "_id": 10,
+      "count": 68
+    },
+    {
+      "_id": 11,
+      "count": 20
+    },
+    {
+      "_id": 12,
+      "count": 4
+    },
+    {
+      "_id": 13,
+      "count": 1
+    },
+    {
+      "_id": 14,
+      "count": 2
+    }
+  ],
+  "sections_per_method": [
+    {
+      "_id": "whitespace",
+      "avg_sections": 5.58235294117647,
+      "min_sections": 4,
+      "max_sections": 9
+    },
+    {
+      "_id": "html",
+      "avg_sections": 6.882403804582793,
+      "min_sections": 4,
+      "max_sections": 14
+    },
+    {
+      "_id": "none",
+      "avg_sections": 0.0,
+      "min_sections": 0,
+      "max_sections": 0
+    }
+  ],
+  "sample_verification": {
+    "high_structure": [
+      {
+        "source_record_id": "21868149",
+        "category": "AGRICULTURE",
+        "method": "html",
+        "section_count": 14,
+        "section_types": [
+          "ACCM",
+          "ADDI",
+          "AFIL",
+          "AWAR",
+          "DISS",
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "LANG",
+          "NAME",
+          "PRES",
+          "PRIN",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 17
+          },
+          {
+            "type": "SUMM",
+            "title": "Professional Overview",
+            "chars": 593
+          },
+          {
+            "type": "HILT",
+            "title": "Core Qualifications",
+            "chars": 412
+          },
+          {
+            "type": "ACCM",
+            "title": "Accomplishments",
+            "chars": 132
+          },
+          {
+            "type": "EDUC",
+            "title": "Education",
+            "chars": 884
+          },
+          {
+            "type": "DISS",
+            "title": "Thesis/Dissertation",
+            "chars": 184
+          },
+          {
+            "type": "LANG",
+            "title": "Languages",
+            "chars": 17
+          },
+          {
+            "type": "EXPR",
+            "title": "Experience",
+            "chars": 3448
+          },
+          {
+            "type": "PRIN",
+            "title": "Personal Information",
+            "chars": 118
+          },
+          {
+            "type": "AWAR",
+            "title": "Fellowships and Awards",
+            "chars": 55
+          },
+          {
+            "type": "ADDI",
+            "title": "Additional Information",
+            "chars": 135
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 422
+          },
+          {
+            "type": "PRES",
+            "title": "Presentations",
+            "chars": 81
+          },
+          {
+            "type": "AFIL",
+            "title": "Memberships/Scholarly Societies",
+            "chars": 80
+          }
+        ]
+      },
+      {
+        "source_record_id": "37640804",
+        "category": "ADVOCATE",
+        "method": "html",
+        "section_count": 14,
+        "section_types": [
+          "AWAR",
+          "CERT",
+          "CUST",
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "NAME",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 82
+          },
+          {
+            "type": "CUST",
+            "title": "OBJECTIVE",
+            "chars": 847
+          },
+          {
+            "type": "SUMM",
+            "title": "Professional Summary",
+            "chars": 1613
+          },
+          {
+            "type": "CERT",
+            "title": "Licenses and Certifications",
+            "chars": 273
+          },
+          {
+            "type": "HILT",
+            "title": "Skill Highlights",
+            "chars": 214
+          },
+          {
+            "type": "EXPR",
+            "title": "Professional Experience",
+            "chars": 1493
+          },
+          {
+            "type": "EDUC",
+            "title": "Education and Training",
+            "chars": 132
+          },
+          {
+            "type": "CUST",
+            "title": "Honors",
+            "chars": 112
+          },
+          {
+            "type": "AWAR",
+            "title": "Awards",
+            "chars": 628
+          },
+          {
+            "type": "CUST",
+            "title": "Co-Curricular Activities",
+            "chars": 490
+          },
+          {
+            "type": "CUST",
+            "title": "Professional Organizations",
+            "chars": 78
+          },
+          {
+            "type": "CUST",
+            "title": "Volunteer & Community Service",
+            "chars": 504
+          },
+          {
+            "type": "CUST",
+            "title": "Special Participation",
+            "chars": 28
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 300
+          }
+        ]
+      },
+      {
+        "source_record_id": "45286020",
+        "category": "TEACHER",
+        "method": "html",
+        "section_count": 13,
+        "section_types": [
+          "ACCM",
+          "ADDI",
+          "AFIL",
+          "CERT",
+          "COMS",
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "INTR",
+          "NAME",
+          "PRIN",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 7
+          },
+          {
+            "type": "SUMM",
+            "title": "Summary",
+            "chars": 201
+          },
+          {
+            "type": "HILT",
+            "title": "Core Qualifications",
+            "chars": 333
+          },
+          {
+            "type": "ACCM",
+            "title": "Achievements",
+            "chars": 943
+          },
+          {
+            "type": "EXPR",
+            "title": "Professional Experience",
+            "chars": 3494
+          },
+          {
+            "type": "EDUC",
+            "title": "Education and Training",
+            "chars": 369
+          },
+          {
+            "type": "CERT",
+            "title": "Certifications",
+            "chars": 44
+          },
+          {
+            "type": "COMS",
+            "title": "Community Involvement",
+            "chars": 23
+          },
+          {
+            "type": "AFIL",
+            "title": "Affiliations",
+            "chars": 89
+          },
+          {
+            "type": "PRIN",
+            "title": "Personal Information",
+            "chars": 248
+          },
+          {
+            "type": "INTR",
+            "title": "Interests",
+            "chars": 86
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 76
+          },
+          {
+            "type": "ADDI",
+            "title": "Additional Information",
+            "chars": 227
+          }
+        ]
+      },
+      {
+        "source_record_id": "57706851",
+        "category": "BPO",
+        "method": "html",
+        "section_count": 12,
+        "section_types": [
+          "ADDI",
+          "AFIL",
+          "CERT",
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "INTR",
+          "LANG",
+          "NAME",
+          "PRIN",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 12
+          },
+          {
+            "type": "SUMM",
+            "title": "Summary",
+            "chars": 887
+          },
+          {
+            "type": "HILT",
+            "title": "Highlights",
+            "chars": 162
+          },
+          {
+            "type": "EXPR",
+            "title": "Experience",
+            "chars": 6171
+          },
+          {
+            "type": "EDUC",
+            "title": "Education",
+            "chars": 118
+          },
+          {
+            "type": "CERT",
+            "title": "Certifications",
+            "chars": 378
+          },
+          {
+            "type": "PRIN",
+            "title": "Personal Information",
+            "chars": 141
+          },
+          {
+            "type": "AFIL",
+            "title": "Professional Affiliations",
+            "chars": 140
+          },
+          {
+            "type": "INTR",
+            "title": "Interests",
+            "chars": 366
+          },
+          {
+            "type": "LANG",
+            "title": "Languages",
+            "chars": 26
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 657
+          },
+          {
+            "type": "ADDI",
+            "title": "Additional Information",
+            "chars": 529
+          }
+        ]
+      },
+      {
+        "source_record_id": "22675694",
+        "category": "DESIGNER",
+        "method": "html",
+        "section_count": 12,
+        "section_types": [
+          "ACCM",
+          "CUST",
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "INTR",
+          "LANG",
+          "NAME",
+          "PRIN",
+          "SKLL",
+          "SUMM",
+          "WRKH"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 16
+          },
+          {
+            "type": "PRIN",
+            "title": "Personal Information",
+            "chars": 87
+          },
+          {
+            "type": "CUST",
+            "title": "Objective",
+            "chars": 82
+          },
+          {
+            "type": "EDUC",
+            "title": "Education",
+            "chars": 236
+          },
+          {
+            "type": "SUMM",
+            "title": "Summary",
+            "chars": 984
+          },
+          {
+            "type": "HILT",
+            "title": "Highlights",
+            "chars": 275
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 151
+          },
+          {
+            "type": "INTR",
+            "title": "Interests",
+            "chars": 59
+          },
+          {
+            "type": "LANG",
+            "title": "Languages",
+            "chars": 348
+          },
+          {
+            "type": "ACCM",
+            "title": "Accomplishments",
+            "chars": 545
+          },
+          {
+            "type": "EXPR",
+            "title": "Volunteering",
+            "chars": 2355
+          },
+          {
+            "type": "WRKH",
+            "title": "Work History",
+            "chars": 102
+          }
+        ]
+      }
+    ],
+    "medium_structure": [
+      {
+        "source_record_id": "22323967",
+        "category": "HR",
+        "method": "html",
+        "section_count": 5,
+        "section_types": [
+          "EDUC",
+          "EXPR",
+          "NAME",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 31
+          },
+          {
+            "type": "SUMM",
+            "title": "Summary",
+            "chars": 106
+          },
+          {
+            "type": "EXPR",
+            "title": "Experience",
+            "chars": 4289
+          },
+          {
+            "type": "EDUC",
+            "title": "Education",
+            "chars": 204
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 503
+          }
+        ]
+      },
+      {
+        "source_record_id": "27018550",
+        "category": "HR",
+        "method": "html",
+        "section_count": 6,
+        "section_types": [
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "NAME",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 13
+          },
+          {
+            "type": "SUMM",
+            "title": "Summary",
+            "chars": 285
+          },
+          {
+            "type": "HILT",
+            "title": "Skills",
+            "chars": 366
+          },
+          {
+            "type": "EXPR",
+            "title": "Experience",
+            "chars": 1709
+          },
+          {
+            "type": "EDUC",
+            "title": "Education and Training",
+            "chars": 99
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 118
+          }
+        ]
+      },
+      {
+        "source_record_id": "17812897",
+        "category": "HR",
+        "method": "html",
+        "section_count": 6,
+        "section_types": [
+          "AFIL",
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "NAME",
+          "SKLL"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 10
+          },
+          {
+            "type": "HILT",
+            "title": "Skill Highlights",
+            "chars": 566
+          },
+          {
+            "type": "EXPR",
+            "title": "Professional Experience",
+            "chars": 7102
+          },
+          {
+            "type": "EDUC",
+            "title": "Education",
+            "chars": 83
+          },
+          {
+            "type": "AFIL",
+            "title": "Professional Affiliations",
+            "chars": 100
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 935
+          }
+        ]
+      },
+      {
+        "source_record_id": "15375009",
+        "category": "HR",
+        "method": "html",
+        "section_count": 5,
+        "section_types": [
+          "EDUC",
+          "EXPR",
+          "NAME",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 10
+          },
+          {
+            "type": "SUMM",
+            "title": "Professional Summary",
+            "chars": 638
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 536
+          },
+          {
+            "type": "EXPR",
+            "title": "Work History",
+            "chars": 7131
+          },
+          {
+            "type": "EDUC",
+            "title": "Education",
+            "chars": 271
+          }
+        ]
+      },
+      {
+        "source_record_id": "11847784",
+        "category": "HR",
+        "method": "html",
+        "section_count": 6,
+        "section_types": [
+          "EDUC",
+          "EXPR",
+          "HILT",
+          "NAME",
+          "SKLL",
+          "SUMM"
+        ],
+        "sections_preview": [
+          {
+            "type": "NAME",
+            "title": "",
+            "chars": 13
+          },
+          {
+            "type": "SUMM",
+            "title": "Summary",
+            "chars": 1273
+          },
+          {
+            "type": "HILT",
+            "title": "Skills",
+            "chars": 169
+          },
+          {
+            "type": "SKLL",
+            "title": "Skills",
+            "chars": 552
+          },
+          {
+            "type": "EXPR",
+            "title": "Experience",
+            "chars": 4206
+          },
+          {
+            "type": "EDUC",
+            "title": "Education and Training",
+            "chars": 84
+          }
+        ]
+      }
+    ],
+    "low_structure": [
+      {
+        "source_record_id": "12632728",
+        "category": "BUSINESS-DEVELOPMENT",
+        "method": "none",
+        "section_count": 0,
+        "section_types": [],
+        "sections_preview": []
+      }
+    ]
+  },
+  "elapsed_seconds": 55.17
+}
