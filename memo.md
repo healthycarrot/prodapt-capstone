@@ -62,3 +62,137 @@ https://arxiv.org/html/2503.02056v1
 # Document breakdown
 - それぞれのdocumentからskillとoccupation(category)、experience、educationを抽出して、構造化されたデータにする。
 - skillとoccupationはESCOの分類体系を使う。
+
+## 正規化パイプライン後のKey fields
+- occupation/category
+	- ESCO基準で正規化
+	- 階層構造を保持
+	- 複数候補を保持
+	- raw文字列も保持
+	- confidenceも保持
+- skills
+	- ESCO基準で正規化
+	- 階層構造を保持
+	- 複数候補を保持
+	- raw文字列も保持
+	- confidenceも保持
+- experience[]
+	- title
+	- company
+	- start_date
+	- end_date
+	- is_current
+	- location
+	- duration_months
+	- raw_title
+	- normalized_occupation_candidates
+- current_location
+- education[]
+	- institution
+	- degree
+	- field_of_study
+	- start_date
+	- end_date
+	- graduation_year
+	- location
+- resume_text
+
+
+## JSON Schema
+```json
+{
+	"type": "object",
+	"required": [
+		"occupation_category",
+		"skills",
+		"experience",
+		"current_location",
+		"education",
+		"resume_text"
+	],
+	"properties": {
+		"occupation_category": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/esco_candidate" }
+		},
+		"skills": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/esco_candidate" }
+		},
+		"experience": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/experience_item" }
+		},
+		"current_location": { "type": ["string", "null"] },
+		"education": {
+			"type": "array",
+			"items": { "$ref": "#/$defs/education_item" }
+		},
+		"resume_text": { "type": "string" },
+		"source": { "type": ["string", "null"] },
+		"extraction_confidence": { "type": ["number", "null"] }
+	},
+	"$defs": {
+		"esco_candidate": {
+			"type": "object",
+			"required": ["raw_text", "confidence"],
+			"properties": {
+				"esco_id": { "type": ["string", "null"] },
+				"preferred_label": { "type": ["string", "null"] },
+				"raw_text": { "type": "string" },
+				"confidence": { "type": "number" },
+				"hierarchy": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"id": { "type": "string" },
+							"label": { "type": "string" }
+						}
+					}
+				}
+			}
+		},
+		"experience_item": {
+			"type": "object",
+			"properties": {
+				"title": { "type": ["string", "null"] },
+				"company": { "type": ["string", "null"] },
+				"start_date": { "type": ["string", "null"] },
+				"end_date": { "type": ["string", "null"] },
+				"is_current": { "type": "boolean" },
+				"location": { "type": ["string", "null"] },
+				"duration_months": { "type": ["integer", "null"] },
+				"raw_title": { "type": ["string", "null"] },
+				"normalized_occupation_candidates": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/esco_candidate" }
+				}
+			}
+		},
+		"education_item": {
+			"type": "object",
+			"properties": {
+				"institution": { "type": ["string", "null"] },
+				"degree": { "type": ["string", "null"] },
+				"field_of_study": { "type": ["string", "null"] },
+				"start_date": { "type": ["string", "null"] },
+				"end_date": { "type": ["string", "null"] },
+				"graduation_year": { "type": ["integer", "string", "null"] },
+				"location": { "type": ["string", "null"] }
+			}
+		}
+	}
+}
+```
+
+## ESCO参照DB方針（確定）
+- ESCOはまず生データ構造のまま参照DBとして利用する（raw層）。
+- 1st〜5thデータを正規化する際、occupation/skillはESCOへ寄せて正規化する。
+- 生データ層では物理FKは必須にせず、URI/codeを論理キーとしてJOINする。
+	- occupation_uri -> occupations.concept_uri
+	- skill_uri -> skills.concept_uri
+	- occupations.isco_group -> isco_groups.code
+- 整合性はETL検証で担保する（unresolved join, duplicate, invalid keyを記録）。
+- 正規化後の格納DBは別スキーマとして設計・保存する。
+- 初期段階では生データ構造を崩さず進め、性能課題が出たら検索用ビュー/派生テーブルを追加する。

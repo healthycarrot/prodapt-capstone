@@ -1,0 +1,128 @@
+Project normalized_resume_profile {
+  database_type: 'PostgreSQL'
+  Note: 'Normalized resume schema. ESCO is used as reference DB; normalized result is stored here.'
+}
+
+Table candidates {
+  candidate_id varchar [pk, note: 'UUIDなど']
+  source_dataset varchar [not null, note: '1st_data | 2nd_data | 3rd_data | 4th_data | 5th_data']
+  source_record_id varchar [not null]
+  normalizer_version varchar [not null]
+  normalized_at timestamp [not null]
+  normalization_status varchar [not null, note: 'success | partial | failed']
+
+  current_location varchar
+  resume_text text [not null]
+  extraction_confidence decimal(6,5)
+
+  indexes {
+    (source_dataset, source_record_id) [unique, name: 'uq_candidates_source_record']
+    (normalization_status) [name: 'idx_candidates_status']
+    (normalized_at) [name: 'idx_candidates_normalized_at']
+  }
+}
+
+Table candidate_occupation_candidates {
+  id bigint [pk, increment]
+  candidate_id varchar [not null, ref: > candidates.candidate_id]
+
+  raw_text text [not null]
+  esco_id varchar
+  preferred_label varchar
+  confidence decimal(6,5) [not null]
+
+  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
+  rank int [not null]
+  is_primary boolean [not null, default: false]
+
+  hierarchy_json jsonb
+  source_span text
+
+  indexes {
+    (candidate_id, rank) [name: 'idx_occ_candidate_rank']
+    (candidate_id, is_primary) [name: 'idx_occ_candidate_primary']
+    (esco_id) [name: 'idx_occ_esco_id']
+  }
+}
+
+Table candidate_skill_candidates {
+  id bigint [pk, increment]
+  candidate_id varchar [not null, ref: > candidates.candidate_id]
+
+  raw_text text [not null]
+  esco_id varchar
+  preferred_label varchar
+  confidence decimal(6,5) [not null]
+
+  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
+  rank int [not null]
+  is_primary boolean [not null, default: false]
+
+  hierarchy_json jsonb
+  source_span text
+
+  indexes {
+    (candidate_id, rank) [name: 'idx_skill_candidate_rank']
+    (candidate_id, is_primary) [name: 'idx_skill_candidate_primary']
+    (esco_id) [name: 'idx_skill_esco_id']
+  }
+}
+
+Table candidate_experiences {
+  experience_id bigint [pk, increment]
+  candidate_id varchar [not null, ref: > candidates.candidate_id]
+
+  title varchar
+  raw_title varchar
+  company varchar
+  start_date date
+  end_date date
+  is_current boolean [not null, default: false]
+  location varchar
+  duration_months int
+  description_raw text
+
+  indexes {
+    (candidate_id) [name: 'idx_exp_candidate']
+    (candidate_id, start_date, end_date) [name: 'idx_exp_candidate_period']
+  }
+}
+
+Table experience_occupation_candidates {
+  id bigint [pk, increment]
+  experience_id bigint [not null, ref: > candidate_experiences.experience_id]
+
+  raw_text text [not null]
+  esco_id varchar
+  preferred_label varchar
+  confidence decimal(6,5) [not null]
+
+  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
+  rank int [not null]
+  is_primary boolean [not null, default: false]
+
+  hierarchy_json jsonb
+
+  indexes {
+    (experience_id, rank) [name: 'idx_exp_occ_rank']
+    (experience_id, is_primary) [name: 'idx_exp_occ_primary']
+    (esco_id) [name: 'idx_exp_occ_esco_id']
+  }
+}
+
+Table candidate_educations {
+  education_id bigint [pk, increment]
+  candidate_id varchar [not null, ref: > candidates.candidate_id]
+
+  institution varchar
+  degree varchar
+  field_of_study varchar
+  start_date date
+  end_date date
+  graduation_year varchar
+  location varchar
+
+  indexes {
+    (candidate_id) [name: 'idx_edu_candidate']
+  }
+}

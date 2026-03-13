@@ -1,0 +1,286 @@
+{
+  "summary": {
+    "total_records": 200,
+    "rows_with_summary": 36,
+    "rows_with_experience": 200,
+    "rows_with_skill": 181,
+    "rows_with_education": 194,
+    "rows_with_all_four": 30,
+    "rows_with_three_or_more": 182,
+    "rows_with_two_or_more": 199,
+    "rows_with_date_ranges": 190,
+    "rows_with_bullet_like_markers": 200,
+    "median_text_length": 3005.0,
+    "median_entity_count": 13.0,
+    "mean_entity_count": 16.03
+  },
+  "top_entity_labels": [
+    {
+      "label": "Name",
+      "count": 199
+    },
+    {
+      "label": "Designation",
+      "count": 184
+    },
+    {
+      "label": "Location",
+      "count": 181
+    },
+    {
+      "label": "Degree",
+      "count": 177
+    },
+    {
+      "label": "Email Address",
+      "count": 175
+    },
+    {
+      "label": "College Name",
+      "count": 174
+    },
+    {
+      "label": "Companies worked at",
+      "count": 173
+    },
+    {
+      "label": "Skills",
+      "count": 163
+    },
+    {
+      "label": "Graduation Year",
+      "count": 91
+    },
+    {
+      "label": "Years of Experience",
+      "count": 32
+    },
+    {
+      "label": "UNKNOWN",
+      "count": 2
+    }
+  ],
+  "samples": {
+    "random": [
+      {
+        "index": 163,
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "detected_sections": [
+          "experience",
+          "skill",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Companies worked at",
+          "Degree",
+          "Designation",
+          "Email Address",
+          "Location",
+          "Name",
+          "Skills"
+        ],
+        "entity_count": 16,
+        "date_range_count": 5,
+        "bullet_like": true,
+        "text_length": 2536,
+        "preview": "Arpit Jain Quality Analyst - ThoughtWorks Technologies Pune - Email me on Indeed: indeed.com/r/Arpit-Jain/3714fe32f98b03a9 • Quality Analyst with a total experience of 4 years in delivering quality software • Expertise in Agile Development Practices. • Experience with Continuous Integration &amp; Delivery • Worked with"
+      },
+      {
+        "index": 28,
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "detected_sections": [
+          "experience",
+          "skill",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Companies worked at",
+          "Degree",
+          "Designation",
+          "Email Address",
+          "Graduation Year",
+          "Location",
+          "Name",
+          "Skills"
+        ],
+        "entity_count": 14,
+        "date_range_count": 4,
+        "bullet_like": true,
+        "text_length": 3314,
+        "preview": "Nazish Alam Consultant - SAP ABAP Ghaziabad, Uttar Pradesh - Email me on Indeed: indeed.com/r/Nazish-Alam/ b06dbac9d6236221 Willing to relocate to: Delhi, Delhi - Noida, Uttar Pradesh - Lucknow, Uttar Pradesh WORK EXPERIENCE Consultant SAP ABAP - Noida, Uttar Pradesh - November 2016 to Present Credence Systems, Noida C"
+      }
+    ],
+    "all_four": [
+      {
+        "index": 2,
+        "has_summary": true,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "detected_sections": [
+          "summary",
+          "experience",
+          "skill",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Companies worked at",
+          "Degree",
+          "Designation",
+          "Email Address",
+          "Graduation Year",
+          "Location",
+          "Name",
+          "Skills"
+        ],
+        "entity_count": 16,
+        "date_range_count": 2,
+        "bullet_like": true,
+        "text_length": 2573,
+        "preview": "Hartej Kathuria Data Analyst Intern - Oracle Retail Bengaluru, Karnataka - Email me on Indeed: indeed.com/r/Hartej-Kathuria/04181c5962a4af19 Willing to relocate to: Delhi - Bangalore, Karnataka - Gurgaon, Haryana WORK EXPERIENCE Data Analyst Intern Oracle Retail - Bengaluru, Karnataka - June 2017 to Present Job Respons"
+      },
+      {
+        "index": 19,
+        "has_summary": true,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "detected_sections": [
+          "summary",
+          "experience",
+          "skill",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Companies worked at",
+          "Degree",
+          "Designation",
+          "Email Address",
+          "Graduation Year",
+          "Location",
+          "Name",
+          "Skills"
+        ],
+        "entity_count": 26,
+        "date_range_count": 6,
+        "bullet_like": true,
+        "text_length": 3528,
+        "preview": "Madas Peddaiah Anantapur, Andhra Pradesh - Email me on Indeed: indeed.com/r/Madas- Peddaiah/557069069de72b14 • Having 3 moths of experience in Manual Testing. • Previously worked with Infosys Limited, Mysore as a Software Test Engineer. • Having good experience in Executed Test Cases as per Client Requirements. • Havin"
+      }
+    ],
+    "missing_any": [
+      {
+        "index": 0,
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "detected_sections": [
+          "experience",
+          "skill",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Companies worked at",
+          "Degree",
+          "Designation",
+          "Email Address",
+          "Graduation Year",
+          "Location",
+          "Name",
+          "Skills"
+        ],
+        "entity_count": 25,
+        "date_range_count": 6,
+        "bullet_like": true,
+        "text_length": 1845,
+        "preview": "Govardhana K Senior Software Engineer Bengaluru, Karnataka, Karnataka - Email me on Indeed: indeed.com/r/Govardhana-K/ b2de315d95905b68 Total IT experience 5 Years 6 Months Cloud Lending Solutions INC 4 Month • Salesforce Developer Oracle 5 Years 2 Month • Core Java Developer Languages Core Java, Go Lang Oracle PL-SQL "
+      },
+      {
+        "index": 1,
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": true,
+        "has_education": true,
+        "detected_sections": [
+          "experience",
+          "skill",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Companies worked at",
+          "Degree",
+          "Designation",
+          "Location",
+          "Name",
+          "Skills",
+          "Years of Experience"
+        ],
+        "entity_count": 28,
+        "date_range_count": 1,
+        "bullet_like": true,
+        "text_length": 5203,
+        "preview": "Harini Komaravelli Test Analyst at Oracle, Hyderabad Hyderabad, Telangana - Email me on Indeed: indeed.com/r/Harini- Komaravelli/2659eee82e435d1b ➢ 6 Yrs. of IT Experience in Manual and Automation testing. WORK EXPERIENCE QA Analyst Oracle Test Analyst at Oracle, Hyderabad Infosys Ltd - Hyderabad, Telangana - November "
+      }
+    ],
+    "sparse": [
+      {
+        "index": 162,
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": false,
+        "has_education": false,
+        "detected_sections": [
+          "experience"
+        ],
+        "entity_labels": [
+          "Companies worked at",
+          "Designation",
+          "Email Address",
+          "Location",
+          "Name",
+          "Years of Experience"
+        ],
+        "entity_count": 7,
+        "date_range_count": 1,
+        "bullet_like": true,
+        "text_length": 467,
+        "preview": "Tapan kumar Nayak Bhubaneshwar, Orissa - Email me on Indeed: indeed.com/r/Tapan-kumar-Nayak/ da1f5ffb3c4c4b17 WORK EXPERIENCE 10years G4S Security in Infosys G4S - Bhubaneshwar, Orissa - February 2009 to May 2018 I am fire training. Usha fire training Bombay https://www.indeed.com/r/Tapan-kumar-Nayak/da1f5ffb3c4c4b17?i"
+      },
+      {
+        "index": 103,
+        "has_summary": false,
+        "has_experience": true,
+        "has_skill": false,
+        "has_education": true,
+        "detected_sections": [
+          "experience",
+          "education"
+        ],
+        "entity_labels": [
+          "College Name",
+          "Designation",
+          "Email Address",
+          "Name"
+        ],
+        "entity_count": 5,
+        "date_range_count": 1,
+        "bullet_like": true,
+        "text_length": 450,
+        "preview": "Avani Priya - Email me on Indeed: indeed.com/r/Avani-Priya/fe6b4c5516207abe WORK EXPERIENCE JavaTally Microsoft - 2013 to 2015 office ADDITIONAL INFORMATION I am a girl with simple living and high thinking .I need to work to prove myself. I am to be independent I don't want to depend on someone. EDUCATION br day public"
+      }
+    ]
+  }
+}
