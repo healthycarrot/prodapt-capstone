@@ -1,0 +1,595 @@
+{
+  "meta": {
+    "source_collection": "source_1st_resumes",
+    "total_documents": 2484,
+    "script": "reanalyze_1st_resume_structure.py",
+    "issue": "#6 – [Pipeline v2] Step 1: 1stデータ再解析"
+  },
+  "whitespace_pattern_analysis": {
+    "total_docs": 2484,
+    "docs_with_space_blocks": 2484,
+    "pct_with_space_blocks": 100.0,
+    "total_space_blocks": 184044,
+    "mean_blocks_per_doc": 74.09,
+    "median_blocks_per_doc": 69.0,
+    "max_blocks_in_single_doc": 288,
+    "block_length_histogram": {
+      "3-5": 121426,
+      "6-10": 52550,
+      "11-20": 8680,
+      "21-50": 1307,
+      "51+": 81
+    },
+    "mean_block_length": 5.38,
+    "median_block_length": 4.0,
+    "mean_first_block_relative_pos": 0.0
+  },
+  "newline_stats": {
+    "total_docs": 2484,
+    "docs_with_newlines": 1171,
+    "docs_without_newlines": 1313,
+    "pct_with_newlines": 47.14,
+    "pct_without_newlines": 52.86,
+    "mean_newline_count": 5.83,
+    "median_newline_count": 0.0
+  },
+  "html_analysis": {
+    "total_docs": 2484,
+    "docs_with_html": 2484,
+    "docs_without_html": 0,
+    "pct_with_html": 100.0,
+    "mean_html_sections": 7.5,
+    "median_html_sections": 7.0,
+    "max_html_sections": 16,
+    "section_id_frequency_top25": {
+      "NAME501510397": 2,
+      "SUMM501510401": 2,
+      "HILT501510678": 2,
+      "EXPR501510399": 2,
+      "EDUC501510400": 2,
+      "AFIL501510402": 2,
+      "SKLL501510404": 2,
+      "NAME515694141": 2,
+      "SUMM515694145": 2,
+      "HILT515694524": 2,
+      "EXPR515694143": 2,
+      "EDUC515694144": 2,
+      "SKLL515694147": 2,
+      "NAME500375979": 1,
+      "SUMM500375981": 1,
+      "HILT500375982": 1,
+      "ACCM500375993": 1,
+      "EXPR500375983": 1,
+      "EDUC500400498": 1,
+      "SKLL500375994": 1,
+      "NAME911808366": 1,
+      "SUMM911808372": 1,
+      "EXPR911808368": 1,
+      "EDUC911808369": 1,
+      "SKLL911808371": 1
+    },
+    "top_html_tags": {
+      "span": 39282,
+      "div": 18850,
+      "li": 15742,
+      "ul": 2576,
+      "p": 1514,
+      "br": 901,
+      "td": 676,
+      "table": 338,
+      "tbody": 338,
+      "tr": 338,
+      "font": 326,
+      "strong": 180,
+      "b": 80,
+      "i": 76,
+      "u": 68,
+      "em": 32,
+      "new": 2,
+      "spanclass=\"jobtitle\"": 2,
+      "divclass=\"singlecolumn\"": 2
+    },
+    "html_splittable": true,
+    "html_splittable_reason": "2484/2484 docs (100.0%) have HTML; mean section count = 7.5. HTML splitting is VIABLE as primary method."
+  },
+  "split_verification_10_samples": [
+    {
+      "source_record_id": "12632728",
+      "category": "BUSINESS-DEVELOPMENT",
+      "structure_score": 0,
+      "text_length": 21,
+      "method_used": "none",
+      "whitespace_segment_count": 0,
+      "html_segment_count": 0,
+      "segments_preview": []
+    },
+    {
+      "source_record_id": "23951429",
+      "category": "DESIGNER",
+      "structure_score": 8,
+      "text_length": 2436,
+      "method_used": "html",
+      "whitespace_segment_count": 44,
+      "html_segment_count": 6,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME725859914",
+          "preview": "GRAPHIC DESIGNER",
+          "char_count": 16
+        },
+        {
+          "label": "SECTNAME_SUMM725859916",
+          "preview": "Summary Versatile professional and hands-on leader who motivates, trains and coaches employees to drive progress toward project and company milestones.",
+          "char_count": 151
+        },
+        {
+          "label": "SECTNAME_HILT725859918",
+          "preview": "Highlights Customer-oriented Employee training and development Client and vendor relations Invoicing and purchase orders MS Office Advanced problem solving skills Driven Strategic thinker Superb commu",
+          "char_count": 326
+        },
+        {
+          "label": "SECTNAME_EXPR725859919",
+          "preview": "Experience 05/2014 to 01/2016 Graphic Designer Company Name - City , State Tracked and evaluated staff performance, and handled all promotions and terminations. Completed purchase orders and customer ",
+          "char_count": 1375
+        },
+        {
+          "label": "SECTNAME_EDUC725859920",
+          "preview": "Education certificate : Computer Technician Network Specialist Fresno City College - City , State , United States",
+          "char_count": 113
+        },
+        {
+          "label": "SECTNAME_SKLL725859921",
+          "preview": "Skills Data Entry, Customer Service, Human Resources Leadership, Interpersonal Skills, Inventory control , Marketing, Problem Resolution Project management, Staff Training,Staffing, administrative Bil",
+          "char_count": 227
+        }
+      ]
+    },
+    {
+      "source_record_id": "21366189",
+      "category": "CONSULTANT",
+      "structure_score": 8,
+      "text_length": 6311,
+      "method_used": "html",
+      "whitespace_segment_count": 44,
+      "html_segment_count": 5,
+      "segments_preview": [
+        {
+          "label": "SECTNAME_HILT820622318",
+          "preview": "Qualifications I am a senior IT infrastructure specialist and have 7 years of OEM administration and 6 years of DBA administration. I have Masters in Computer Applications (MCA) and a seasoned technic",
+          "char_count": 913
+        },
+        {
+          "label": "SECTNAME_TSKL820623021",
+          "preview": "Technical Skills Skills Experience Total Years Last Used Operating System : Linux, HP-Unix, Solaris, Windows 9 12 2016",
+          "char_count": 118
+        },
+        {
+          "label": "SECTNAME_EXPR820622316",
+          "preview": "Work Experience July 2016 Company Name Consultant Collaborate with Clients, customers to ensure successful implementations which includes. Implement OEM 12c setup, Apply BP, Plugins, performance monit",
+          "char_count": 3714
+        },
+        {
+          "label": "SECTNAME_EDUC820622317",
+          "preview": "Education and Training MCA, Madurai Kamaraj University University of Madras - RKM Vivekananda College TRAININGS AND CERTIFICTAIONS Six Sigma Green Belt - certified ITIL V3 Foundation certified Oracle ",
+          "char_count": 512
+        },
+        {
+          "label": "SECTNAME_SKLL820622319",
+          "preview": "Skills Architect, Backup, c, Change Management, Strong interpersonal skills, excellent communication, Computer Applications, Clients, Database Administration, DBA, databases, Database, disaster recove",
+          "char_count": 767
+        }
+      ]
+    },
+    {
+      "source_record_id": "22894544",
+      "category": "CONSTRUCTION",
+      "structure_score": 8,
+      "text_length": 4964,
+      "method_used": "html",
+      "whitespace_segment_count": 45,
+      "html_segment_count": 8,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME698368426",
+          "preview": "DRIVER/MANAGER",
+          "char_count": 14
+        },
+        {
+          "label": "SECTNAME_SUMM698368430",
+          "preview": "Professional Summary 4 years of total customer service and physical labor. Great time management and interpersonal skills. The perfect team player and top of the line customer service. I'm looking to ",
+          "char_count": 331
+        },
+        {
+          "label": "SECTNAME_EXPR698368434",
+          "preview": "Experience Driver/Manager , 06/2015 to 10/2015 Company Name - City , State Loading and unloading truck at warehouse during assigned times, ensuring customers were happy with their products, unloading ",
+          "char_count": 1978
+        },
+        {
+          "label": "SECTNAME_EDUC698368435",
+          "preview": "Education High School Diploma Graduated : communications , 2017 GPA: GPA: 3.3 GPA: 3.3 communications Attended Shoreline CC for 2 years where I obtained my AA in general studies, as well as courses in",
+          "char_count": 228
+        },
+        {
+          "label": "SECTNAME_INTR698368558",
+          "preview": "Interests Captain of my high school and JUCO basketball team. Winning multiple team awards. Helped coach and trained younger athletes to maximize their potential as athletes, students, and individuals",
+          "char_count": 605
+        },
+        {
+          "label": "SECTNAME_PRIN698368529",
+          "preview": "Personal Information Very diverse individual coming from a multiracial house hold. With other plans to become a successful individual later on in my life. Working and living for my future and not for ",
+          "char_count": 391
+        },
+        {
+          "label": "SECTNAME_ADDI698368598",
+          "preview": "Additional Information ACKNOWLEDGEMENT(S) AND ACCOMPLISHMEMTS Great Microsoft Office Skills Captain of my high school and JUCO basketball team. Winning multiple team awards. Helped coach and trained y",
+          "char_count": 1058
+        },
+        {
+          "label": "SECTNAME_SKLL698368590",
+          "preview": "Skills billing, budget, charts, customer service, data base, delivery, frame, insurance, logging, Psychology, quality, renovations, safety",
+          "char_count": 138
+        }
+      ]
+    },
+    {
+      "source_record_id": "64017585",
+      "category": "INFORMATION-TECHNOLOGY",
+      "structure_score": 9,
+      "text_length": 3372,
+      "method_used": "html",
+      "whitespace_segment_count": 61,
+      "html_segment_count": 5,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME1027579958",
+          "preview": "INFORMATION TECHNOLOGY CONSULTANT, MANAGING MEMBER",
+          "char_count": 50
+        },
+        {
+          "label": "SECTNAME_SUMM1027579962",
+          "preview": "Summary A versatile, analytic IT Specialist with a proven record of success within large institutions as well as entrepreneurial organizations. Thrives on challenge and solves problems with creativity",
+          "char_count": 296
+        },
+        {
+          "label": "SECTNAME_EXPR1027579960",
+          "preview": "Experience Information Technology Consultant, Managing Member January 2017 to Current Company Name － City , State Worked with product designers and product managers to design user interactions in appl",
+          "char_count": 2058
+        },
+        {
+          "label": "SECTNAME_EDUC1027579961",
+          "preview": "Education and Training BS : Print Production, Graphic Design Computer Science , 1993 St. John's University Print Production, Graphic Design Computer Science",
+          "char_count": 156
+        },
+        {
+          "label": "SECTNAME_SKLL1027579963",
+          "preview": "Technical Skills Active Directory, premiere, ads, Advertising, IBM AIX, Apple, architect, Arts, catalog, color, com, Clients, digital photography, digital video, direct mail, disaster recovery, eComme",
+          "char_count": 515
+        }
+      ]
+    },
+    {
+      "source_record_id": "25482567",
+      "category": "FITNESS",
+      "structure_score": 9,
+      "text_length": 3331,
+      "method_used": "html",
+      "whitespace_segment_count": 60,
+      "html_segment_count": 7,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME846689131",
+          "preview": "OWNER/OPERATOR",
+          "char_count": 14
+        },
+        {
+          "label": "SECTNAME_SUMM846689135",
+          "preview": "Summary High-performing executive with in-depth knowledge of business operations at all levels. Proficient in sales, budgeting, and customer relations. General Manager of an elite gym. Responsible for",
+          "char_count": 383
+        },
+        {
+          "label": "SECTNAME_HILT846689136",
+          "preview": "Highlights Sales new/existing - Interpersonal and organizational skills Leadership/communication skills - Small business development Client account management - Commitment to quality and service Profi",
+          "char_count": 1353
+        },
+        {
+          "label": "SECTNAME_ACCM846690138",
+          "preview": "Accomplishments Successfully started own business. Worked from an hourly employee to being General Manager of leading fitness company. IFBB professional fitness athlete.",
+          "char_count": 169
+        },
+        {
+          "label": "SECTNAME_EXPR846689133",
+          "preview": "Experience 06/2006 to 08/2015 Owner/Operator Company Name － City , State Started and managed the premier functional training studio in Orange County, CA. Trained clients one-on-one to achieve health a",
+          "char_count": 553
+        },
+        {
+          "label": "SECTNAME_EDUC846689134",
+          "preview": "Education 1996 Masters : Exercise Science Human Performance Emphasis University of Wisconsin － City , State Exercise Science Human Performance Emphasis 1994 Bachelors : Exercise Science University of ",
+          "char_count": 276
+        },
+        {
+          "label": "SECTNAME_SKLL846689137",
+          "preview": "Skills Sales &amp; accountmanagement Budget development and achievement Interpersonal communication skills Client retention, customer service Leadership, organizational skills Comprehension of policie",
+          "char_count": 302
+        }
+      ]
+    },
+    {
+      "source_record_id": "68338341",
+      "category": "CHEF",
+      "structure_score": 9,
+      "text_length": 5521,
+      "method_used": "html",
+      "whitespace_segment_count": 104,
+      "html_segment_count": 7,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME522820406",
+          "preview": "EXECUTIVE CHEF-PARTNER",
+          "char_count": 22
+        },
+        {
+          "label": "SECTNAME_SUMM522820410",
+          "preview": "Summary Proven abilities in fine dining restaurants, catering, corporate dining and provisioning. Well versed in cost control, P &amp; L analysis, menu production, design, sanitation, purchasing and r",
+          "char_count": 280
+        },
+        {
+          "label": "SECTNAME_HILT522820428",
+          "preview": "Highlights ServSafe Certified FoodManager ServSafe Liquor Certified 13CT Caterer Liquor Licensee Florida State Gaming Commission Licensee",
+          "char_count": 137
+        },
+        {
+          "label": "SECTNAME_EXPR522820408",
+          "preview": "Experience Executive Chef-Partner July 2014 to Current Company Name － City , State Daily supervision of BOH team members. Weekly supervision of FOH operations-customer service, point of sales, managem",
+          "char_count": 3943
+        },
+        {
+          "label": "SECTNAME_EDUC522820409",
+          "preview": "Education Associate of Science : Culinary Arts , 1991 The Culinary Institute Of America － City , State Business administration , 1987 Kingsborough Community College Abraham Lincoln High School － City ",
+          "char_count": 223
+        },
+        {
+          "label": "SECTNAME_SKLL522820412",
+          "preview": "Skills Well versed in POS usage, Microsoft, Aloha and Cateredge. Excellent communication skills, and the ability to work well either alone or as part of a team. Multi-tasking abilities and great decis",
+          "char_count": 333
+        },
+        {
+          "label": "SECTNAME_ADDI522820413",
+          "preview": "Additional Information A complete listing of all references, awards, and accolades will be furnished upon request. Thank you for your consideration.",
+          "char_count": 148
+        }
+      ]
+    },
+    {
+      "source_record_id": "51415089",
+      "category": "PUBLIC-RELATIONS",
+      "structure_score": 9,
+      "text_length": 6505,
+      "method_used": "html",
+      "whitespace_segment_count": 62,
+      "html_segment_count": 5,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME693517633",
+          "preview": "OWNER/CONSULTANT",
+          "char_count": 16
+        },
+        {
+          "label": "SECTNAME_SUMM693517635",
+          "preview": "Summary Proven marketing and public relations executive with expertise in creating, implementing and executing all facets of marketing, press and national promotions including major entertainment indu",
+          "char_count": 370
+        },
+        {
+          "label": "SECTNAME_EXPR693517637",
+          "preview": "Experience Owner/Consultant August 2006 to Current Company Name － City , State Develop and implement public relations plans and strategies for top consumer brands and gain major local and national exp",
+          "char_count": 5277
+        },
+        {
+          "label": "SECTNAME_EDUC693517638",
+          "preview": "Education Bachelor of Arts : Communications Public relations and writing , August, 1993 University of Missouri － City , State Communications Public relations and writing",
+          "char_count": 169
+        },
+        {
+          "label": "SECTNAME_SKLL693517647",
+          "preview": "Skills ad, artist, benefits, branding, Cable, CD, com, client, Clients, special events, Fast, Film, marketing plans, marketing strategies, marketing, market, materials, messaging, Access, 98, Works, n",
+          "char_count": 388
+        }
+      ]
+    },
+    {
+      "source_record_id": "10504237",
+      "category": "TEACHER",
+      "structure_score": 10,
+      "text_length": 6551,
+      "method_used": "html",
+      "whitespace_segment_count": 85,
+      "html_segment_count": 4,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME924770124",
+          "preview": "BIOLOGY TEACHER",
+          "char_count": 15
+        },
+        {
+          "label": "SECTNAME_EXPR924770126",
+          "preview": "Experience 11/2016 to Current Biology Teacher Company Name － City , State Execute, implement, and modify lesson plans while incorporating differentiated instruction and multiple intelligences. Design ",
+          "char_count": 4680
+        },
+        {
+          "label": "SECTNAME_EDUC924770127",
+          "preview": "Education August 2016 DIG (Discoveries in Geosciences) Field School March 2011 Post-Bachelors Teaching Certification Program : Secondary Education University of Washington － City , State Collaborate w",
+          "char_count": 959
+        },
+        {
+          "label": "SECTNAME_SKLL924770128",
+          "preview": "Skills Anatomy, aseptic techniques, Bachelors, Biology, calculators, calibration, content, credit, database, Department of Health, DNA, Educator, English, equipment maintenance, forms, forth, Good Lab",
+          "char_count": 501
+        }
+      ]
+    },
+    {
+      "source_record_id": "38225199",
+      "category": "FINANCE",
+      "structure_score": 10,
+      "text_length": 6295,
+      "method_used": "html",
+      "whitespace_segment_count": 48,
+      "html_segment_count": 7,
+      "segments_preview": [
+        {
+          "label": "SECTION_NAME505134636",
+          "preview": "FINANCE OPERATIONS/ SUPERVISOR MANAGER",
+          "char_count": 38
+        },
+        {
+          "label": "SECTNAME_SUMM505134638",
+          "preview": "Professional Summary Looking for a position as Manager in a company that provides an open environment with many opportunities for continuous growth.I am highly motivated achiever who is recognized for",
+          "char_count": 360
+        },
+        {
+          "label": "SECTNAME_HILT505134639",
+          "preview": "Core Qualifications Microsoft Office 2010 Window XP (Word, Power Point, Excel, Access), Vista, People Soft, Ensemble, Vantive/Newt, Agent Works, Web Client, TotalView/IEX, Internet Explorer, 1SourceCe",
+          "char_count": 670
+        },
+        {
+          "label": "SECTNAME_EXPR505134640",
+          "preview": "Experience Company Name City , State Finance Operations/ Supervisor Manager 09/1999 to 02/2012 Company Name City , State Customer Relations Manager 03/2012 to Current Supervise and manage the daily op",
+          "char_count": 3756
+        },
+        {
+          "label": "SECTNAME_EDUC505134641",
+          "preview": "Education Early CHildhood education/ computer Science. 1996 Certificate in Early Childhood Education : Early Childhood Education 1995 Community C COLLEGE OF DENVER , City , State , USA Certificate in ",
+          "char_count": 540
+        },
+        {
+          "label": "SECTNAME_AFIL505134642",
+          "preview": "Professional Affiliations Owner of Nonprofit organization Co Founder&amp; Executive Director of Lug- N - Nuts Car Club Member of Colorado Low-rider Alliance",
+          "char_count": 156
+        },
+        {
+          "label": "SECTNAME_SKLL505134643",
+          "preview": "Skills 10-key by touch, accounts payable, accounts receivable, administrative, billing, budgets, budget, Cisco, closing, interpersonal, credit, Client, customer satisfaction, customer care, database, ",
+          "char_count": 505
+        }
+      ]
+    }
+  ],
+  "edge_cases_bottom_5": [
+    {
+      "source_record_id": "12632728",
+      "category": "BUSINESS-DEVELOPMENT",
+      "text_length": 21,
+      "structure_score": 0,
+      "newline_count": 0,
+      "space_block_count": 1,
+      "html_section_count": 0,
+      "section_hits": [],
+      "preview": "",
+      "issues": [
+        "very short text",
+        "no section headers detected",
+        "no date ranges",
+        "no bullet markers",
+        "no newlines",
+        "no HTML sections"
+      ]
+    },
+    {
+      "source_record_id": "23143731",
+      "category": "PUBLIC-RELATIONS",
+      "text_length": 5317,
+      "structure_score": 3,
+      "newline_count": 0,
+      "space_block_count": 56,
+      "html_section_count": 6,
+      "section_hits": [
+        "education",
+        "experience",
+        "skills"
+      ],
+      "preview": "PUBLIC RELATIONS DIRECTOR Experience Public Relations Director Company Name － City , State Developed a media plan for 4 company divisions Developed and fostered relationships between the media and division heads Created and distributed press releases for 4 company divisions Significantly increased v",
+      "issues": [
+        "no date ranges",
+        "no bullet markers",
+        "no newlines"
+      ]
+    },
+    {
+      "source_record_id": "23464505",
+      "category": "AVIATION",
+      "text_length": 3442,
+      "structure_score": 4,
+      "newline_count": 0,
+      "space_block_count": 66,
+      "html_section_count": 7,
+      "section_hits": [
+        "career",
+        "education",
+        "experience",
+        "overview",
+        "projects",
+        "qualifications",
+        "skills"
+      ],
+      "preview": "JAVA INTERN Career Overview Developer well-versed in structuring, developing and implementing interactive websites. with experience in back-end programming, relational databases and performance testing SAN. Education May 2015 Wichita State University － City , State Master of Science Computer Science",
+      "issues": [
+        "no date ranges",
+        "no bullet markers",
+        "no newlines"
+      ]
+    },
+    {
+      "source_record_id": "61677751",
+      "category": "BUSINESS-DEVELOPMENT",
+      "text_length": 5361,
+      "structure_score": 4,
+      "newline_count": 0,
+      "space_block_count": 63,
+      "html_section_count": 6,
+      "section_hits": [
+        "education",
+        "experience",
+        "objective",
+        "qualifications",
+        "skills",
+        "summary"
+      ],
+      "preview": "SALES AND BUSINESS DEVELOPMENT Executive Summary Sales management professional with over 15 years in business and management roles. Demonstrates a passion for building relationships, cultivating partnerships and growing businesses. Core Qualifications Business Development Project Management B2B Sale",
+      "issues": [
+        "no date ranges",
+        "no bullet markers",
+        "no newlines"
+      ]
+    },
+    {
+      "source_record_id": "29797594",
+      "category": "TEACHER",
+      "text_length": 5554,
+      "structure_score": 4,
+      "newline_count": 0,
+      "space_block_count": 43,
+      "html_section_count": 7,
+      "section_hits": [
+        "credentials",
+        "education",
+        "experience",
+        "projects",
+        "skills"
+      ],
+      "preview": "TEACHER Skills E ducator: People skills , enthusiasti c, problem-solve r, great organizational skills , encouraging, technology savvy, eager to learn, communicates great with colleagues and parents, sets high and clear expectations for students, eager to teach, loves to teach students how to \"love t",
+      "issues": [
+        "no date ranges",
+        "no bullet markers",
+        "no newlines"
+      ]
+    }
+  ],
+  "recommendation": {
+    "recommended_method": "hybrid",
+    "detail": "RECOMMENDED: Hybrid approach — use HTML section divs as primary splitter (high coverage, semantic section IDs). Fall back to whitespace-block splitting for any documents where HTML is missing or has fewer than 2 sections. HTML covers 100.0% of docs with mean 7.5 sections. Whitespace blocks cover 100.0% of docs.",
+    "newline_warning": "52.86% of docs have NO newlines — newline-only splitting is not viable",
+    "verification_method_distribution": {
+      "none": 1,
+      "html": 9
+    }
+  }
+}
