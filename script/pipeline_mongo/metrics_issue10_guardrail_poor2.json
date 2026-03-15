@@ -1,0 +1,41 @@
+{
+  "normalizer_version": "issue10_simple_v1",
+  "run_at_utc": "2026-03-14T03:04:11.271569",
+  "db_name": "prodapt_capstone",
+  "source_collection": "source_1st_resumes",
+  "output_collection": "normalized_candidates",
+  "profile": "balanced",
+  "threshold_strictness": "medium",
+  "source_record_ids_filter": [
+    "19818707",
+    "25213006"
+  ],
+  "graph_weights": {
+    "essential": 0.03,
+    "optional": 0.015,
+    "max_boost": 0.2
+  },
+  "dry_run": false,
+  "metrics": {
+    "processed_docs": 2,
+    "graph_rerank_applied_docs": 0,
+    "graph_rank_changed_docs": 0,
+    "llm_rerank_trigger_docs": 0,
+    "llm_extraction_trigger_docs": 2,
+    "normalization_status_counts": {
+      "failed": 1,
+      "partial": 1
+    },
+    "occ_method_counts": {},
+    "skill_method_counts": {
+      "exact": 2,
+      "alt_label": 1,
+      "fuzzy": 7
+    },
+    "avg_occ_candidates": 0.0,
+    "avg_skill_candidates": 5.0,
+    "elapsed_seconds": 7.46,
+    "occ_phrase_cache_size": 17,
+    "skill_phrase_cache_size": 36
+  }
+}

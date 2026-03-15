@@ -1,0 +1,34 @@
+{
+  "generated_at_utc": "2026-03-15T02:34:44.079528",
+  "mongo_db": "prodapt_capstone",
+  "embedding_model": "text-embedding-3-small",
+  "dry_run": false,
+  "counts": {
+    "occupation_records": 3043,
+    "skill_records": 13960
+  },
+  "milvus": {
+    "uri_configured": true,
+    "db_name": "default",
+    "occ_collection": "occupation_collection",
+    "skill_collection": "skill_collection",
+    "metric_type": "COSINE",
+    "drop_existing": true
+  },
+  "preview": {
+    "occupation_payload": "type: occupation\npreferred: technical director\nalt: director of technical arts; technical supervisor; head of technical; technical and operations director; technical manager; head of technical department\ndescription: Technical directors realise the artistic visions of the creators within technical constraints. They coordinate the operations of various production units, such as scene, wardrobe, sound and lighting, and make-up. They adapt the prototype and study the feasibility, implementation, operation and technical monitoring of the artistic project. They are also responsible for the stage eq",
+    "skill_payload": "type: skill\npreferred: manage musical staff\nalt: manage music staff; coordinate duties of musical staff; direct musical staff; manage staff of music\ndescription: Assign and manage staff tasks in areas such as scoring, arranging, copying music and vocal coaching.\nhierarchy: skills > management skills > supervising people > supervising a team or group\nrelated_occupations_essential: musical conductor; music director; choirmaster/choirmistress"
+  },
+  "write_result": {
+    "occupation": {
+      "collection": "occupation_collection",
+      "inserted": 3043,
+      "vector_dim": 1536
+    },
+    "skill": {
+      "collection": "skill_collection",
+      "inserted": 13960,
+      "vector_dim": 1536
+    }
+  }
+}

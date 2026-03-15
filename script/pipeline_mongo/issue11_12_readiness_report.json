@@ -1,0 +1,121 @@
+{
+  "generated_at_utc": "2026-03-13T22:32:23.960375",
+  "collection": "normalized_candidates",
+  "total_docs": 2484,
+  "status_counts": {
+    "success": 2027,
+    "partial": 427,
+    "failed": 30
+  },
+  "status_rates": {
+    "success": 81.6,
+    "partial": 17.19,
+    "failed": 1.21
+  },
+  "occ_method_counts": {
+    "fuzzy": 5568,
+    "alt_label": 2673,
+    "exact": 945
+  },
+  "skill_method_counts": {
+    "exact": 3301,
+    "fuzzy": 12374,
+    "alt_label": 2759
+  },
+  "avg_occ_candidates": 3.698,
+  "avg_skill_candidates": 7.421,
+  "graph": {
+    "rerank_applied_docs": 1181,
+    "rerank_applied_rate": 47.54,
+    "rank_changed_docs": 590,
+    "rank_changed_rate": 23.75
+  },
+  "llm_handoff": {
+    "rerank_trigger_docs": 26,
+    "rerank_trigger_rate": 1.05,
+    "extraction_trigger_docs": 781,
+    "extraction_trigger_rate": 31.44
+  },
+  "confidence_bins": {
+    ">=0.95": 1992,
+    "0.90-0.949": 410,
+    "0.85-0.899": 46,
+    "none": 30,
+    "0.80-0.849": 6
+  },
+  "issue12_integrity": {
+    "duplicate_source_keys": 0,
+    "missing_candidate_id_docs": 0
+  },
+  "top_partial_failed_categories": [
+    {
+      "category": "ARTS",
+      "count": 29
+    },
+    {
+      "category": "HEALTHCARE",
+      "count": 27
+    },
+    {
+      "category": "SALES",
+      "count": 27
+    },
+    {
+      "category": "CONSTRUCTION",
+      "count": 27
+    },
+    {
+      "category": "TEACHER",
+      "count": 26
+    },
+    {
+      "category": "CHEF",
+      "count": 26
+    },
+    {
+      "category": "FITNESS",
+      "count": 25
+    },
+    {
+      "category": "CONSULTANT",
+      "count": 25
+    },
+    {
+      "category": "HR",
+      "count": 22
+    },
+    {
+      "category": "BUSINESS-DEVELOPMENT",
+      "count": 22
+    }
+  ],
+  "recommendations": {
+    "issue11": {
+      "llm_mode_default": "off",
+      "enable_rerank_when": "llm_handoff.rerank_trigger = true",
+      "enable_extraction_when": "llm_handoff.extraction_trigger = true",
+      "expected_rerank_call_rate_pct": 1.05,
+      "expected_extraction_call_rate_pct": 31.44,
+      "cache_key": "sha256(source_dataset|source_record_id|normalizer_version|llm_mode)"
+    },
+    "issue12": {
+      "upsert_key": "source_dataset + source_record_id",
+      "required_status_values": [
+        "success",
+        "partial",
+        "failed"
+      ],
+      "integrity_checks": [
+        "duplicate_source_keys=0",
+        "missing_candidate_id_docs=0"
+      ],
+      "recommended_indexes": [
+        "uq_source_record(source_dataset, source_record_id)",
+        "idx_candidate_id(candidate_id)",
+        "idx_normalization_status(normalization_status)",
+        "idx_llm_rerank_trigger(llm_handoff.rerank_trigger)",
+        "idx_llm_extraction_trigger(llm_handoff.extraction_trigger)"
+      ]
+    }
+  }
+}

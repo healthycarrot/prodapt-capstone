@@ -1,0 +1,63 @@
+{
+  "normalizer_version": "issue10_simple_v2_milvus_hybrid",
+  "run_at_utc": "2026-03-14T13:53:43.113917",
+  "db_name": "prodapt_capstone",
+  "source_collection": "source_1st_resumes",
+  "output_collection": "normalized_candidates",
+  "profile": "balanced",
+  "threshold_strictness": "medium",
+  "source_record_ids_filter": [],
+  "graph_weights": {
+    "essential": 0.03,
+    "optional": 0.015,
+    "max_boost": 0.2
+  },
+  "embedding": {
+    "mode": "auto",
+    "enabled": true,
+    "disabled_reason": null,
+    "model": "text-embedding-3-small",
+    "milvus_db_name": "default",
+    "milvus_occ_collection": "esco_occupation_embeddings",
+    "milvus_skill_collection": "esco_skill_embeddings",
+    "embed_api_calls": 114,
+    "embedding_cache_hits": 0,
+    "search_api_calls": 114,
+    "search_cache_hits": 120,
+    "failed_embedding_calls": 0,
+    "failed_search_calls": 0,
+    "embedding_cache_size": 114,
+    "occ_search_cache_size": 4,
+    "skill_search_cache_size": 110
+  },
+  "dry_run": true,
+  "metrics": {
+    "processed_docs": 20,
+    "graph_rerank_applied_docs": 18,
+    "graph_rank_changed_docs": 12,
+    "embedding_occ_docs": 0,
+    "embedding_skill_docs": 4,
+    "llm_rerank_trigger_docs": 0,
+    "llm_extraction_trigger_docs": 2,
+    "normalization_status_counts": {
+      "success": 19,
+      "partial": 1
+    },
+    "occ_method_counts": {
+      "fuzzy": 87,
+      "alt_label": 19,
+      "exact": 4
+    },
+    "skill_method_counts": {
+      "exact": 47,
+      "fuzzy": 112,
+      "embedding": 4,
+      "alt_label": 30
+    },
+    "avg_occ_candidates": 5.5,
+    "avg_skill_candidates": 9.65,
+    "elapsed_seconds": 113.52,
+    "occ_phrase_cache_size": 75,
+    "skill_phrase_cache_size": 324
+  }
+}

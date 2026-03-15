@@ -1,0 +1,116 @@
+# Pipeline
+
+## Scope
+- This file is the canonical pipeline memo for `script/pipeline_mongo`.
+- Covers implementation history from Issue #6 onward and current default behavior.
+
+## Issue Timeline (Issue #6 -> current)
+1. Issue #6: Mongo ingestion baseline
+- Loaded ESCO raw CSV and 1st dataset into MongoDB.
+- Established source collections and idempotent source key (`source_dataset + source_record_id`).
+- Main script: `script/pipeline_mongo/ingest_csv_to_mongo.py`.
+
+2. Issue #7: Section parsing layer
+- Added parsed section storage and parser reports for source resumes.
+- Prepared downstream deterministic extraction.
+- Main script: `script/pipeline_mongo/parse_sections_to_mongo.py`.
+
+3. Issue #8: Parser quality and structure refinement
+- Improved section parsing stability and reporting.
+- Reduced malformed section carry-over into extraction stage.
+
+4. Issue #9: Deterministic field extraction
+- Added rule-based extraction for experience/education/skills.
+- Stored `extracted_fields` in source docs.
+- Main scripts:
+  - `script/pipeline_mongo/extract_fields.py`
+  - `script/pipeline_mongo/extract_fields_to_mongo.py`
+
+5. Issue #10: Simple but effective normalization pipeline
+- Implemented occupation/skill matching using:
+  - exact label
+  - alt label
+  - fuzzy fallback
+- Added graph rerank by ESCO occupation-skill relations.
+- Added guardrail for fuzzy misfire suppression.
+- Added `llm_handoff` trigger fields for controlled downstream LLM usage.
+- Main script: `script/pipeline_mongo/normalize_1st_to_mongo.py`.
+- Full-run reference result (all 2484):
+  - `success`: 2027
+  - `partial`: 427
+  - `failed`: 30
+  - graph rank changed: 590
+
+6. Issue #11 readiness (LLM gating)
+- Confirmed trigger-gated strategy:
+  - rerank trigger: 26 docs (1.05%)
+  - extraction trigger: 781 docs (31.44%)
+- Keep rule output as fallback if LLM fails.
+
+7. Issue #12 readiness (data integrity)
+- Confirmed idempotent upsert strategy is valid:
+  - duplicate upsert key count: 0
+  - missing `candidate_id`: 0
+- Keep indexes for operational filtering (`normalization_status`, `llm_handoff.*`).
+
+8. Issue #13 review
+- No major plan rewrite required.
+- Keep ranking metrics; add segmentation and integrity blocks in evaluation outputs.
+
+9. Current update (Embedding + Milvus, Occupation/Skill both)
+- Added hybrid embedding retrieval to normalization:
+  - enabled for both occupation and skill candidates
+  - merges embedding candidates with existing lexical candidates before profile filtering
+  - safe fallback: if config/deps are missing, embedding auto-disables and lexical pipeline continues
+- Added ESCO embedding index builder for Milvus cloud:
+  - `script/pipeline_mongo/build_esco_milvus_index.py`
+  - Occupation payload:
+    - preferred + alt + description + hierarchy + essential skills
+  - Skill payload:
+    - preferred + alt + description + hierarchy + related occupations (essential)
+
+## Current Default Behavior
+- Normalizer script: `script/pipeline_mongo/normalize_1st_to_mongo.py`
+- `--embedding-mode auto` is default.
+- In `auto`, pipeline attempts embedding only when all are available:
+  - `OPENAI_API_KEY`
+  - `MILVUS_URI`
+  - Milvus collections for occupation/skill embeddings
+  - required packages (`openai`, `pymilvus`)
+- If unavailable, pipeline runs in lexical mode without aborting.
+
+## Environment Variables
+- `OPENAI_API_KEY`
+- `MILVUS_URI`
+- `MILVUS_TOKEN` (optional)
+- `MILVUS_DB_NAME` (optional)
+- `MILVUS_OCC_COLLECTION` (optional, default: `esco_occupation_embeddings`)
+- `MILVUS_SKILL_COLLECTION` (optional, default: `esco_skill_embeddings`)
+
+## Recommended Commands
+1. Build Milvus embedding collections
+```bash
+python .\script\pipeline_mongo\build_esco_milvus_index.py --db-name prodapt_capstone --drop-existing
+```
+
+2. Run normalization (full)
+```bash
+python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --limit 0 --ranking-profile balanced --threshold-strictness medium --metrics-out .\script\pipeline_mongo\metrics_issue10_full_balanced_medium.json
+```
+
+3. Run normalization (targeted IDs)
+```bash
+python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --source-record-ids 19818707,25213006 --limit 0 --metrics-out .\script\pipeline_mongo\metrics_targeted.json
+```
+
+4. Compare A/B1/B2 experience-query variants (Milvus retrieval)
+```bash
+python .\script\pipeline_mongo\evaluate_milvus_ab_experience.py --db-name prodapt_capstone --sample-size 60 --top-k 10
+```
+
+## Related Docs
+- `docs/Issue11-12-Review.md`
+- `docs/Issue13-Plan-Review.md`
+- `docs/MongoDB-Normalization-Pipeline.md`
+- `docs/Issue6-Script-IO-Map.md`
+- `docs/Milvus-AB-Experience-Comparison.md`

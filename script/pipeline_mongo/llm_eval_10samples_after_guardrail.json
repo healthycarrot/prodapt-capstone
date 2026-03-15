@@ -1,0 +1,337 @@
+{
+  "generated_at_utc": "2026-03-14T03:04:48.741793",
+  "model": "gpt-4.1-mini",
+  "sample_size": 10,
+  "summary": {
+    "avg_top1_fit_score": 76.5,
+    "avg_top3_ranking_score": 72.1,
+    "avg_overall_score": 74.1,
+    "verdict_counts": {
+      "good": 2,
+      "mixed": 7,
+      "poor": 1
+    }
+  },
+  "evaluations": [
+    {
+      "source_record_id": "27018550",
+      "category": "HR",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "customer service representative",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "client relations manager",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "call centre supervisor",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "refinery shift manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "27018550",
+        "top1_fit_score": 85,
+        "top3_ranking_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "顧客対応経験豊富でカスタマーサービス代表が最適。HR専門性はやや弱い。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "37058472",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "project manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "art director",
+          "confidence": 0.965,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "oil and gas production manager",
+          "confidence": 0.828,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "37058472",
+        "top1_fit_score": 75,
+        "top3_ranking_score": 70,
+        "overall_score": 72,
+        "verdict": "mixed",
+        "reason_ja": "デザイナー経験豊富だが、トップ職種のプロジェクトマネージャーはややズレ。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "36434348",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "ICT system analyst",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "software analyst",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "business manager",
+          "confidence": 0.98,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT application developer",
+          "confidence": 0.9586,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "software developer",
+          "confidence": 0.9586,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "36434348",
+        "top1_fit_score": 90,
+        "top3_ranking_score": 88,
+        "overall_score": 89,
+        "verdict": "good",
+        "reason_ja": "ITマネージャー経験とスキルがICTシステムアナリスト等に高適合。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "26801767",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "chief technology officer",
+          "confidence": 0.9354,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "IT auditor",
+          "confidence": 0.83097,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "26801767",
+        "top1_fit_score": 80,
+        "top3_ranking_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "ITディレクター経験はCTOに近いがスキルの一部が乖離。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "63282405",
+      "category": "FITNESS",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "customer service representative",
+          "confidence": 0.9354,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "client relations manager",
+          "confidence": 0.9204,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "fitness instructor",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "office manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "airport director",
+          "confidence": 0.81778,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "63282405",
+        "top1_fit_score": 80,
+        "top3_ranking_score": 78,
+        "overall_score": 79,
+        "verdict": "mixed",
+        "reason_ja": "顧客サービス経験豊富だがフィットネス関連職種との関連は薄い。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "27502951",
+      "category": "AVIATION",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "aircraft maintenance coordinator",
+          "confidence": 0.81385,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "27502951",
+        "top1_fit_score": 70,
+        "top3_ranking_score": 65,
+        "overall_score": 67,
+        "verdict": "mixed",
+        "reason_ja": "航空業界経験はあるがトップ職種の整備コーディネーターとはやや不一致。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "12613221",
+      "category": "HEALTHCARE",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "healthcare specialist lecturer",
+          "confidence": 0.81778,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "12613221",
+        "top1_fit_score": 75,
+        "top3_ranking_score": 70,
+        "overall_score": 72,
+        "verdict": "mixed",
+        "reason_ja": "医療技術者経験はあるが講師職とはスキル・経験に差異あり。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "12938200",
+      "category": "HEALTHCARE",
+      "normalization_status": "partial",
+      "top_occupations": [
+        {
+          "preferred_label": "mental health support worker",
+          "confidence": 0.85581,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "mental health social worker",
+          "confidence": 0.85581,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "12938200",
+        "top1_fit_score": 65,
+        "top3_ranking_score": 60,
+        "overall_score": 62,
+        "verdict": "poor",
+        "reason_ja": "精神保健職種との関連性が低くスキル情報も不足。",
+        "manual_check_needed": true
+      }
+    },
+    {
+      "source_record_id": "11847784",
+      "category": "HR",
+      "normalization_status": "partial",
+      "top_occupations": [
+        {
+          "preferred_label": "compensation analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "animal trainer",
+          "confidence": 0.83238,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "call centre analyst",
+          "confidence": 0.83097,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "energy analyst",
+          "confidence": 0.83097,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "11847784",
+        "top1_fit_score": 70,
+        "top3_ranking_score": 65,
+        "overall_score": 67,
+        "verdict": "mixed",
+        "reason_ja": "HR経験はあるがトップ職種の補償アナリスト等とはややズレ。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "36856210",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "partial",
+      "top_occupations": [
+        {
+          "preferred_label": "ICT teacher secondary school",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "cyber incident responder",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "agricultural equipment design engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "aviation ground systems engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT system analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "36856210",
+        "top1_fit_score": 75,
+        "top3_ranking_score": 70,
+        "overall_score": 72,
+        "verdict": "mixed",
+        "reason_ja": "IT分野の幅広い経験だがトップ職種との直接的な一致は弱い。",
+        "manual_check_needed": false
+      }
+    }
+  ]
+}

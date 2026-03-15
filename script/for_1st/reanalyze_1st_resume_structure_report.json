@@ -1,4 +1,17 @@
-{
+ gh issue list --state all --limit 50 --json number,title,body,state
+gh : The term 'gh' is not recognized as the name of a cmdlet, 
+function, script file, or operable program. Check the spelling    
+of the name, or if a path was included, verify that the path is   
+correct and try again.
+At line:1 char:1
++ gh issue list --state all --limit 50 --json
+number,title,body,state
++ ~~
+    + CategoryInfo          : ObjectNotFound: (gh:String) [], Co  
+   mmandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\Administrator\Desktop\prodapt-capstone> {
   "meta": {
     "source_collection": "source_1st_resumes",
     "total_documents": 2484,

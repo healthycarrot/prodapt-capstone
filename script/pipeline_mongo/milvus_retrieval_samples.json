@@ -1,0 +1,869 @@
+{
+  "generated_at_utc": "2026-03-15T02:56:20.717391",
+  "sample_size": 10,
+  "top_k": 5,
+  "embedding_model": "text-embedding-3-small",
+  "milvus": {
+    "db_name": "default",
+    "occ_collection": "occupation_collection",
+    "skill_collection": "skill_collection"
+  },
+  "summary": {
+    "occ_top1_anchor_hit_count": 8,
+    "skill_top1_query_overlap_count": 7,
+    "category_counts": {
+      "AVIATION": 1,
+      "CONSTRUCTION": 1,
+      "ENGINEERING": 1,
+      "TEACHER": 1,
+      "DIGITAL-MEDIA": 1,
+      "PUBLIC-RELATIONS": 1,
+      "HEALTHCARE": 1,
+      "FINANCE": 1,
+      "ACCOUNTANT": 1,
+      "AGRICULTURE": 1
+    }
+  },
+  "samples": [
+    {
+      "source_record_id": "10176815",
+      "category": "AVIATION",
+      "occupation_query": "AVIATION",
+      "skill_query": "Proficient with maintenance tracking software",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/b0473a10-e3de-480c-a841-171f2356a074",
+          "label": "aviation inspector",
+          "score": 0.529046,
+          "confidence": 0.529046
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/b5e21e2b-ab0c-4c8d-8277-d98be4ad79c4",
+          "label": "avionics inspector",
+          "score": 0.514619,
+          "confidence": 0.514619
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/81a1e1f5-cce3-444d-bfc3-9771236d57cd",
+          "label": "aircraft maintenance engineer",
+          "score": 0.498751,
+          "confidence": 0.498751
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/c8ee6499-7613-4c02-9edf-2a0edcf47705",
+          "label": "aviation safety officer",
+          "score": 0.496018,
+          "confidence": 0.496018
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/591c5063-69ce-4551-ba60-e2304111130f",
+          "label": "aviation data communications manager",
+          "score": 0.495817,
+          "confidence": 0.495817
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/645386bb-8011-4434-90f5-9da2d8bf78cb",
+          "label": "maintain inventory of rail track parts",
+          "score": 0.528742,
+          "confidence": 0.528742
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/f371606f-9b45-4340-9e92-ebd91d14ab29",
+          "label": "maintain inventory of tools",
+          "score": 0.526421,
+          "confidence": 0.526421
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/a28df07f-976c-4eb4-b29a-06161af39756",
+          "label": "use computerised maintenance management systems",
+          "score": 0.526178,
+          "confidence": 0.526178
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/182915aa-3470-433a-9b12-347511befcde",
+          "label": "maintain records of maintenance interventions",
+          "score": 0.52402,
+          "confidence": 0.52402
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/880a8964-a257-4763-b0f5-e0d09d8a0cae",
+          "label": "maintain inventory of pesticides",
+          "score": 0.523864,
+          "confidence": 0.523864
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": false
+      }
+    },
+    {
+      "source_record_id": "10041713",
+      "category": "CONSTRUCTION",
+      "occupation_query": "CONSTRUCTION",
+      "skill_query": "Energy Management Professional Certified by Schneider University.",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/ba3bacd4-73e9-4861-a9c0-f89f1f28055a",
+          "label": "construction general contractor",
+          "score": 0.474407,
+          "confidence": 0.474407
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/faed05c0-c1d1-4e34-b575-0dea96459e56",
+          "label": "construction manager",
+          "score": 0.449771,
+          "confidence": 0.449771
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/0dd7e6cd-2e5a-4fae-9ce0-6a3622d4019f",
+          "label": "construction general supervisor",
+          "score": 0.442202,
+          "confidence": 0.442202
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/fb7e2f4f-1545-42f1-972e-94082e49c6dc",
+          "label": "building construction worker",
+          "score": 0.434108,
+          "confidence": 0.434108
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/f0978ec0-ae7d-4c4a-8f80-3fd200edddac",
+          "label": "construction quality inspector",
+          "score": 0.433524,
+          "confidence": 0.433524
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/83fc0b2b-6cd2-46af-b1ff-d3fc83604c26",
+          "label": "energy efficiency",
+          "score": 0.453625,
+          "confidence": 0.453625
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/ddce2912-bc0f-4a47-aa2b-c1de48bc4b44",
+          "label": "energy conservation",
+          "score": 0.443939,
+          "confidence": 0.443939
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/885808f7-f42b-406e-95f2-28efcd45ddda",
+          "label": "carry out energy management of facilities",
+          "score": 0.416929,
+          "confidence": 0.416929
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/79a5bc25-5b59-47bc-a4c2-fb8e8cb1ddf6",
+          "label": "smart grids systems",
+          "score": 0.412729,
+          "confidence": 0.412729
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/ce689fb5-2c21-4f96-a4b0-d02d4af35923",
+          "label": "design passive energy measures",
+          "score": 0.409637,
+          "confidence": 0.409637
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": true
+      }
+    },
+    {
+      "source_record_id": "10030015",
+      "category": "ENGINEERING",
+      "occupation_query": "ENGINEERING",
+      "skill_query": "DasyLab",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/1c36dd08-f6a7-43f2-a889-beebedb71c25",
+          "label": "equipment engineer",
+          "score": 0.527851,
+          "confidence": 0.527851
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/2a914d26-42aa-46b5-acf3-097d51ba4617",
+          "label": "construction engineer",
+          "score": 0.523447,
+          "confidence": 0.523447
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/836f0a96-7546-4003-9fc8-714fc79199d4",
+          "label": "contract engineer",
+          "score": 0.520627,
+          "confidence": 0.520627
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/555235ce-8c45-409b-a6c9-83e69c2d2bce",
+          "label": "military engineer",
+          "score": 0.519582,
+          "confidence": 0.519582
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/0f5cc4eb-925d-4b99-be6d-b0964a253a9a",
+          "label": "civil engineering technician",
+          "score": 0.516646,
+          "confidence": 0.516646
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/54971fec-1c2f-49c0-9396-2f0c9fa5c8c0",
+          "label": "LAMS",
+          "score": 0.367809,
+          "confidence": 0.367809
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/4a477e55-fdb6-4fe5-8dec-fcebfa3579d6",
+          "label": "automated analysers in the medical laboratory",
+          "score": 0.354273,
+          "confidence": 0.354273
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/604f62cc-0f04-4903-b9f9-7128f72d4e5a",
+          "label": "Brightspace (learning management systems)",
+          "score": 0.353884,
+          "confidence": 0.353884
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/35f1dcdc-577f-46c6-96d9-6c7a64501de9",
+          "label": "laboratory equipment",
+          "score": 0.340958,
+          "confidence": 0.340958
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/e0e86af6-ecb7-446b-acdd-d70cf2e7daad",
+          "label": "check the received biological samples",
+          "score": 0.328984,
+          "confidence": 0.328984
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": false,
+        "skill_top1_has_query_token_overlap": false
+      }
+    },
+    {
+      "source_record_id": "10504237",
+      "category": "TEACHER",
+      "occupation_query": "TEACHER",
+      "skill_query": "Anatomy",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/cbde2432-cb7f-451f-a686-b22cad3957a6",
+          "label": "drama teacher",
+          "score": 0.501579,
+          "confidence": 0.501579
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/5efb2c08-ba3a-4659-a2e4-1883f54e77b6",
+          "label": "secondary school teacher",
+          "score": 0.488013,
+          "confidence": 0.488013
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/f6ca9392-708d-46cb-a2e9-51519595baa2",
+          "label": "drama teacher secondary school",
+          "score": 0.486087,
+          "confidence": 0.486087
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/9711dcfc-d9a8-4fba-9c5e-8428d8bcb53e",
+          "label": "language school teacher",
+          "score": 0.483211,
+          "confidence": 0.483211
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/1044dedc-81d1-48b6-96b3-ced5393b2de1",
+          "label": "teacher of talented and gifted students",
+          "score": 0.48243,
+          "confidence": 0.48243
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/9ec4252d-cbe8-4134-88fa-549dee1883f3",
+          "label": "human anatomy",
+          "score": 0.563476,
+          "confidence": 0.563476
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/b2273cd7-3249-42b3-bc23-8f228b73f84d",
+          "label": "pathological anatomy",
+          "score": 0.518051,
+          "confidence": 0.518051
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/8011182a-6c09-4688-92ee-563c435d381e",
+          "label": "horse anatomy",
+          "score": 0.514003,
+          "confidence": 0.514003
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/b5207591-6db2-4ace-af66-c79ad5176fe0",
+          "label": "histology",
+          "score": 0.504665,
+          "confidence": 0.504665
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/e286eddc-75e5-4ae3-966b-ec89c1c046ba",
+          "label": "anatomy of animals",
+          "score": 0.497413,
+          "confidence": 0.497413
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": true
+      }
+    },
+    {
+      "source_record_id": "10005171",
+      "category": "DIGITAL-MEDIA",
+      "occupation_query": "DIGITAL-MEDIA",
+      "skill_query": "radio and television interviews featuring Chattanooga State administrators",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/d5a43cd3-230e-46d0-ba05-d67d61e5cfbb",
+          "label": "digital media designer",
+          "score": 0.511475,
+          "confidence": 0.511475
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/22585d1e-48aa-45a6-a8c3-d072b4ff1b31",
+          "label": "media integration operator",
+          "score": 0.442636,
+          "confidence": 0.442636
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/d5c4ab26-c293-4f4d-ad89-fe776f49a67f",
+          "label": "digital artist",
+          "score": 0.43644,
+          "confidence": 0.43644
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/dc97adbe-f807-4ad8-8f3c-c24b3416cdef",
+          "label": "digital marketing manager",
+          "score": 0.433229,
+          "confidence": 0.433229
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/b55718eb-e8ff-4485-8ad0-bbac32cbd77b",
+          "label": "advertising media planner",
+          "score": 0.396075,
+          "confidence": 0.396075
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/4d313147-b39d-413f-a5e2-b12d5f0dc9e6",
+          "label": "give interviews to media",
+          "score": 0.333589,
+          "confidence": 0.333589
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/fd9694e7-5e7a-4209-806f-51451bb63dc7",
+          "label": "present during live broadcasts",
+          "score": 0.277643,
+          "confidence": 0.277643
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/2e046d83-a38a-453c-a26d-64114ed2e036",
+          "label": "organise press conferences",
+          "score": 0.273861,
+          "confidence": 0.273861
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/0256f6b0-f4a9-4c5e-9cfd-96d58a2a70fe",
+          "label": "operate radio equipment",
+          "score": 0.261579,
+          "confidence": 0.261579
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/324f0243-1a21-4f5c-9f71-52eebc2596ed",
+          "label": "interview techniques",
+          "score": 0.260443,
+          "confidence": 0.260443
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": true
+      }
+    },
+    {
+      "source_record_id": "10070224",
+      "category": "PUBLIC-RELATIONS",
+      "occupation_query": "PUBLIC-RELATIONS",
+      "skill_query": "Microsoft Office Suite: Word",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/6cc19251-763b-4de1-b4f7-526c9ff732d2",
+          "label": "public relations manager",
+          "score": 0.530518,
+          "confidence": 0.530518
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/c0489e22-6a1b-4e52-974a-eb71bbb42134",
+          "label": "public relations officer",
+          "score": 0.512696,
+          "confidence": 0.512696
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/b89ba3a8-f03a-46b8-ac54-c87d7204aad0",
+          "label": "spokesperson",
+          "score": 0.491099,
+          "confidence": 0.491099
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/9e285322-2cfa-430f-9b66-41be57d698e2",
+          "label": "public affairs consultant",
+          "score": 0.461925,
+          "confidence": 0.461925
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/cd7b838c-51f6-41ec-9067-bb974c0f991b",
+          "label": "communication manager",
+          "score": 0.377817,
+          "confidence": 0.377817
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/81633a44-f1db-4a01-a940-804c6905e330",
+          "label": "use word processing software",
+          "score": 0.540683,
+          "confidence": 0.540683
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/f683ae1d-cb7c-4aa1-b9fe-205e1bd23535",
+          "label": "use microsoft office",
+          "score": 0.512855,
+          "confidence": 0.512855
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/3d03c40c-1b83-4793-8902-2523f40af59e",
+          "label": "Microsoft Access",
+          "score": 0.42289,
+          "confidence": 0.42289
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/234aeb8d-56c3-4531-9193-1c5e6a8d16cb",
+          "label": "use presentation software",
+          "score": 0.413069,
+          "confidence": 0.413069
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/4b244020-5f28-4e20-b74f-1c2dcb6f15cb",
+          "label": "apply desktop publishing techniques",
+          "score": 0.405797,
+          "confidence": 0.405797
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": true
+      }
+    },
+    {
+      "source_record_id": "10062724",
+      "category": "HEALTHCARE",
+      "occupation_query": "HEALTHCARE",
+      "skill_query": "design",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/d38c2107-98f2-47b7-8bb4-f69750d51082",
+          "label": "healthcare assistant",
+          "score": 0.441855,
+          "confidence": 0.441855
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/43d49e27-302b-439d-bce6-86555527edb5",
+          "label": "healthcare inspector",
+          "score": 0.434803,
+          "confidence": 0.434803
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/61053604-8091-4a8e-9c63-5151051722e3",
+          "label": "healthcare consultant",
+          "score": 0.433607,
+          "confidence": 0.433607
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/4a29eab1-5f02-4723-a863-e2d5a0614dfa",
+          "label": "healthcare institution manager",
+          "score": 0.421748,
+          "confidence": 0.421748
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/d4d6842b-27f0-4222-85db-c542acf6d434",
+          "label": "public health policy officer",
+          "score": 0.382367,
+          "confidence": 0.382367
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/fd33c66c-70c4-40e6-b87c-5495bd3bf26e",
+          "label": "design user interface",
+          "score": 0.472413,
+          "confidence": 0.472413
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/d3545bf2-2160-479c-9eb2-6c789da37d8b",
+          "label": "select design elements",
+          "score": 0.465204,
+          "confidence": 0.465204
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/e665d919-f28d-4ac4-adf0-8903ac66540e",
+          "label": "develop design plans",
+          "score": 0.461338,
+          "confidence": 0.461338
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/4c58528e-bdaa-43ad-8f5a-8ad0b8cd4bbb",
+          "label": "design principles",
+          "score": 0.460482,
+          "confidence": 0.460482
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/2c28fc20-8a60-4311-8899-5ef8729c05b3",
+          "label": "design process",
+          "score": 0.450291,
+          "confidence": 0.450291
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": true
+      }
+    },
+    {
+      "source_record_id": "10549585",
+      "category": "FINANCE",
+      "occupation_query": "FINANCE",
+      "skill_query": "Skills Experience Total Years Last Used",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/30f3ea93-882a-4525-841c-1d5b4b64076f",
+          "label": "financial manager",
+          "score": 0.450558,
+          "confidence": 0.450558
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/78db356f-a96a-4456-ab29-2de62e52f830",
+          "label": "public finance accountant",
+          "score": 0.432097,
+          "confidence": 0.432097
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/c01cdf85-3ce0-4d12-ae86-e4e63493fafa",
+          "label": "financial broker",
+          "score": 0.418468,
+          "confidence": 0.418468
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/21de0f3b-a71a-4263-a9ba-90c5f3721b4d",
+          "label": "financial planner",
+          "score": 0.416746,
+          "confidence": 0.416746
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/5e5b1b61-1351-4d3b-a293-deb3661715dd",
+          "label": "financial controller",
+          "score": 0.414563,
+          "confidence": 0.414563
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/0737ad0a-75ac-4696-988b-565820577ac0",
+          "label": "use experience map",
+          "score": 0.44026,
+          "confidence": 0.44026
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/f3880260-ef21-401c-a64f-a96f21dc968a",
+          "label": "last types",
+          "score": 0.419782,
+          "confidence": 0.419782
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/cbc24ea1-8f53-4211-96d4-2c682d018b8a",
+          "label": "use tools for construction and repair",
+          "score": 0.417952,
+          "confidence": 0.417952
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/3f513fdf-70f6-4309-a456-5c60478b14e5",
+          "label": "use authentic crafting techniques",
+          "score": 0.406531,
+          "confidence": 0.406531
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/4ae00a8e-9f47-46da-b1c8-3641a29d9483",
+          "label": "age furniture artificially",
+          "score": 0.397902,
+          "confidence": 0.397902
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": true
+      }
+    },
+    {
+      "source_record_id": "10554236",
+      "category": "ACCOUNTANT",
+      "occupation_query": "ACCOUNTANT",
+      "skill_query": "Certified Defense Financial Manager",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/eda0d957-3c3c-4139-b89a-a18bc9e18897",
+          "label": "accountant",
+          "score": 0.611652,
+          "confidence": 0.611652
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/c3aae59e-1441-4b3e-bdd1-6da50dc7cf42",
+          "label": "bookkeeper",
+          "score": 0.587359,
+          "confidence": 0.587359
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/bfe142b9-a049-4d41-89c4-fd2f34ac56b6",
+          "label": "accounting assistant",
+          "score": 0.567562,
+          "confidence": 0.567562
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/1ad59946-d13e-441e-9b36-56e1df055e21",
+          "label": "financial auditor",
+          "score": 0.558525,
+          "confidence": 0.558525
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/caafca69-9faa-4850-8930-a3fa07fea4e6",
+          "label": "accounting analyst",
+          "score": 0.557364,
+          "confidence": 0.557364
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/a1f2e26f-b2ba-47dc-a0e8-8c53424a508d",
+          "label": "apply certification and payment procedures",
+          "score": 0.410387,
+          "confidence": 0.410387
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/3982571a-e9ce-442a-a4a0-fdfc97727091",
+          "label": "manage cash desk",
+          "score": 0.406382,
+          "confidence": 0.406382
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/52e53619-fa77-4f72-b237-5e4aae784dc2",
+          "label": "financial management",
+          "score": 0.373889,
+          "confidence": 0.373889
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/1ddc021d-d818-4731-904f-842d7491f419",
+          "label": "manage financial and material resources",
+          "score": 0.368454,
+          "confidence": 0.368454
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/2d008d5a-b7bd-46f7-bbb1-5d70a0af9c84",
+          "label": "control financial resources",
+          "score": 0.364037,
+          "confidence": 0.364037
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": true,
+        "skill_top1_has_query_token_overlap": false
+      }
+    },
+    {
+      "source_record_id": "10953078",
+      "category": "AGRICULTURE",
+      "occupation_query": "AGRICULTURE",
+      "skill_query": "balance",
+      "occupation_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/occupation/4d5bd738-9202-4fd7-bd8c-7dbe914048de",
+          "label": "agricultural engineer",
+          "score": 0.490751,
+          "confidence": 0.490751
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/occupation/c25b3700-6095-42b7-99fc-b87dc326c044",
+          "label": "agricultural scientist",
+          "score": 0.479283,
+          "confidence": 0.479283
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/occupation/c40ef517-d4ab-4932-b184-9c2ea5b24fe2",
+          "label": "agronomist",
+          "score": 0.470415,
+          "confidence": 0.470415
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/occupation/98f17395-0f8c-4f51-9072-cb8f66fd6044",
+          "label": "agricultural policy officer",
+          "score": 0.460292,
+          "confidence": 0.460292
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/occupation/c9191f7f-28b5-4df8-991d-804c53009b83",
+          "label": "crop production worker",
+          "score": 0.458714,
+          "confidence": 0.458714
+        }
+      ],
+      "skill_hits": [
+        {
+          "rank": 1,
+          "esco_id": "http://data.europa.eu/esco/skill/36576c3d-2c7b-4755-bc67-ec1452470c98",
+          "label": "balance tyres",
+          "score": 0.433732,
+          "confidence": 0.433732
+        },
+        {
+          "rank": 2,
+          "esco_id": "http://data.europa.eu/esco/skill/585ed991-fdab-4f3c-9187-a32bfb7ab822",
+          "label": "perform balance sheet operations",
+          "score": 0.41027,
+          "confidence": 0.41027
+        },
+        {
+          "rank": 3,
+          "esco_id": "http://data.europa.eu/esco/skill/882cb8bb-1538-4a77-818b-64c65697fe73",
+          "label": "balance transportation cargo",
+          "score": 0.391213,
+          "confidence": 0.391213
+        },
+        {
+          "rank": 4,
+          "esco_id": "http://data.europa.eu/esco/skill/d74fb4cc-222e-4ad7-a064-78411fa4dc63",
+          "label": "balance participants' personal needs with group needs",
+          "score": 0.373756,
+          "confidence": 0.373756
+        },
+        {
+          "rank": 5,
+          "esco_id": "http://data.europa.eu/esco/skill/2ff6daae-8319-4e56-bc4d-bb574754aec4",
+          "label": "harmonise body movements",
+          "score": 0.369783,
+          "confidence": 0.369783
+        }
+      ],
+      "heuristics": {
+        "occ_top1_has_category_anchor": false,
+        "skill_top1_has_query_token_overlap": true
+      }
+    }
+  ]
+}
