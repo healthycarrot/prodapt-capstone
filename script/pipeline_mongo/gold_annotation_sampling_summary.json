@@ -1,0 +1,162 @@
+{
+  "generated_at_utc": "2026-03-15T11:56:24.347754",
+  "mongo": {
+    "db_name": "prodapt_capstone",
+    "collection": "normalized_candidates",
+    "source_dataset": "1st_data",
+    "total_docs": 2484
+  },
+  "settings": {
+    "template_size": 50,
+    "stratified_size": 200,
+    "seed": 42,
+    "top_occ": 10,
+    "top_skill": 10,
+    "resume_max_chars": 500
+  },
+  "outputs": {
+    "template_csv": "script\\pipeline_mongo\\gold_annotation_template_50.csv",
+    "stratified_csv": "script\\pipeline_mongo\\gold_annotation_sample_200_stratified.csv",
+    "summary_json": "script\\pipeline_mongo\\gold_annotation_sampling_summary.json"
+  },
+  "template_50_summary": {
+    "row_count": 50,
+    "status_counts": {
+      "partial": 11,
+      "success": 38,
+      "failed": 1
+    },
+    "top_categories": [
+      {
+        "category": "INFORMATION-TECHNOLOGY",
+        "count": 3
+      },
+      {
+        "category": "ACCOUNTANT",
+        "count": 3
+      },
+      {
+        "category": "BUSINESS-DEVELOPMENT",
+        "count": 3
+      },
+      {
+        "category": "FITNESS",
+        "count": 2
+      },
+      {
+        "category": "TEACHER",
+        "count": 2
+      },
+      {
+        "category": "CHEF",
+        "count": 2
+      },
+      {
+        "category": "SALES",
+        "count": 2
+      },
+      {
+        "category": "HR",
+        "count": 2
+      },
+      {
+        "category": "PUBLIC-RELATIONS",
+        "count": 2
+      },
+      {
+        "category": "AUTOMOBILE",
+        "count": 2
+      },
+      {
+        "category": "DIGITAL-MEDIA",
+        "count": 2
+      },
+      {
+        "category": "BANKING",
+        "count": 2
+      },
+      {
+        "category": "HEALTHCARE",
+        "count": 2
+      },
+      {
+        "category": "CONSULTANT",
+        "count": 2
+      },
+      {
+        "category": "ARTS",
+        "count": 2
+      }
+    ]
+  },
+  "stratified_200_summary": {
+    "row_count": 200,
+    "status_counts": {
+      "success": 175,
+      "failed": 3,
+      "partial": 22
+    },
+    "top_categories": [
+      {
+        "category": "INFORMATION-TECHNOLOGY",
+        "count": 10
+      },
+      {
+        "category": "BUSINESS-DEVELOPMENT",
+        "count": 10
+      },
+      {
+        "category": "ADVOCATE",
+        "count": 9
+      },
+      {
+        "category": "AVIATION",
+        "count": 9
+      },
+      {
+        "category": "HEALTHCARE",
+        "count": 9
+      },
+      {
+        "category": "ENGINEERING",
+        "count": 9
+      },
+      {
+        "category": "BANKING",
+        "count": 9
+      },
+      {
+        "category": "CONSULTANT",
+        "count": 9
+      },
+      {
+        "category": "DESIGNER",
+        "count": 9
+      },
+      {
+        "category": "PUBLIC-RELATIONS",
+        "count": 9
+      },
+      {
+        "category": "FITNESS",
+        "count": 9
+      },
+      {
+        "category": "HR",
+        "count": 9
+      },
+      {
+        "category": "CHEF",
+        "count": 9
+      },
+      {
+        "category": "CONSTRUCTION",
+        "count": 9
+      },
+      {
+        "category": "ACCOUNTANT",
+        "count": 9
+      }
+    ]
+  }
+}

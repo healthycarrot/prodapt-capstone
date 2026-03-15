@@ -3,6 +3,16 @@
 ## Pipeline Change Rule
 - For any change related to the normalization pipeline, read `Pipeline.md` before editing code or docs.
 
+# Github issue rule
+- When you have to check issues, you must access the remote repository and check the issues on GitHub. You can use the GitHub API or any other method to access the issues. Make sure to check for any relevant issues that may be related to the task you are working on.
+
+## GitHub CLI (`gh`)
+- `gh` is available via the executable path:
+  - `C:\Program Files\GitHub CLI\gh.exe`
+- Current authenticated account:
+  - `healthycarrot`
+- If `gh` is not resolved from `PATH`, run it by full path.
+
 ## What Counts As Pipeline Change
 - Files under `script/pipeline_mongo/`
 - Pipeline-related docs under `docs/`

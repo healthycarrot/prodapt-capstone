@@ -57,7 +57,7 @@
 - No major plan rewrite required.
 - Keep ranking metrics; add segmentation and integrity blocks in evaluation outputs.
 
-9. Current update (Embedding + Milvus, Occupation/Skill both)
+9. Embedding + Milvus baseline
 - Added hybrid embedding retrieval to normalization:
   - enabled for both occupation and skill candidates
   - merges embedding candidates with existing lexical candidates before profile filtering
@@ -69,9 +69,25 @@
   - Skill payload:
     - preferred + alt + description + hierarchy + related occupations (essential)
 
+10. Retrieval strategy refinement (2026-03-15)
+- Occupation retrieval switched to `A + B1`:
+  - A: base occupation semantic query
+  - B1: base + raw experience query
+  - final merge: RRF fusion before profile filtering
+- Skill retrieval kept as `A` only:
+  - experience-augmented query is not used in current default path
+- Added embedding debug counters for:
+  - occupation A candidates
+  - occupation B1 candidates
+  - fused occupation candidates
+  - skill A candidates
+
 ## Current Default Behavior
 - Normalizer script: `script/pipeline_mongo/normalize_1st_to_mongo.py`
 - `--embedding-mode auto` is default.
+- When embedding is enabled:
+  - Occupation: `A + B1` (RRF fusion)
+  - Skill: `A` only
 - In `auto`, pipeline attempts embedding only when all are available:
   - `OPENAI_API_KEY`
   - `MILVUS_URI`
@@ -106,6 +122,11 @@ python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capst
 4. Compare A/B1/B2 experience-query variants (Milvus retrieval)
 ```bash
 python .\script\pipeline_mongo\evaluate_milvus_ab_experience.py --db-name prodapt_capstone --sample-size 60 --top-k 10
+```
+
+5. Generate gold annotation CSV samples (50 template + 200 stratified)
+```bash
+python .\script\pipeline_mongo\generate_gold_annotation_samples.py --db-name prodapt_capstone --template-size 50 --stratified-size 200 --out-template-csv .\script\pipeline_mongo\gold_annotation_template_50.csv --out-stratified-csv .\script\pipeline_mongo\gold_annotation_sample_200_stratified.csv --out-summary-json .\script\pipeline_mongo\gold_annotation_sampling_summary.json
 ```
 
 ## Related Docs

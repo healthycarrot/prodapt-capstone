@@ -207,7 +207,8 @@ def category_anchor_phrases(category: str | None) -> list[str]:
 
 def embedding_phrase_allowed(phrase: str) -> bool:
     key = normalize_text(phrase)
-    if len(key) < 3 or len(key) > 120:
+    # B1 occupation queries append short raw-experience text, so allow moderate length.
+    if len(key) < 3 or len(key) > 320:
         return False
     if key in GENERIC_TERMS:
         return False
@@ -391,6 +392,100 @@ def embedding_match(
         search_cache[cache_key] = cached_rows
 
     return out
+
+
+def build_experience_raw_snippet(experiences: list[dict[str, Any]], max_chars: int = 180) -> str:
+    if not experiences:
+        return ""
+
+    def _sort_key(exp: dict[str, Any]) -> tuple[int, str, str]:
+        return (
+            1 if bool(exp.get("is_current")) else 0,
+            str(exp.get("end_date") or ""),
+            str(exp.get("start_date") or ""),
+        )
+
+    top = sorted([e for e in experiences if isinstance(e, dict)], key=_sort_key, reverse=True)[:2]
+    chunks: list[str] = []
+    for exp in top:
+        title = normalize_spaces(exp.get("title") or exp.get("raw_title"))
+        company = normalize_spaces(exp.get("company"))
+        desc = normalize_spaces(exp.get("description_raw"))
+        chunk = " | ".join([v for v in [title, company, desc] if v])
+        if chunk:
+            chunks.append(chunk)
+    if not chunks:
+        return ""
+    return " ; ".join(chunks)[:max_chars]
+
+
+def build_occupation_b1_queries(occupation_phrases: list[str], experiences: list[dict[str, Any]]) -> list[str]:
+    exp_snippet = build_experience_raw_snippet(experiences)
+    if not exp_snippet:
+        return []
+
+    base = unique_strings(occupation_phrases)[:2]
+    out: list[str] = []
+    for phrase in base:
+        if not phrase:
+            continue
+        out.append(f"{phrase} ; experience: {exp_snippet}")
+    return out
+
+
+def rrf_fuse_embedding_candidates(
+    primary: list[Candidate],
+    secondary: list[Candidate],
+    top_k: int,
+    rrf_k: int = 60,
+) -> list[Candidate]:
+    if not primary and not secondary:
+        return []
+    if not secondary:
+        return sorted(primary, key=lambda c: c.confidence, reverse=True)[:top_k]
+
+    def _ranked(rows: list[Candidate]) -> list[Candidate]:
+        best: dict[str, Candidate] = {}
+        for cand in rows:
+            current = best.get(cand.esco_id)
+            if current is None or cand.confidence > current.confidence:
+                best[cand.esco_id] = cand
+        return sorted(best.values(), key=lambda c: c.confidence, reverse=True)
+
+    fused: dict[str, dict[str, Any]] = {}
+    for ranked in [_ranked(primary), _ranked(secondary)]:
+        for rank, cand in enumerate(ranked, start=1):
+            row = fused.setdefault(
+                cand.esco_id,
+                {
+                    "best": cand,
+                    "rrf_score": 0.0,
+                    "best_conf": cand.confidence,
+                },
+            )
+            row["rrf_score"] += 1.0 / float(rrf_k + rank)
+            if cand.confidence > row["best_conf"]:
+                row["best_conf"] = cand.confidence
+                row["best"] = cand
+
+    merged: list[Candidate] = []
+    for row in fused.values():
+        best = row["best"]
+        # Convert rank-fusion evidence into a bounded confidence bump.
+        boosted = min(1.0, float(row["best_conf"]) + (float(row["rrf_score"]) * 3.0))
+        merged.append(
+            Candidate(
+                esco_id=best.esco_id,
+                preferred_label=best.preferred_label,
+                raw_text=best.raw_text,
+                confidence=round(boosted, 5),
+                match_method="embedding_b1",
+                hierarchy_json=best.hierarchy_json,
+                source_span=best.source_span,
+            )
+        )
+
+    return sorted(merged, key=lambda c: c.confidence, reverse=True)[:top_k]
 
 
 def label_matches_category(label: str | None, category: str | None) -> bool:
@@ -905,6 +1000,7 @@ def build_doc(
     skill_phrases = payload["skill_phrases"]
     if not skill_phrases:
         skill_phrases = extract_skills_from_text(resume_text)
+    experiences = payload.get("experiences") or []
 
     raw_occ = staged_match(
         occupation_phrases,
@@ -921,18 +1017,31 @@ def build_doc(
         phrase_cache=skill_phrase_cache,
     )
 
+    embedding_occ_a: list[Candidate] = []
+    embedding_occ_b1: list[Candidate] = []
     embedding_occ: list[Candidate] = []
     embedding_skill: list[Candidate] = []
     if embedding_runtime is not None and embedding_runtime.enabled:
-        embedding_occ = embedding_match(
+        embedding_occ_a = embedding_match(
             occupation_phrases,
             occ_index,
             embedding_runtime,
             target="occupation",
         )
-        skill_embedding_phrases = unique_strings(skill_phrases + occupation_phrases[:3])
+        occ_b1_queries = build_occupation_b1_queries(occupation_phrases, experiences)
+        embedding_occ_b1 = embedding_match(
+            occ_b1_queries,
+            occ_index,
+            embedding_runtime,
+            target="occupation",
+        )
+        embedding_occ = rrf_fuse_embedding_candidates(
+            embedding_occ_a,
+            embedding_occ_b1,
+            top_k=embedding_runtime.occ_top_k,
+        )
         embedding_skill = embedding_match(
-            skill_embedding_phrases,
+            skill_phrases,
             skill_index,
             embedding_runtime,
             target="skill",
@@ -981,8 +1090,10 @@ def build_doc(
         "disabled_reason": (
             embedding_runtime.disabled_reason if (embedding_runtime is not None and not embedding_runtime.enabled) else None
         ),
-        "occupation_candidate_count": len(embedding_occ),
-        "skill_candidate_count": len(embedding_skill),
+        "occupation_a_candidate_count": len(embedding_occ_a),
+        "occupation_b1_candidate_count": len(embedding_occ_b1),
+        "occupation_fused_candidate_count": len(embedding_occ),
+        "skill_a_candidate_count": len(embedding_skill),
     }
 
     out = {
@@ -997,7 +1108,7 @@ def build_doc(
         "extraction_confidence": extraction_confidence,
         "occupation_candidates": occ_rows,
         "skill_candidates": skill_rows,
-        "experiences": payload.get("experiences") or [],
+        "experiences": experiences,
         "educations": payload.get("educations") or [],
         "llm_handoff": llm_handoff,
         "matching_debug": {
@@ -1207,7 +1318,7 @@ def main() -> None:
                 metrics["occ_method_counts"][row.get("match_method", "unknown")] += 1
             for row in skill_rows:
                 metrics["skill_method_counts"][row.get("match_method", "unknown")] += 1
-            if any(row.get("match_method") == "embedding" for row in occ_rows):
+            if any(row.get("match_method") in {"embedding", "embedding_b1"} for row in occ_rows):
                 metrics["embedding_occ_docs"] += 1
             if any(row.get("match_method") == "embedding" for row in skill_rows):
                 metrics["embedding_skill_docs"] += 1

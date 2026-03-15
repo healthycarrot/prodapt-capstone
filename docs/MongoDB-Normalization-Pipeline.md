@@ -1,17 +1,17 @@
-# MongoDB Normalization Pipeline (1st_data -> normalized_candidates)
+﻿# MongoDB Normalization Pipeline (1st_data -> normalized_candidates)
 
-## 方針
-- ESCO は raw 構造のまま MongoDB に格納して参照する。
-- 1st_data (`Resume.csv`) を入力として正規化し、`normalized_candidates` に保存する。
-- 初期マッチングは `exact + alt_label + fuzzy(>=0.85)`。
-- 将来 LLM を追加できるよう、matcher をモジュール化する。
-- 職種候補は ESCO occupation-skill relation で再ランキングする（graph rerank）。
-- 曖昧ケースのみ LLM rerank を発火し、結果はメモリキャッシュする。
-- 任意で Top-N のみ embedding rerank を適用する。
+## æ–¹é‡
+- ESCO ã¯ raw æ§‹é€ ã®ã¾ã¾ MongoDB ã«æ ¼ç´ã—ã¦å‚ç…§ã™ã‚‹ã€‚
+- 1st_data (`Resume.csv`) ã‚’å…¥åŠ›ã¨ã—ã¦æ­£è¦åŒ–ã—ã€`normalized_candidates` ã«ä¿å­˜ã™ã‚‹ã€‚
+- åˆæœŸãƒžãƒƒãƒãƒ³ã‚°ã¯ `exact + alt_label + fuzzy(>=0.85)`ã€‚
+- å°†æ¥ LLM ã‚’è¿½åŠ ã§ãã‚‹ã‚ˆã†ã€matcher ã‚’ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åŒ–ã™ã‚‹ã€‚
+- è·ç¨®å€™è£œã¯ ESCO occupation-skill relation ã§å†ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã™ã‚‹ï¼ˆgraph rerankï¼‰ã€‚
+- æ›–æ˜§ã‚±ãƒ¼ã‚¹ã®ã¿ LLM rerank ã‚’ç™ºç«ã—ã€çµæžœã¯ãƒ¡ãƒ¢ãƒªã‚­ãƒ£ãƒƒã‚·ãƒ¥ã™ã‚‹ã€‚
+- ä»»æ„ã§ Top-N ã®ã¿ embedding rerank ã‚’é©ç”¨ã™ã‚‹ã€‚
 
-## コレクション
+## ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
 
-### Raw 参照コレクション (ESCO)
+### Raw å‚ç…§ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ (ESCO)
 - `raw_esco_occupations`
 - `raw_esco_skills`
 - `raw_esco_isco_groups`
@@ -20,81 +20,85 @@
 - `raw_esco_broader_relations_skill`
 - `raw_esco_occupation_skill_relations`
 
-### 入力コレクション
+### å…¥åŠ›ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
 - `source_1st_resumes`
 
-### 正規化出力コレクション
+### æ­£è¦åŒ–å‡ºåŠ›ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
 - `normalized_candidates`
 
-## 実装ファイル
-- CSV取込: [script/pipeline_mongo/ingest_csv_to_mongo.py](script/pipeline_mongo/ingest_csv_to_mongo.py)
-- 正規化: [script/pipeline_mongo/normalize_1st_to_mongo.py](script/pipeline_mongo/normalize_1st_to_mongo.py)
-- 評価ランナー: [script/pipeline_mongo/evaluate_normalization.py](script/pipeline_mongo/evaluate_normalization.py)
+## å®Ÿè£…ãƒ•ã‚¡ã‚¤ãƒ«
+- CSVå–è¾¼: [script/pipeline_mongo/ingest_csv_to_mongo.py](script/pipeline_mongo/ingest_csv_to_mongo.py)
+- æ­£è¦åŒ–: [script/pipeline_mongo/normalize_1st_to_mongo.py](script/pipeline_mongo/normalize_1st_to_mongo.py)
+- è©•ä¾¡ãƒ©ãƒ³ãƒŠãƒ¼: [script/pipeline_mongo/evaluate_normalization.py](script/pipeline_mongo/evaluate_normalization.py)
 
-## 必要パッケージ
+## å¿…è¦ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸
 - `pymongo`
 - `rapidfuzz`
 - `openai`
 - `python-dotenv`
 
-## 実行手順
+## å®Ÿè¡Œæ‰‹é †
 
-1. CSV を MongoDB にロード
+1. CSV ã‚’ MongoDB ã«ãƒ­ãƒ¼ãƒ‰
 - ESCO raw CSV
 - 1st_data `Resume.csv`
 
-2. 正規化パイプライン実行
-- `source_1st_resumes` を読み取り
-- occupation/skill を ESCO 参照で候補化
-- occupation を ESCO relation + optional embedding/LLM で再ランキング
-- `normalized_candidates` へ upsert
+2. æ­£è¦åŒ–ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³å®Ÿè¡Œ
+- `source_1st_resumes` ã‚’èª­ã¿å–ã‚Š
+- occupation/skill ã‚’ ESCO å‚ç…§ã§å€™è£œåŒ–
+- occupation ã‚’ ESCO relation + optional embedding/LLM ã§å†ãƒ©ãƒ³ã‚­ãƒ³ã‚°
+- `normalized_candidates` ã¸ upsert
 
-### 推奨実行例（graph + LLM + embedding）
-- `python .\normalize_1st_to_mongo.py --db-name prodapt_capstone --fetch-batch-size 300 --write-batch-size 300 --enable-embedding-rerank --enable-llm-rerank`
+### æŽ¨å¥¨å®Ÿè¡Œä¾‹ï¼ˆgraph + LLM + embeddingï¼‰
+- `python .\normalize_1st_to_mongo.py --db-name prodapt_capstone --limit 0 --ranking-profile balanced --threshold-strictness medium --embedding-mode auto --metrics-out .\script\pipeline_mongo\metrics_issue10_full_balanced_medium.json`
 
-### 主な追加フラグ
+### ä¸»ãªè¿½åŠ ãƒ•ãƒ©ã‚°
 - `--graph-essential-weight`
 - `--graph-optional-weight`
-- `--enable-embedding-rerank`
+- `--graph-max-boost`
+- `--embedding-mode` (`auto` / `off`)
 - `--embedding-model`
-- `--embedding-top-n`
-- `--enable-llm-rerank`
-- `--llm-low-confidence-threshold`
-- `--llm-min-graph-support`
-- `--llm-min-skill-candidates`
+- `--embedding-occ-top-k`
+- `--embedding-skill-top-k`
+- `--embedding-min-confidence`
+- `--milvus-occ-collection`
+- `--milvus-skill-collection`
 
-## 正規化ルール (確定)
+## æ­£è¦åŒ–ãƒ«ãƒ¼ãƒ« (ç¢ºå®š)
 - `candidate_id`: UUID v4
 - `source_dataset`: `1st_data`
-- `source_record_id`: 1st の `ID`
-- fuzzy 閾値: `0.85`
-- rank: `confidence` 降順
+- `source_record_id`: 1st ã® `ID`
+- fuzzy é–¾å€¤: `0.85`
+- rank: `confidence` é™é †
 - is_primary: `rank = 1`
-- 再実行: upsert（既存候補/子配列差し替え）
-- occupation候補に `graph_support`（essential/optional hit）を付与
+- å†å®Ÿè¡Œ: upsertï¼ˆæ—¢å­˜å€™è£œ/å­é…åˆ—å·®ã—æ›¿ãˆï¼‰
+- occupationå€™è£œã« `graph_support`ï¼ˆessential/optional hitï¼‰ã‚’ä»˜ä¸Ž
 
-## モジュール構成 (将来LLM対応)
+## ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«æ§‹æˆ (å°†æ¥LLMå¯¾å¿œ)
 - `ExactMatcher`
 - `AltLabelMatcher`
 - `FuzzyMatcher`
-- 将来追加: `LLMMatcher`
+- å°†æ¥è¿½åŠ : `LLMMatcher`
 
-`normalize_1st_to_mongo.py` は matcher インターフェース経由で呼ぶため、LLM matcher を追加しても既存処理に最小変更で対応できる。
+`normalize_1st_to_mongo.py` ã¯ matcher ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹çµŒç”±ã§å‘¼ã¶ãŸã‚ã€LLM matcher ã‚’è¿½åŠ ã—ã¦ã‚‚æ—¢å­˜å‡¦ç†ã«æœ€å°å¤‰æ›´ã§å¯¾å¿œã§ãã‚‹ã€‚
 
-## 評価ランナー
+## è©•ä¾¡ãƒ©ãƒ³ãƒŠãƒ¼
 
-### 実行
-- `python .\evaluate_normalization.py --db-name prodapt_capstone --k 10 --output-json .\eval_report.json --output-md .\eval_report.md`
+### å®Ÿè¡Œ
+- `python .\script\pipeline_mongo\evaluate_normalization.py --db-name prodapt_capstone --mode weak --limit 50 --k 10 --output-json .\script\pipeline_mongo\eval_issue13_smoke50.json --output-md .\docs\Eval-Normalization-Issue13-Smoke50.md`
+- `python .\script\pipeline_mongo\evaluate_normalization.py --db-name prodapt_capstone --mode gold --gold-file .\gold_labels.csv --k 10 --output-json .\script\pipeline_mongo\eval_issue13_gold.json --output-md .\docs\Eval-Normalization-Issue13-Gold.md`
+- `python .\script\pipeline_mongo\evaluate_normalization.py --db-name prodapt_capstone --mode weak --k 10 --baseline-json .\script\pipeline_mongo\eval_issue13_before.json --output-json .\script\pipeline_mongo\eval_issue13_after.json --output-md .\docs\Eval-Normalization-Issue13-Diff.md`
 
-### 指標
+### æŒ‡æ¨™
 - `P@5`
 - `MRR@10`
 - `MAP@K`
 - `coverage@10`
 
-### 備考
-- `--gold-file` を渡すと人手ラベルで評価
-- `--gold-file` なしの場合は category と職種ラベルの弱一致で暫定評価
+### å‚™è€ƒ
+- `--mode auto` ã§ã¯ `--gold-file` æŒ‡å®šæ™‚ã« Goldï¼ŒæœªæŒ‡å®šæ™‚ã« Weak
+- Weak ã¯ category-anchor overlap ã«åŸºã¥ãè£œåŠ©è©•ä¾¡
+- `--baseline-json` ãŒã‚ã‚‹ã¨ A/B å·®åˆ†è¡¨ã‚’ Markdown ã«å‡ºåŠ›
 
 ## Issue #11/#12 Handoff (from full run)
 - Full run command:
@@ -125,3 +129,4 @@
 - `script/pipeline_mongo/metrics_issue10_full_balanced_medium.json`
 - `script/pipeline_mongo/issue11_12_readiness_report.json`
 - `docs/Issue11-12-Review.md`
+
