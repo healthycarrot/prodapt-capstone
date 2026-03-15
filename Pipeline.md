@@ -82,18 +82,41 @@
   - fused occupation candidates
   - skill A candidates
 
+11. Issue #13 implementation update (2026-03-16)
+- Added LLM-based occupation adjudication stage after graph rerank:
+  - candidate pool expansion (dedupe by ESCO id)
+  - resume role-profile extraction by LLM
+  - multi-judge (`jury`) occupation scoring/ranking
+  - consensus-based rerank merge into final occupation confidence
+- Added `matching_debug.llm_occupation` block:
+  - applied flag, reason, candidate_count, judge_runs, consensus_rate
+  - top1 before/after, fallback_used
+- Added per-candidate LLM signals in output:
+  - `llm_fit_score`
+  - `llm_rank_score`
+- Updated normalizer version:
+  - `issue13_llm_occ_jury_v1`
+
 ## Current Default Behavior
 - Normalizer script: `script/pipeline_mongo/normalize_1st_to_mongo.py`
 - `--embedding-mode auto` is default.
+- `--llm-occ-rerank-mode always` is default.
 - When embedding is enabled:
   - Occupation: `A + B1` (RRF fusion)
   - Skill: `A` only
+- Occupation final ranking path:
+  - lexical/embedding candidate generation
+  - profile filter
+  - graph rerank
+  - LLM occupation rerank (jury aggregation)
+  - category guardrail
 - In `auto`, pipeline attempts embedding only when all are available:
   - `OPENAI_API_KEY`
   - `MILVUS_URI`
   - Milvus collections for occupation/skill embeddings
   - required packages (`openai`, `pymilvus`)
-- If unavailable, pipeline runs in lexical mode without aborting.
+- If embedding is unavailable, pipeline runs without embedding.
+- If LLM occupation rerank is unavailable, pipeline falls back to non-LLM ranking path.
 
 ## Environment Variables
 - `OPENAI_API_KEY`
@@ -119,12 +142,17 @@ python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capst
 python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --source-record-ids 19818707,25213006 --limit 0 --metrics-out .\script\pipeline_mongo\metrics_targeted.json
 ```
 
-4. Compare A/B1/B2 experience-query variants (Milvus retrieval)
+4. Run normalization without LLM occupation rerank (for speed/baseline)
+```bash
+python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --limit 0 --llm-occ-rerank-mode off --metrics-out .\script\pipeline_mongo\metrics_no_llm_occ.json
+```
+
+5. Compare A/B1/B2 experience-query variants (Milvus retrieval)
 ```bash
 python .\script\pipeline_mongo\evaluate_milvus_ab_experience.py --db-name prodapt_capstone --sample-size 60 --top-k 10
 ```
 
-5. Generate gold annotation CSV samples (50 template + 200 stratified)
+6. Generate gold annotation CSV samples (50 template + 200 stratified)
 ```bash
 python .\script\pipeline_mongo\generate_gold_annotation_samples.py --db-name prodapt_capstone --template-size 50 --stratified-size 200 --out-template-csv .\script\pipeline_mongo\gold_annotation_template_50.csv --out-stratified-csv .\script\pipeline_mongo\gold_annotation_sample_200_stratified.csv --out-summary-json .\script\pipeline_mongo\gold_annotation_sampling_summary.json
 ```

@@ -1,6 +1,7 @@
 ﻿from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -37,7 +38,7 @@ except Exception:
     MilvusSearchClient = None
 
 
-NORMALIZER_VERSION = "issue10_simple_v2_milvus_hybrid"
+NORMALIZER_VERSION = "issue13_llm_occ_jury_v1"
 
 PROFILE_CONFIG = {
     "precision": {
@@ -124,6 +125,8 @@ class Candidate:
     source_span: str | None = None
     graph_support: dict[str, Any] | None = None
     base_confidence: float | None = None
+    llm_fit_score: float | None = None
+    llm_rank_score: float | None = None
 
 
 @dataclass
@@ -172,6 +175,39 @@ class EmbeddingRuntime:
             "embedding_cache_size": len(self.embedding_cache),
             "occ_search_cache_size": len(self.occ_search_cache),
             "skill_search_cache_size": len(self.skill_search_cache),
+        }
+
+
+@dataclass
+class LlmOccupationRuntime:
+    mode: str = "off"
+    enabled: bool = False
+    disabled_reason: str = ""
+    model: str = "gpt-4.1-mini"
+    candidate_k: int = 30
+    jury_size: int = 5
+    temperature: float = 0.2
+    max_resume_chars: int = 5000
+    openai_client: Any | None = None
+    api_calls: int = 0
+    failed_calls: int = 0
+    profile_cache_hits: int = 0
+    profile_cache: dict[str, dict[str, Any]] = field(default_factory=dict)
+
+    def summary(self) -> dict[str, Any]:
+        return {
+            "mode": self.mode,
+            "enabled": self.enabled,
+            "disabled_reason": self.disabled_reason or None,
+            "model": self.model,
+            "candidate_k": self.candidate_k,
+            "jury_size": self.jury_size,
+            "temperature": self.temperature,
+            "max_resume_chars": self.max_resume_chars,
+            "api_calls": self.api_calls,
+            "failed_calls": self.failed_calls,
+            "profile_cache_hits": self.profile_cache_hits,
+            "profile_cache_size": len(self.profile_cache),
         }
 
 
@@ -287,6 +323,109 @@ def build_embedding_runtime(args: argparse.Namespace) -> EmbeddingRuntime:
         runtime.disabled_reason = f"{type(exc).__name__}: {exc}"
 
     return runtime
+
+
+def build_llm_occ_runtime(
+    args: argparse.Namespace,
+    shared_openai_client: Any | None = None,
+) -> LlmOccupationRuntime:
+    runtime = LlmOccupationRuntime(
+        mode=args.llm_occ_rerank_mode,
+        model=args.llm_occ_model,
+        candidate_k=args.llm_occ_candidate_k,
+        jury_size=max(1, int(args.llm_occ_jury_size)),
+        temperature=max(0.0, min(1.0, float(args.llm_occ_temperature))),
+        max_resume_chars=max(1000, int(args.llm_occ_max_resume_chars)),
+    )
+
+    if runtime.mode == "off":
+        runtime.disabled_reason = "llm_occ_rerank_mode=off"
+        return runtime
+
+    env_path = Path(__file__).resolve().parent / ".env"
+    if load_dotenv is not None and env_path.exists():
+        load_dotenv(env_path)
+
+    openai_api_key = args.openai_api_key or os.getenv("OPENAI_API_KEY", "")
+    if OpenAI is None:
+        runtime.disabled_reason = "openai package is not installed"
+        return runtime
+    if not openai_api_key and shared_openai_client is None:
+        runtime.disabled_reason = "OPENAI_API_KEY is not configured"
+        return runtime
+
+    try:
+        runtime.openai_client = shared_openai_client or OpenAI(api_key=openai_api_key)
+        runtime.enabled = True
+        runtime.disabled_reason = ""
+    except Exception as exc:
+        runtime.enabled = False
+        runtime.openai_client = None
+        runtime.disabled_reason = f"{type(exc).__name__}: {exc}"
+
+    return runtime
+
+
+def safe_json_loads(text: str) -> dict[str, Any] | None:
+    value = (text or "").strip()
+    if not value:
+        return None
+    try:
+        parsed = json.loads(value)
+        if isinstance(parsed, dict):
+            return parsed
+    except Exception:
+        pass
+
+    start = value.find("{")
+    end = value.rfind("}")
+    if start >= 0 and end > start:
+        try:
+            parsed = json.loads(value[start : end + 1])
+            if isinstance(parsed, dict):
+                return parsed
+        except Exception:
+            return None
+    return None
+
+
+def llm_chat_json(
+    runtime: LlmOccupationRuntime,
+    *,
+    system_prompt: str,
+    user_prompt: str,
+    temperature: float,
+    max_tokens: int = 1800,
+) -> dict[str, Any] | None:
+    if not runtime.enabled or runtime.openai_client is None:
+        return None
+
+    try:
+        response = runtime.openai_client.chat.completions.create(
+            model=runtime.model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        )
+        runtime.api_calls += 1
+        choices = getattr(response, "choices", None) or []
+        if not choices:
+            runtime.failed_calls += 1
+            return None
+        message = getattr(choices[0], "message", None)
+        content = getattr(message, "content", "") if message is not None else ""
+        parsed = safe_json_loads(str(content))
+        if parsed is None:
+            runtime.failed_calls += 1
+            return None
+        return parsed
+    except Exception:
+        runtime.failed_calls += 1
+        return None
 
 
 def embed_text(runtime: EmbeddingRuntime, text: str) -> list[float] | None:
@@ -522,6 +661,7 @@ class ConceptIndex:
         self.search_labels: list[str] = []
         self._broader: dict[str, list[dict[str, str]]] = {}
         self._hierarchy_cache: dict[str, list[dict[str, str]]] = {}
+        self._meta_by_esco: dict[str, dict[str, Any]] = {}
 
         for row in broader_rows:
             child = (row.get("concept_uri") or row.get("conceptUri") or "").strip()
@@ -535,6 +675,21 @@ class ConceptIndex:
             preferred = (row.get("preferred_label") or row.get("preferredLabel") or "").strip()
             if not esco_id or not preferred:
                 continue
+
+            description = normalize_spaces(
+                row.get("description")
+                or row.get("definition")
+                or row.get("scopeNote")
+                or row.get("scope_note")
+                or ""
+            )
+            isco_group = normalize_spaces(str(row.get("iscoGroup") or row.get("isco_group") or ""))
+            self._meta_by_esco[esco_id] = {
+                "preferred_label": preferred,
+                "alt_labels": parse_alt_labels(row),
+                "description": description,
+                "isco_group": isco_group,
+            }
 
             pref_norm = normalize_text(preferred)
             self.preferred_map.setdefault(pref_norm, []).append((esco_id, preferred))
@@ -569,6 +724,9 @@ class ConceptIndex:
 
         self._hierarchy_cache[concept_uri] = chain
         return chain
+
+    def get_meta(self, concept_uri: str) -> dict[str, Any]:
+        return self._meta_by_esco.get(concept_uri, {})
 
 
 class OccupationSkillGraph:
@@ -761,6 +919,368 @@ def profile_filter(candidates: list[Candidate], profile: str, top_k: int) -> lis
     return sorted(best_by_esco.values(), key=lambda c: c.confidence, reverse=True)[:top_k]
 
 
+def dedupe_best_by_esco(candidates: list[Candidate], top_k: int = 0) -> list[Candidate]:
+    best_by_esco: dict[str, Candidate] = {}
+    for cand in sorted(candidates, key=lambda c: c.confidence, reverse=True):
+        current = best_by_esco.get(cand.esco_id)
+        if current is None or cand.confidence > current.confidence:
+            best_by_esco[cand.esco_id] = cand
+    rows = sorted(best_by_esco.values(), key=lambda c: c.confidence, reverse=True)
+    if top_k > 0:
+        return rows[:top_k]
+    return rows
+
+
+def llm_occ_should_apply(runtime: LlmOccupationRuntime, occ_candidates: list[Candidate]) -> tuple[bool, str]:
+    if not runtime.enabled:
+        return False, runtime.disabled_reason or "llm runtime is disabled"
+    if runtime.mode == "off":
+        return False, "llm_occ_rerank_mode=off"
+    if not occ_candidates:
+        return False, "no occupation candidates"
+    if runtime.mode == "always":
+        return True, "mode=always"
+
+    top_conf = float(occ_candidates[0].confidence)
+    second_conf = float(occ_candidates[1].confidence) if len(occ_candidates) > 1 else None
+    margin = (top_conf - second_conf) if second_conf is not None else None
+
+    top_graph = occ_candidates[0].graph_support or {}
+    top_hits = int(top_graph.get("essential_hits", 0)) + int(top_graph.get("optional_hits", 0))
+    should = bool(
+        (margin is not None and margin <= 0.03)
+        or top_conf < 0.90
+        or (top_conf < 0.85 and top_hits == 0)
+    )
+    if should:
+        return True, "mode=low_conf_only and low-confidence condition matched"
+    return False, "mode=low_conf_only and confidence condition not matched"
+
+
+def build_resume_profile_fallback(
+    *,
+    category: str,
+    occupation_phrases: list[str],
+    experiences: list[dict[str, Any]],
+) -> dict[str, Any]:
+    top_title = ""
+    for phrase in occupation_phrases:
+        if normalize_text(phrase):
+            top_title = normalize_spaces(phrase)
+            break
+
+    exp_snippet = build_experience_raw_snippet(experiences, max_chars=200)
+    domains = unique_strings([category] + [tok for tok in normalize_spaces(top_title).split() if len(tok) >= 3])[:6]
+    return {
+        "core_role": top_title or category or "unknown",
+        "management_scope": "",
+        "domains": domains,
+        "must_have_terms": unique_strings([top_title] + domains)[:8],
+        "must_not_terms": [],
+        "evidence_snippets": [exp_snippet] if exp_snippet else [],
+    }
+
+
+def llm_resume_profile(
+    *,
+    runtime: LlmOccupationRuntime,
+    category: str,
+    resume_text: str,
+    occupation_phrases: list[str],
+    skill_phrases: list[str],
+    experiences: list[dict[str, Any]],
+) -> dict[str, Any]:
+    fallback = build_resume_profile_fallback(
+        category=category,
+        occupation_phrases=occupation_phrases,
+        experiences=experiences,
+    )
+    if not runtime.enabled:
+        return fallback
+
+    title_hint = unique_strings(occupation_phrases)[:6]
+    skill_hint = unique_strings(skill_phrases)[:14]
+    exp_snippet = build_experience_raw_snippet(experiences, max_chars=500)
+    resume_trim = normalize_spaces(resume_text)[: runtime.max_resume_chars]
+    cache_src = json.dumps(
+        {
+            "category": category,
+            "title_hint": title_hint,
+            "skill_hint": skill_hint,
+            "exp_snippet": exp_snippet,
+            "resume_trim": resume_trim[:2000],
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    cache_key = hashlib.sha1(cache_src.encode("utf-8")).hexdigest()
+    cached = runtime.profile_cache.get(cache_key)
+    if isinstance(cached, dict):
+        runtime.profile_cache_hits += 1
+        return cached
+
+    system_prompt = (
+        "You summarize resume evidence for occupation matching. "
+        "Return strict JSON object only."
+    )
+    user_prompt = (
+        "Create a compact role profile from resume evidence for ESCO occupation matching.\n"
+        "Return JSON with keys:\n"
+        "core_role (string), management_scope (string), domains (array[string]), "
+        "must_have_terms (array[string]), must_not_terms (array[string]), evidence_snippets (array[string]).\n\n"
+        f"Category: {category}\n"
+        f"Title hints: {json.dumps(title_hint, ensure_ascii=False)}\n"
+        f"Skill hints: {json.dumps(skill_hint, ensure_ascii=False)}\n"
+        f"Experience snippet: {exp_snippet}\n"
+        f"Resume text:\n{resume_trim}"
+    )
+    parsed = llm_chat_json(
+        runtime,
+        system_prompt=system_prompt,
+        user_prompt=user_prompt,
+        temperature=0.0,
+        max_tokens=900,
+    )
+    if not isinstance(parsed, dict):
+        runtime.profile_cache[cache_key] = fallback
+        return fallback
+
+    profile = {
+        "core_role": normalize_spaces(str(parsed.get("core_role") or fallback["core_role"]))[:140],
+        "management_scope": normalize_spaces(str(parsed.get("management_scope") or ""))[:240],
+        "domains": unique_strings(
+            [str(v) for v in (parsed.get("domains") or []) if isinstance(v, (str, int, float))]
+        )[:10]
+        or fallback["domains"],
+        "must_have_terms": unique_strings(
+            [str(v) for v in (parsed.get("must_have_terms") or []) if isinstance(v, (str, int, float))]
+        )[:14]
+        or fallback["must_have_terms"],
+        "must_not_terms": unique_strings(
+            [str(v) for v in (parsed.get("must_not_terms") or []) if isinstance(v, (str, int, float))]
+        )[:10],
+        "evidence_snippets": unique_strings(
+            [str(v) for v in (parsed.get("evidence_snippets") or []) if isinstance(v, (str, int, float))]
+        )[:6]
+        or fallback["evidence_snippets"],
+    }
+    runtime.profile_cache[cache_key] = profile
+    return profile
+
+
+def candidate_to_llm_payload(candidate: Candidate, occ_index: ConceptIndex) -> dict[str, Any]:
+    meta = occ_index.get_meta(candidate.esco_id)
+    hierarchy = candidate.hierarchy_json or occ_index.get_hierarchy(candidate.esco_id)
+    hierarchy_labels = [normalize_spaces(str(v.get("label") or "")) for v in hierarchy if isinstance(v, dict)]
+    graph = candidate.graph_support or {}
+    return {
+        "esco_id": candidate.esco_id,
+        "preferred_label": normalize_spaces(meta.get("preferred_label") or candidate.preferred_label),
+        "alt_labels": unique_strings([str(v) for v in (meta.get("alt_labels") or []) if isinstance(v, str)])[:10],
+        "description": normalize_spaces(str(meta.get("description") or ""))[:450],
+        "isco_group": normalize_spaces(str(meta.get("isco_group") or "")),
+        "hierarchy_labels": [v for v in hierarchy_labels if v][:6],
+        "raw_text": candidate.raw_text,
+        "match_method": candidate.match_method,
+        "base_confidence": round(float(candidate.confidence), 5),
+        "graph_hits": int(graph.get("essential_hits", 0)) + int(graph.get("optional_hits", 0)),
+    }
+
+
+def apply_llm_occupation_rerank(
+    *,
+    occ_candidates: list[Candidate],
+    occ_pool: list[Candidate],
+    occ_index: ConceptIndex,
+    runtime: LlmOccupationRuntime | None,
+    category: str,
+    resume_text: str,
+    occupation_phrases: list[str],
+    skill_phrases: list[str],
+    experiences: list[dict[str, Any]],
+    top_k: int,
+) -> tuple[list[Candidate], dict[str, Any]]:
+    debug = {
+        "mode": runtime.mode if runtime is not None else "off",
+        "enabled": bool(runtime is not None and runtime.enabled),
+        "applied": False,
+        "reason": None,
+        "candidate_count": 0,
+        "judge_runs": 0,
+        "consensus_rate": None,
+        "top1_before": occ_candidates[0].esco_id if occ_candidates else None,
+        "top1_after": occ_candidates[0].esco_id if occ_candidates else None,
+        "fallback_used": False,
+    }
+    if runtime is None:
+        debug["reason"] = "llm runtime is not configured"
+        return occ_candidates, debug
+
+    should_apply, reason = llm_occ_should_apply(runtime, occ_candidates)
+    debug["reason"] = reason
+    if not should_apply:
+        return occ_candidates, debug
+
+    pool = dedupe_best_by_esco(occ_pool + occ_candidates)
+    pool = pool[: max(int(top_k), int(runtime.candidate_k))]
+    pool = pool[: int(runtime.candidate_k)]
+    debug["candidate_count"] = len(pool)
+    if len(pool) < 2:
+        debug["reason"] = "candidate pool is too small"
+        debug["fallback_used"] = True
+        return occ_candidates, debug
+
+    profile = llm_resume_profile(
+        runtime=runtime,
+        category=category,
+        resume_text=resume_text,
+        occupation_phrases=occupation_phrases,
+        skill_phrases=skill_phrases,
+        experiences=experiences,
+    )
+
+    payload_candidates = [candidate_to_llm_payload(cand, occ_index) for cand in pool]
+    allowed_ids = [row["esco_id"] for row in payload_candidates]
+    allowed_id_set = set(allowed_ids)
+
+    fit_scores: dict[str, list[float]] = {esco_id: [] for esco_id in allowed_ids}
+    rank_scores: dict[str, float] = {esco_id: 0.0 for esco_id in allowed_ids}
+    top1_votes: Counter[str] = Counter()
+    successful_judges = 0
+
+    for judge_id in range(1, int(runtime.jury_size) + 1):
+        system_prompt = (
+            "You are an ESCO occupation adjudicator. "
+            "Use role/domain/seniority evidence from resume profile and occupation definitions. "
+            "Penalize domain mismatch. Return strict JSON."
+        )
+        user_prompt = (
+            f"Judge #{judge_id}\n"
+            "Task: score each candidate and provide ranked occupation IDs.\n"
+            "Return JSON keys: scores (array), ranked_esco_ids (array).\n"
+            "scores item keys: esco_id, fit_score (0-100), conflicts (array[string]), reason_short (string).\n\n"
+            f"Resume profile: {json.dumps(profile, ensure_ascii=False)}\n"
+            f"Candidates: {json.dumps(payload_candidates, ensure_ascii=False)}"
+        )
+        parsed = llm_chat_json(
+            runtime,
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            temperature=runtime.temperature,
+            max_tokens=1800,
+        )
+        if not isinstance(parsed, dict):
+            continue
+
+        score_map: dict[str, float] = {}
+        for item in parsed.get("scores") or []:
+            if not isinstance(item, dict):
+                continue
+            esco_id = str(item.get("esco_id") or "").strip()
+            if esco_id not in allowed_id_set:
+                continue
+            try:
+                fit_score = float(item.get("fit_score", 0.0))
+            except Exception:
+                fit_score = 0.0
+            score_map[esco_id] = max(0.0, min(100.0, fit_score))
+
+        ranked_ids: list[str] = []
+        seen_ranked: set[str] = set()
+        for value in parsed.get("ranked_esco_ids") or []:
+            esco_id = str(value or "").strip()
+            if esco_id in allowed_id_set and esco_id not in seen_ranked:
+                ranked_ids.append(esco_id)
+                seen_ranked.add(esco_id)
+        if not ranked_ids:
+            ranked_ids = [
+                esco_id
+                for esco_id, _ in sorted(
+                    score_map.items(),
+                    key=lambda item: item[1],
+                    reverse=True,
+                )
+            ]
+        for esco_id in allowed_ids:
+            if esco_id not in seen_ranked:
+                ranked_ids.append(esco_id)
+                seen_ranked.add(esco_id)
+
+        if not ranked_ids:
+            continue
+
+        successful_judges += 1
+        top1_votes[ranked_ids[0]] += 1
+        for rank, esco_id in enumerate(ranked_ids, start=1):
+            rank_scores[esco_id] += 1.0 / float(60 + rank)
+        for esco_id in allowed_ids:
+            fit_scores[esco_id].append(score_map.get(esco_id, 0.0))
+
+    debug["judge_runs"] = successful_judges
+    if successful_judges == 0:
+        debug["reason"] = "llm calls failed for all judges"
+        debug["fallback_used"] = True
+        return occ_candidates, debug
+
+    base_by_esco = {cand.esco_id: cand for cand in pool}
+    max_rank_score = max([rank_scores[v] for v in allowed_ids] + [1e-9])
+    reranked: list[Candidate] = []
+    for esco_id in allowed_ids:
+        base = base_by_esco[esco_id]
+        scores = fit_scores.get(esco_id) or []
+        avg_fit = (sum(scores) / len(scores)) if scores else 0.0
+        rank_norm = float(rank_scores.get(esco_id, 0.0)) / float(max_rank_score)
+        llm_conf = (avg_fit / 100.0) * 0.75 + rank_norm * 0.25
+        merged_conf = max(0.0, min(1.0, (float(base.confidence) * 0.35) + (llm_conf * 0.65)))
+        reranked.append(
+            Candidate(
+                esco_id=base.esco_id,
+                preferred_label=base.preferred_label,
+                raw_text=base.raw_text,
+                confidence=round(merged_conf, 5),
+                match_method=base.match_method,
+                hierarchy_json=base.hierarchy_json,
+                source_span=base.source_span,
+                graph_support=base.graph_support,
+                base_confidence=base.base_confidence,
+                llm_fit_score=round(avg_fit, 2),
+                llm_rank_score=round(rank_norm, 5),
+            )
+        )
+
+    reranked = sorted(
+        reranked,
+        key=lambda cand: (
+            cand.confidence,
+            cand.llm_fit_score if cand.llm_fit_score is not None else 0.0,
+        ),
+        reverse=True,
+    )[:top_k]
+    if not reranked:
+        debug["reason"] = "llm rerank returned no candidates"
+        debug["fallback_used"] = True
+        return occ_candidates, debug
+
+    top1_after = reranked[0].esco_id
+    top1_votes_total = sum(top1_votes.values())
+    consensus_rate = (
+        float(top1_votes.get(top1_after, 0)) / float(top1_votes_total)
+        if top1_votes_total > 0
+        else 0.0
+    )
+
+    debug.update(
+        {
+            "applied": True,
+            "reason": "llm rerank applied",
+            "consensus_rate": round(consensus_rate, 5),
+            "top1_after": top1_after,
+            "fallback_used": False,
+        }
+    )
+    return reranked, debug
+
+
 def apply_graph_rerank(
     occ_candidates: list[Candidate],
     matched_skill_uris: set[str],
@@ -819,6 +1339,10 @@ def candidate_rows(candidates: list[Candidate]) -> list[dict[str, Any]]:
             row["base_confidence"] = cand.base_confidence
         if cand.graph_support is not None:
             row["graph_support"] = cand.graph_support
+        if cand.llm_fit_score is not None:
+            row["llm_fit_score"] = cand.llm_fit_score
+        if cand.llm_rank_score is not None:
+            row["llm_rank_score"] = cand.llm_rank_score
         out.append(row)
     return out
 
@@ -979,6 +1503,7 @@ def build_doc(
     graph_optional_weight: float,
     graph_max_boost: float,
     embedding_runtime: EmbeddingRuntime | None = None,
+    llm_occ_runtime: LlmOccupationRuntime | None = None,
 ) -> tuple[dict[str, Any], bool, bool]:
     cfg = PROFILE_CONFIG[profile]
     occ_threshold = resolve_threshold(cfg["occ_threshold"], strictness)
@@ -1049,6 +1574,7 @@ def build_doc(
         raw_occ.extend(embedding_occ)
         raw_skill.extend(embedding_skill)
 
+    occ_pool_for_llm = dedupe_best_by_esco(raw_occ, top_k=max(int(cfg["top_occ"]), 60))
     occ_candidates = profile_filter(raw_occ, profile=profile, top_k=int(cfg["top_occ"]))
     skill_candidates = profile_filter(raw_skill, profile=profile, top_k=int(cfg["top_skill"]))
 
@@ -1060,6 +1586,18 @@ def build_doc(
         essential_weight=graph_essential_weight,
         optional_weight=graph_optional_weight,
         max_boost=graph_max_boost,
+    )
+    occ_candidates, llm_occ_debug = apply_llm_occupation_rerank(
+        occ_candidates=occ_candidates,
+        occ_pool=occ_pool_for_llm,
+        occ_index=occ_index,
+        runtime=llm_occ_runtime,
+        category=category,
+        resume_text=resume_text,
+        occupation_phrases=occupation_phrases,
+        skill_phrases=skill_phrases,
+        experiences=experiences,
+        top_k=int(cfg["top_occ"]),
     )
     occ_candidates, guardrail_debug = apply_occupation_guardrails(
         occ_candidates,
@@ -1126,6 +1664,7 @@ def build_doc(
                 "rank_changed": graph_changed,
             },
             "embedding": embedding_debug,
+            "llm_occupation": llm_occ_debug,
             "category_guardrail": guardrail_debug,
             "llm_handoff": llm_handoff,
         },
@@ -1169,6 +1708,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--milvus-skill-collection", default="")
     parser.add_argument("--milvus-metric-type", default="COSINE")
     parser.add_argument("--milvus-search-ef", type=int, default=64)
+    parser.add_argument("--llm-occ-rerank-mode", choices=["off", "low_conf_only", "always"], default="always")
+    parser.add_argument("--llm-occ-model", default="gpt-4.1-mini")
+    parser.add_argument("--llm-occ-candidate-k", type=int, default=30)
+    parser.add_argument("--llm-occ-jury-size", type=int, default=5)
+    parser.add_argument("--llm-occ-temperature", type=float, default=0.2)
+    parser.add_argument("--llm-occ-max-resume-chars", type=int, default=5000)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--metrics-out", default="")
     return parser.parse_args()
@@ -1178,6 +1723,10 @@ def main() -> None:
     args = parse_args()
     selected_ids = [x.strip() for x in (args.source_record_ids or "").split(",") if x.strip()]
     embedding_runtime = build_embedding_runtime(args)
+    llm_occ_runtime = build_llm_occ_runtime(
+        args,
+        shared_openai_client=embedding_runtime.openai_client if embedding_runtime.enabled else None,
+    )
     if embedding_runtime.enabled:
         print(
             "Embedding search enabled: "
@@ -1187,6 +1736,16 @@ def main() -> None:
         )
     else:
         print(f"Embedding search disabled: {embedding_runtime.disabled_reason}")
+    if llm_occ_runtime.enabled:
+        print(
+            "LLM occupation rerank enabled: "
+            f"mode={llm_occ_runtime.mode}, "
+            f"model={llm_occ_runtime.model}, "
+            f"candidate_k={llm_occ_runtime.candidate_k}, "
+            f"jury_size={llm_occ_runtime.jury_size}"
+        )
+    else:
+        print(f"LLM occupation rerank disabled: {llm_occ_runtime.disabled_reason}")
 
     client = MongoClient(args.mongo_uri)
     db = client[args.db_name]
@@ -1220,6 +1779,8 @@ def main() -> None:
         "embedding_skill_docs": 0,
         "llm_rerank_trigger_docs": 0,
         "llm_extraction_trigger_docs": 0,
+        "llm_occ_applied_docs": 0,
+        "llm_occ_fallback_docs": 0,
         "normalization_status_counts": Counter(),
         "occ_method_counts": Counter(),
         "skill_method_counts": Counter(),
@@ -1281,6 +1842,7 @@ def main() -> None:
                 graph_optional_weight=args.graph_optional_weight,
                 graph_max_boost=args.graph_max_boost,
                 embedding_runtime=embedding_runtime,
+                llm_occ_runtime=llm_occ_runtime,
             )
 
             key = {
@@ -1309,6 +1871,11 @@ def main() -> None:
                 metrics["llm_rerank_trigger_docs"] += 1
             if llm_handoff.get("extraction_trigger"):
                 metrics["llm_extraction_trigger_docs"] += 1
+            llm_occ_debug = ((normalized.get("matching_debug") or {}).get("llm_occupation") or {})
+            if llm_occ_debug.get("applied"):
+                metrics["llm_occ_applied_docs"] += 1
+            if llm_occ_debug.get("fallback_used"):
+                metrics["llm_occ_fallback_docs"] += 1
 
             occ_rows = normalized["occupation_candidates"]
             skill_rows = normalized["skill_candidates"]
@@ -1360,6 +1927,7 @@ def main() -> None:
             "max_boost": args.graph_max_boost,
         },
         "embedding": embedding_runtime.summary(),
+        "llm_occupation_rerank": llm_occ_runtime.summary(),
         "dry_run": args.dry_run,
         "metrics": {
             "processed_docs": metrics["processed_docs"],
@@ -1369,6 +1937,8 @@ def main() -> None:
             "embedding_skill_docs": metrics["embedding_skill_docs"],
             "llm_rerank_trigger_docs": metrics["llm_rerank_trigger_docs"],
             "llm_extraction_trigger_docs": metrics["llm_extraction_trigger_docs"],
+            "llm_occ_applied_docs": metrics["llm_occ_applied_docs"],
+            "llm_occ_fallback_docs": metrics["llm_occ_fallback_docs"],
             "normalization_status_counts": dict(metrics["normalization_status_counts"]),
             "occ_method_counts": dict(metrics["occ_method_counts"]),
             "skill_method_counts": dict(metrics["skill_method_counts"]),
