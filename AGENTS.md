@@ -22,3 +22,9 @@
 ## Update Rule
 - If behavior/defaults/commands change, update `Pipeline.md` in the same task.
 - Keep Issue timeline continuity (Issue #6 onward) and append new decisions rather than rewriting history.
+
+## Documentation Rule
+- Organize docs by topic under `docs/`: `overview/`, `pipeline/`, `schema/`, `issues/`, `reports/`.
+- Keep `docs/index.md` as the single entry point; update it whenever docs are added, moved, or removed.
+- For execution outputs and reports, keep active files in the category folder and move older snapshots into that category's `old/` folder.
+- Do not place new standalone docs directly under `docs/` except `docs/index.md`.

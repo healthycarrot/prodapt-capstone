@@ -2,7 +2,7 @@ Project normalized_resume_profile {
   database_type: 'PostgreSQL'
   Note: '''
     Normalized resume schema. ESCO is used as reference DB; normalized result is stored here.
-    Field mapping: see docs/field-mapping.md for full source_section / extractor_mode details.
+    Field mapping: see docs/schema/field-mapping.md for full source_section / extractor_mode details.
   '''
 }
 

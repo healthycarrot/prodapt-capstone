@@ -1,0 +1,463 @@
+{
+  "generated_at_utc": "2026-03-15T18:04:20.848019",
+  "mode": "weak",
+  "k": 10,
+  "mongo_uri": "mongodb://localhost:27017",
+  "db_name": "prodapt_capstone",
+  "collection": "normalized_candidates",
+  "source_dataset": "1st_data",
+  "limit": 20,
+  "doc_count": 20,
+  "status_counts": {
+    "success": 16,
+    "partial": 4
+  },
+  "integrity": {
+    "duplicate_source_keys": 0,
+    "missing_candidate_id_docs": 0
+  },
+  "operational": {
+    "llm_handoff": {
+      "rerank_trigger_docs": 1,
+      "rerank_trigger_rate": 0.05,
+      "extraction_trigger_docs": 9,
+      "extraction_trigger_rate": 0.45
+    },
+    "embedding_b1": {
+      "top1_docs": 0,
+      "top1_rate": 0.0,
+      "any_docs": 0,
+      "any_rate": 0.0
+    }
+  },
+  "match_method": {
+    "occupation": {
+      "docs_with_candidates": 18,
+      "top1_counts": {
+        "alt_label": 2,
+        "exact": 8,
+        "fuzzy": 8
+      },
+      "top1_rates": {
+        "alt_label": 0.1111,
+        "exact": 0.4444,
+        "fuzzy": 0.4444
+      },
+      "all_candidate_counts": {
+        "alt_label": 19,
+        "exact": 10,
+        "fuzzy": 52
+      }
+    },
+    "skill": {
+      "docs_with_candidates": 18,
+      "top1_counts": {
+        "alt_label": 4,
+        "exact": 10,
+        "fuzzy": 4
+      },
+      "top1_rates": {
+        "alt_label": 0.2222,
+        "exact": 0.5556,
+        "fuzzy": 0.2222
+      },
+      "all_candidate_counts": {
+        "alt_label": 19,
+        "exact": 15,
+        "fuzzy": 73
+      }
+    }
+  },
+  "field_fill_rate": {
+    "fields": [
+      "category",
+      "resume_text",
+      "current_location",
+      "extraction_confidence",
+      "occupation_candidates",
+      "skill_candidates",
+      "experiences",
+      "educations",
+      "llm_handoff",
+      "matching_debug",
+      "candidate_id"
+    ],
+    "overall": {
+      "category": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      },
+      "resume_text": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      },
+      "current_location": {
+        "filled_docs": 0,
+        "total_docs": 20,
+        "rate": 0.0
+      },
+      "extraction_confidence": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      },
+      "occupation_candidates": {
+        "filled_docs": 18,
+        "total_docs": 20,
+        "rate": 0.9
+      },
+      "skill_candidates": {
+        "filled_docs": 18,
+        "total_docs": 20,
+        "rate": 0.9
+      },
+      "experiences": {
+        "filled_docs": 19,
+        "total_docs": 20,
+        "rate": 0.95
+      },
+      "educations": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      },
+      "llm_handoff": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      },
+      "matching_debug": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      },
+      "candidate_id": {
+        "filled_docs": 20,
+        "total_docs": 20,
+        "rate": 1.0
+      }
+    },
+    "by_status": {
+      "partial": {
+        "category": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        },
+        "resume_text": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        },
+        "current_location": {
+          "filled_docs": 0,
+          "total_docs": 4,
+          "rate": 0.0
+        },
+        "extraction_confidence": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        },
+        "occupation_candidates": {
+          "filled_docs": 2,
+          "total_docs": 4,
+          "rate": 0.5
+        },
+        "skill_candidates": {
+          "filled_docs": 2,
+          "total_docs": 4,
+          "rate": 0.5
+        },
+        "experiences": {
+          "filled_docs": 3,
+          "total_docs": 4,
+          "rate": 0.75
+        },
+        "educations": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        },
+        "llm_handoff": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        },
+        "matching_debug": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        },
+        "candidate_id": {
+          "filled_docs": 4,
+          "total_docs": 4,
+          "rate": 1.0
+        }
+      },
+      "success": {
+        "category": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "resume_text": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "current_location": {
+          "filled_docs": 0,
+          "total_docs": 16,
+          "rate": 0.0
+        },
+        "extraction_confidence": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "occupation_candidates": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "skill_candidates": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "experiences": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "educations": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "llm_handoff": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "matching_debug": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        },
+        "candidate_id": {
+          "filled_docs": 16,
+          "total_docs": 16,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "rankings": {
+    "overall": {
+      "doc_count": 20,
+      "occupation": {
+        "docs_total": 20,
+        "docs_evaluated": 20,
+        "docs_with_results": 18,
+        "label_coverage_rate": 1.0,
+        "p_at_1": 0.25,
+        "p_at_5": 0.16,
+        "mrr_at_10": 0.3208,
+        "map_at_10": 0.3086,
+        "coverage_at_10": 0.45
+      },
+      "skill": {
+        "docs_total": 20,
+        "docs_evaluated": 20,
+        "docs_with_results": 18,
+        "label_coverage_rate": 1.0,
+        "p_at_1": 0.05,
+        "p_at_5": 0.08,
+        "mrr_at_10": 0.1142,
+        "map_at_10": 0.1137,
+        "coverage_at_10": 0.25
+      }
+    },
+    "by_status": {
+      "partial": {
+        "doc_count": 4,
+        "occupation": {
+          "docs_total": 4,
+          "docs_evaluated": 4,
+          "docs_with_results": 2,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.25,
+          "p_at_5": 0.15,
+          "mrr_at_10": 0.3333,
+          "map_at_10": 0.3542,
+          "coverage_at_10": 0.5
+        },
+        "skill": {
+          "docs_total": 4,
+          "docs_evaluated": 4,
+          "docs_with_results": 2,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0,
+          "p_at_5": 0.0,
+          "mrr_at_10": 0.0,
+          "map_at_10": 0.0,
+          "coverage_at_10": 0.0
+        }
+      },
+      "success": {
+        "doc_count": 16,
+        "occupation": {
+          "docs_total": 16,
+          "docs_evaluated": 16,
+          "docs_with_results": 16,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.25,
+          "p_at_5": 0.1625,
+          "mrr_at_10": 0.3177,
+          "map_at_10": 0.2972,
+          "coverage_at_10": 0.4375
+        },
+        "skill": {
+          "docs_total": 16,
+          "docs_evaluated": 16,
+          "docs_with_results": 16,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0625,
+          "p_at_5": 0.1,
+          "mrr_at_10": 0.1427,
+          "map_at_10": 0.1422,
+          "coverage_at_10": 0.3125
+        }
+      }
+    },
+    "by_llm_handoff": {
+      "rerank_trigger_true": {
+        "doc_count": 1,
+        "occupation": {
+          "docs_total": 1,
+          "docs_evaluated": 1,
+          "docs_with_results": 1,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0,
+          "p_at_5": 0.2,
+          "mrr_at_10": 0.25,
+          "map_at_10": 0.25,
+          "coverage_at_10": 1.0
+        },
+        "skill": {
+          "docs_total": 1,
+          "docs_evaluated": 1,
+          "docs_with_results": 1,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0,
+          "p_at_5": 0.2,
+          "mrr_at_10": 0.5,
+          "map_at_10": 0.5,
+          "coverage_at_10": 1.0
+        }
+      },
+      "rerank_trigger_false": {
+        "doc_count": 19,
+        "occupation": {
+          "docs_total": 19,
+          "docs_evaluated": 19,
+          "docs_with_results": 17,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.2632,
+          "p_at_5": 0.1579,
+          "mrr_at_10": 0.3246,
+          "map_at_10": 0.3117,
+          "coverage_at_10": 0.4211
+        },
+        "skill": {
+          "docs_total": 19,
+          "docs_evaluated": 19,
+          "docs_with_results": 17,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0526,
+          "p_at_5": 0.0737,
+          "mrr_at_10": 0.0939,
+          "map_at_10": 0.0934,
+          "coverage_at_10": 0.2105
+        }
+      },
+      "extraction_trigger_true": {
+        "doc_count": 9,
+        "occupation": {
+          "docs_total": 9,
+          "docs_evaluated": 9,
+          "docs_with_results": 7,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.1111,
+          "p_at_5": 0.1333,
+          "mrr_at_10": 0.2407,
+          "map_at_10": 0.2593,
+          "coverage_at_10": 0.4444
+        },
+        "skill": {
+          "docs_total": 9,
+          "docs_evaluated": 9,
+          "docs_with_results": 7,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0,
+          "p_at_5": 0.0,
+          "mrr_at_10": 0.0,
+          "map_at_10": 0.0,
+          "coverage_at_10": 0.0
+        }
+      },
+      "extraction_trigger_false": {
+        "doc_count": 11,
+        "occupation": {
+          "docs_total": 11,
+          "docs_evaluated": 11,
+          "docs_with_results": 11,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.3636,
+          "p_at_5": 0.1818,
+          "mrr_at_10": 0.3864,
+          "map_at_10": 0.349,
+          "coverage_at_10": 0.4545
+        },
+        "skill": {
+          "docs_total": 11,
+          "docs_evaluated": 11,
+          "docs_with_results": 11,
+          "label_coverage_rate": 1.0,
+          "p_at_1": 0.0909,
+          "p_at_5": 0.1455,
+          "mrr_at_10": 0.2076,
+          "map_at_10": 0.2068,
+          "coverage_at_10": 0.4545
+        }
+      }
+    }
+  },
+  "category_segments": {
+    "top_partial_failed_categories": [
+      {
+        "category": "CONSTRUCTION",
+        "count": 1
+      },
+      {
+        "category": "AVIATION",
+        "count": 1
+      },
+      {
+        "category": "BUSINESS-DEVELOPMENT",
+        "count": 1
+      },
+      {
+        "category": "FITNESS",
+        "count": 1
+      }
+    ]
+  },
+  "warnings": [
+    "weak skill coverage_at_10=0.2500 < threshold 0.4000"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "normalizer_version": "issue13_llm_occ_jury_v1",
+  "run_at_utc": "2026-03-15T18:10:51.311867",
+  "db_name": "prodapt_capstone",
+  "source_collection": "source_1st_resumes",
+  "output_collection": "normalized_candidates_ab_no_llm_20",
+  "profile": "balanced",
+  "threshold_strictness": "medium",
+  "source_record_ids_filter": [
+    "10001727",
+    "10005171",
+    "10030015",
+    "10041713",
+    "10062724",
+    "10070224",
+    "10076271",
+    "10089434",
+    "10100240",
+    "10138632",
+    "10149490",
+    "10176013",
+    "10176815",
+    "10182582",
+    "10186968",
+    "10189110",
+    "10219099",
+    "10228751",
+    "10235211",
+    "10235429"
+  ],
+  "graph_weights": {
+    "essential": 0.03,
+    "optional": 0.015,
+    "max_boost": 0.2
+  },
+  "embedding": {
+    "mode": "off",
+    "enabled": false,
+    "disabled_reason": "embedding_mode=off",
+    "model": "text-embedding-3-small",
+    "milvus_db_name": "",
+    "milvus_occ_collection": "",
+    "milvus_skill_collection": "",
+    "embed_api_calls": 0,
+    "embedding_cache_hits": 0,
+    "search_api_calls": 0,
+    "search_cache_hits": 0,
+    "failed_embedding_calls": 0,
+    "failed_search_calls": 0,
+    "embedding_cache_size": 0,
+    "occ_search_cache_size": 0,
+    "skill_search_cache_size": 0
+  },
+  "llm_occupation_rerank": {
+    "mode": "off",
+    "enabled": false,
+    "disabled_reason": "llm_occ_rerank_mode=off",
+    "model": "gpt-4.1-mini",
+    "candidate_k": 30,
+    "jury_size": 5,
+    "temperature": 0.2,
+    "max_resume_chars": 5000,
+    "api_calls": 0,
+    "failed_calls": 0,
+    "profile_cache_hits": 0,
+    "profile_cache_size": 0
+  },
+  "record_parallelism": {
+    "record_workers": 4,
+    "shared_phrase_cache": false
+  },
+  "dry_run": false,
+  "metrics": {
+    "processed_docs": 20,
+    "graph_rerank_applied_docs": 9,
+    "graph_rank_changed_docs": 7,
+    "embedding_occ_docs": 0,
+    "embedding_skill_docs": 0,
+    "llm_rerank_trigger_docs": 0,
+    "llm_extraction_trigger_docs": 8,
+    "llm_occ_applied_docs": 0,
+    "llm_occ_fallback_docs": 0,
+    "normalization_status_counts": {
+      "success": 17,
+      "partial": 3
+    },
+    "occ_method_counts": {
+      "exact": 10,
+      "alt_label": 19,
+      "fuzzy": 64
+    },
+    "skill_method_counts": {
+      "fuzzy": 73,
+      "exact": 15,
+      "alt_label": 19
+    },
+    "avg_occ_candidates": 4.65,
+    "avg_skill_candidates": 5.35,
+    "elapsed_seconds": 83.93,
+    "occ_phrase_cache_size": 0,
+    "skill_phrase_cache_size": 0
+  }
+}

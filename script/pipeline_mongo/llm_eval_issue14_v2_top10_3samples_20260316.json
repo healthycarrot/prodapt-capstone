@@ -1,0 +1,147 @@
+{
+  "generated_at_utc": "2026-03-15T21:22:35.600203",
+  "model": "gpt-4.1-mini",
+  "collection": "normalized_candidates_issue14_v2_eval",
+  "sample_size": 3,
+  "summary": {
+    "avg_top1_fit_score": 83.33,
+    "avg_top10_filter_usefulness_score": 80.0,
+    "avg_overall_score": 81.33,
+    "verdict_counts": {
+      "good": 2,
+      "mixed": 1
+    }
+  },
+  "evaluations": [
+    {
+      "source_record_id": "36856210",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "partial",
+      "top10_occupations": [
+        {
+          "preferred_label": "ICT teacher secondary school",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "cyber incident responder",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "agricultural equipment design engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "aviation ground systems engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT system analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "36856210",
+        "top1_fit_score": 85,
+        "top10_filter_usefulness_score": 80,
+        "overall_score": 82,
+        "verdict": "good",
+        "reason_ja": "情報保証・IT設計に合致。農業・航空は不適切混入あり。"
+      }
+    },
+    {
+      "source_record_id": "32531824",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "bank manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "business analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "financial analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "call centre analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "investment analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "32531824",
+        "top1_fit_score": 75,
+        "top10_filter_usefulness_score": 70,
+        "overall_score": 72,
+        "verdict": "mixed",
+        "reason_ja": "ビジネス開発・分析に近いが銀行・投資はややズレ。"
+      }
+    },
+    {
+      "source_record_id": "27018550",
+      "category": "HR",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "customer service representative",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "human resources assistant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "human resources officer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "talent acquisition manager",
+          "confidence": 0.995,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "client relations manager",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "refinery shift manager",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "call centre supervisor",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "27018550",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 90,
+        "overall_score": 90,
+        "verdict": "good",
+        "reason_ja": "HR・顧客対応に適合。上位職種も関連性高く有用。"
+      }
+    }
+  ]
+}

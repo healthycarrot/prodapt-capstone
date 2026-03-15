@@ -37,9 +37,9 @@ flowchart TD
 | #7/#8 | `parse_sections_to_mongo.py` | `source_1st_resumes.resume_html` / `resume_text` | Section-parsed documents | `source_1st_resumes.parsed_sections`, `parsing_method`, `parser_version`; report: `script/pipeline_mongo/parse_sections_report.json` |
 | #9 | `extract_fields_to_mongo.py` | `source_1st_resumes.parsed_sections` (+ html/text) | Deterministic extracted fields | `source_1st_resumes.extracted_fields`, `extraction_method`, `extractor_version`, `experience_count`, `education_count`, `skill_count`; report: `script/pipeline_mongo/extract_fields_report.json` |
 | #10 | `normalize_1st_to_mongo.py` | `source_1st_resumes` + `raw_esco_*` + (optional) Milvus embeddings | Normalized candidate records | `normalized_candidates` (upsert by `source_dataset + source_record_id`), includes `occupation_candidates`, `skill_candidates`, `normalization_status`, `llm_handoff`, `matching_debug`; metrics JSON via `--metrics-out` |
-| #11/#12 support | `evaluate_llm_representative_samples.py` | `normalized_candidates` sample docs | LLM-as-judge report | `script/pipeline_mongo/llm_eval_10samples*.json`, `docs/LLM-Eval-10samples*.md` |
+| #11/#12 support | `evaluate_llm_representative_samples.py` | `normalized_candidates` sample docs | LLM-as-judge report | `script/pipeline_mongo/llm_eval_10samples*.json`, `docs/reports/llm/LLM-Eval-10samples-20260316-Latest.md` (+ old snapshots in `docs/reports/llm/old/`) |
 | Current (Embedding infra) | `build_esco_milvus_index.py` | Mongo ESCO collections (`raw_esco_*`) | Milvus vector collections | `occupation_collection`, `skill_collection` (or env-defined names); summary: `script/pipeline_mongo/milvus_build_report.json` |
-| Current (Retrieval validation) | `evaluate_milvus_retrieval_samples.py` | `source_1st_resumes` representative docs + Milvus collections | Top-K retrieval visualization | `script/pipeline_mongo/milvus_retrieval_samples.json`, `docs/Milvus-Retrieval-Samples.md` |
+| Current (Retrieval validation) | `evaluate_milvus_retrieval_samples.py` | `source_1st_resumes` representative docs + Milvus collections | Top-K retrieval visualization | `script/pipeline_mongo/milvus_retrieval_samples.json`, `docs/reports/retrieval/Milvus-Retrieval-Samples.md` |
 
 ## Current Default Collections
 - Mongo source:

@@ -1,7 +1,7 @@
 # フィールド対応表: スキーマ → HTMLセクション → 抽出方式
 
 Issue: #7 – [Pipeline v2] Step 2: スキーマ→セクション対応表作成
-Source: `docs/dbdiagram.normalized.dbml`
+Source: `docs/schema/dbdiagram.normalized.dbml`
 Reference: `script/for_1st/reanalyze_1st_resume_structure_report.json` (Issue #6)
 
 ---

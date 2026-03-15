@@ -1,0 +1,344 @@
+{
+  "generated_at_utc": "2026-03-15T21:15:21.422607",
+  "model": "gpt-4.1-mini",
+  "sample_size": 10,
+  "collection": "normalized_candidates_issue14_v2_eval",
+  "normalizer_version_target": "issue14_llm_candidate_generation_v2",
+  "summary": {
+    "avg_top1_fit_score": 79.6,
+    "avg_top3_ranking_score": 75.0,
+    "avg_overall_score": 77.2,
+    "verdict_counts": {
+      "good": 5,
+      "mixed": 4,
+      "poor": 1
+    }
+  },
+  "evaluations": [
+    {
+      "source_record_id": "36856210",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "partial",
+      "top_occupations": [
+        {
+          "preferred_label": "ICT teacher secondary school",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "cyber incident responder",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "agricultural equipment design engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "aviation ground systems engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT system analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "36856210",
+        "top1_fit_score": 85,
+        "top3_ranking_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "情報保証とIT設計経験がICT教師やシステムアナリストに適合。農業や航空は不適切。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "72876163",
+      "category": "BANKING",
+      "normalization_status": "partial",
+      "top_occupations": [
+        {
+          "preferred_label": "branch manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "engineering assistant",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "consumer electronics repair technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "72876163",
+        "top1_fit_score": 80,
+        "top3_ranking_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "ITマネージャー経験は支店長に近いが、工学助手や修理技術者はミスマッチ。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "80162314",
+      "category": "HR",
+      "normalization_status": "partial",
+      "top_occupations": [
+        {
+          "preferred_label": "financial planner",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "human resources assistant",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "human resources officer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "talent acquisition manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "80162314",
+        "top1_fit_score": 90,
+        "top3_ranking_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "人事経験とスキルが人事関連職に高く適合。ファイナンシャルプランナーはやや範囲外。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "32531824",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "bank manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "business analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "financial analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "call centre analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "investment analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "32531824",
+        "top1_fit_score": 75,
+        "top3_ranking_score": 70,
+        "overall_score": 72,
+        "verdict": "mixed",
+        "reason_ja": "ビジネス開発と財務分析経験は銀行業務に関連するが、専門性は限定的。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "18365443",
+      "category": "HEALTHCARE",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "ICT system analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "18365443",
+        "top1_fit_score": 88,
+        "top3_ranking_score": 85,
+        "overall_score": 86,
+        "verdict": "good",
+        "reason_ja": "医療分析とシステム分析の経験がICTシステムアナリストに適合。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "12923795",
+      "category": "FITNESS",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "chief executive officer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "cabin crew manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "video and motion picture director",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "sport facility manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "12923795",
+        "top1_fit_score": 70,
+        "top3_ranking_score": 65,
+        "overall_score": 67,
+        "verdict": "mixed",
+        "reason_ja": "経営幹部経験はCEOに合うが、他の職種は関連性が薄い。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "28831442",
+      "category": "PUBLIC-RELATIONS",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "business manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "28831442",
+        "top1_fit_score": 70,
+        "top3_ranking_score": 65,
+        "overall_score": 67,
+        "verdict": "mixed",
+        "reason_ja": "広報・顧客対応経験はビジネスマネージャーに部分的に適合。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "28471099",
+      "category": "ARTS",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "ICT auditor manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT research manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "28471099",
+        "top1_fit_score": 85,
+        "top3_ranking_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "ITリーダー経験がICT監査マネージャーや研究マネージャーに適合。",
+        "manual_check_needed": false
+      }
+    },
+    {
+      "source_record_id": "28186635",
+      "category": "AVIATION",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "consumer electronics repair technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "oil refinery control room operator",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "28186635",
+        "top1_fit_score": 65,
+        "top3_ranking_score": 60,
+        "overall_score": 62,
+        "verdict": "poor",
+        "reason_ja": "郵便サポートと軍事経験は電子機器修理技術者や制御室オペレーターに乏しい関連性。",
+        "manual_check_needed": true
+      }
+    },
+    {
+      "source_record_id": "63989974",
+      "category": "AUTOMOBILE",
+      "normalization_status": "success",
+      "top_occupations": [
+        {
+          "preferred_label": "ICT network administrator",
+          "confidence": 0.935,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "building materials shop manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "hardware and paint shop manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "consumer electronics repair technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT network technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "source_record_id": "63989974",
+        "top1_fit_score": 88,
+        "top3_ranking_score": 85,
+        "overall_score": 86,
+        "verdict": "good",
+        "reason_ja": "ITマネージャー経験がICTネットワーク管理者に高く適合。自動車関連は限定的。",
+        "manual_check_needed": false
+      }
+    }
+  ]
+}

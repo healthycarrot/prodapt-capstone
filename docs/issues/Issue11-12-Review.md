@@ -12,7 +12,8 @@
 ## Issue #11 Handoff Cohort
 - Rerank trigger docs: 26 (1.05%)
 - Extraction trigger docs: 781 (31.44%)
-- Suggested default: keep `llm_mode=off`, run targeted `rerank` / `extraction` only for trigger=true docs.
+- Historical note: this review preceded Issue #14. LLM rerank direction was later rolled back because quality gain was limited versus latency/cost.
+- Current direction: keep trigger diagnostics, but use LLM for candidate generation (seed IDs + term expansion), not rerank.
 
 ## Issue #12 Integrity Check
 - Duplicate upsert keys: 0

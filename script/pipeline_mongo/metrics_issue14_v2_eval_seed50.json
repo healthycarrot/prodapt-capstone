@@ -1,0 +1,87 @@
+{
+  "normalizer_version": "issue14_llm_candidate_generation_v2",
+  "run_at_utc": "2026-03-15T20:41:36.589580",
+  "db_name": "prodapt_capstone",
+  "source_collection": "source_1st_resumes",
+  "output_collection": "normalized_candidates_issue14_v2_eval",
+  "profile": "balanced",
+  "threshold_strictness": "medium",
+  "source_record_ids_filter": [],
+  "graph_weights": {
+    "essential": 0.03,
+    "optional": 0.015,
+    "max_boost": 0.2
+  },
+  "embedding": {
+    "mode": "auto",
+    "enabled": true,
+    "disabled_reason": null,
+    "model": "text-embedding-3-small",
+    "milvus_db_name": "default",
+    "milvus_occ_collection": "occupation_collection",
+    "milvus_skill_collection": "skill_collection",
+    "embed_api_calls": 351,
+    "embedding_cache_hits": 3,
+    "search_api_calls": 354,
+    "search_cache_hits": 333,
+    "failed_embedding_calls": 0,
+    "failed_search_calls": 0,
+    "embedding_cache_size": 351,
+    "occ_search_cache_size": 102,
+    "skill_search_cache_size": 251
+  },
+  "llm_candidate_generation": {
+    "mode": "always",
+    "enabled": true,
+    "disabled_reason": null,
+    "model": "gpt-4.1-mini",
+    "max_occ_refs": 40,
+    "max_skill_refs": 60,
+    "max_occ_seed_ids": 20,
+    "max_skill_seed_ids": 50,
+    "temperature": 0.1,
+    "max_resume_chars": 3500,
+    "api_calls": 50,
+    "failed_calls": 2,
+    "cache_hits": 0,
+    "generation_cache_size": 48,
+    "reference_cache_size": 2
+  },
+  "record_parallelism": {
+    "record_workers": 4,
+    "shared_phrase_cache": false
+  },
+  "dry_run": false,
+  "metrics": {
+    "processed_docs": 50,
+    "graph_rerank_applied_docs": 50,
+    "graph_rank_changed_docs": 32,
+    "embedding_occ_docs": 0,
+    "embedding_skill_docs": 5,
+    "llm_rerank_trigger_docs": 0,
+    "llm_extraction_trigger_docs": 0,
+    "llm_candidate_applied_docs": 48,
+    "llm_candidate_fallback_docs": 2,
+    "normalization_status_counts": {
+      "success": 50
+    },
+    "occ_method_counts": {
+      "exact": 248,
+      "fuzzy": 113,
+      "alt_label": 52,
+      "llm_seed": 25
+    },
+    "skill_method_counts": {
+      "exact": 788,
+      "fuzzy": 268,
+      "llm_seed": 94,
+      "alt_label": 94,
+      "embedding": 5
+    },
+    "avg_occ_candidates": 8.76,
+    "avg_skill_candidates": 24.98,
+    "elapsed_seconds": 444.22,
+    "occ_phrase_cache_size": 0,
+    "skill_phrase_cache_size": 0
+  }
+}

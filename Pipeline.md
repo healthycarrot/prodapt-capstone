@@ -1,4 +1,4 @@
-# Pipeline
+﻿# Pipeline
 
 ## Scope
 - This file is the canonical pipeline memo for `script/pipeline_mongo`.
@@ -46,6 +46,7 @@
   - rerank trigger: 26 docs (1.05%)
   - extraction trigger: 781 docs (31.44%)
 - Keep rule output as fallback if LLM fails.
+- Note: `llm_handoff.rerank_trigger` is retained as ambiguity-monitoring metadata, not as an active LLM rerank execution path in current defaults.
 
 7. Issue #12 readiness (data integrity)
 - Confirmed idempotent upsert strategy is valid:
@@ -83,40 +84,72 @@
   - skill A candidates
 
 11. Issue #13 implementation update (2026-03-16)
-- Added LLM-based occupation adjudication stage after graph rerank:
-  - candidate pool expansion (dedupe by ESCO id)
-  - resume role-profile extraction by LLM
-  - multi-judge (`jury`) occupation scoring/ranking
-  - consensus-based rerank merge into final occupation confidence
-- Added `matching_debug.llm_occupation` block:
-  - applied flag, reason, candidate_count, judge_runs, consensus_rate
-  - top1 before/after, fallback_used
-- Added per-candidate LLM signals in output:
-  - `llm_fit_score`
-  - `llm_rank_score`
+- Tried LLM-based occupation rerank after graph rerank.
+- Result: improvement was limited relative to latency/cost and operational complexity.
+- Decision: rollback LLM rerank path and remove it from defaults and docs.
+- Kept record-level parallel normalization workers:
+  - `--record-workers` parallelizes source-document processing in `main`
+  - when `record_workers > 1`, phrase cache is local per record (`shared_phrase_cache=false`) to avoid cross-thread races
+
+12. Issue #14 update (2026-03-16): LLM candidate generation
+- Moved LLM usage from rerank to candidate creation stage.
+- LLM input is built from:
+  - `source_1st_resumes.extracted_fields` derived phrases/experience summary
+  - ESCO classification snippets (preferred/description/hierarchy/alt labels)
+- LLM outputs:
+  - occupation seed ESCO IDs + occupation terms
+  - skill seed ESCO IDs + skill terms
+- Seeds are merged into lexical/embedding candidate generation before profile filtering.
+- Added `matching_debug.llm_candidate_generation` diagnostics.
 - Updated normalizer version:
-  - `issue13_llm_occ_jury_v1`
+  - `issue14_llm_candidate_generation_v2`
+- Output caps are fixed for retrieval use:
+  - occupation top N = 20
+  - skill top N = 50
+
+## Phase Definition (2026-03-16)
+| Phase | Status | Purpose | Main Input | Main Output | Main Script(s) |
+|---|---|---|---|---|---|
+| 1. `ingestion phase` | implemented | CSVからMongoDBへ基礎データを投入する | ESCO CSV, `Resume.csv` | `source_1st_resumes`, `raw_esco_*` | `script/pipeline_mongo/ingest_csv_to_mongo.py` |
+| 2. `esco embedding phase` | implemented | `raw_esco_*` をembeddingしてMilvusへ格納する | `raw_esco_*` | Milvus ESCO embedding collections | `script/pipeline_mongo/build_esco_milvus_index.py` |
+| 3. `parsing_extraction phase` | implemented | `source_1st_resumes` のsection parsingとfield extractionを行う | `source_1st_resumes` | `source_1st_resumes.parsed_sections`, `source_1st_resumes.extracted_fields` | `script/pipeline_mongo/parse_sections_to_mongo.py`, `script/pipeline_mongo/extract_fields_to_mongo.py` |
+| 4. `normalized phase` | implemented | `source_1st_resumes` と `raw_esco_*` と Milvus を照合して `normalized_candidates` を作る | `source_1st_resumes`, `raw_esco_*`, Milvus ESCO vectors | `normalized_candidates` | `script/pipeline_mongo/normalize_1st_to_mongo.py` |
+| 4A. `normalized eval phase` | implemented | 正規化結果を評価する（現状: Weak評価 + LLM評価） | `normalized_candidates` | 評価Markdown/JSONレポート | `script/pipeline_mongo/evaluate_normalization.py`, `script/pipeline_mongo/evaluate_llm_representative_samples.py` |
+| 5. `real embedding phase` | not_implemented | RAG用semantic search対象フィールドをembeddingしてMilvusへ格納する | `normalized_candidates` (planned) | Milvus profile/search vectors (planned) | TBD |
+
+## Additional Phase Proposals
+- `retrieval eval phase` (implemented): embedding検索品質をAB/サンプルで検証する補助フェーズ。  
+  scripts: `evaluate_milvus_retrieval_samples.py`, `evaluate_milvus_ab_experience.py`
+- `quality gate phase` (proposed): 正規化実行後に最小品質基準（P@1, coverage, failed rate）を満たさない場合はpublishを止める運用フェーズ。
+- `serving/index publish phase` (proposed): `normalized_candidates` / real embeddings を検索サービス向けにスナップショット化して配布するフェーズ。
 
 ## Current Default Behavior
 - Normalizer script: `script/pipeline_mongo/normalize_1st_to_mongo.py`
 - `--embedding-mode auto` is default.
-- `--llm-occ-rerank-mode always` is default.
+- `--llm-candidate-mode always` is default.
+- `--record-workers 1` is default (increase for throughput).
 - When embedding is enabled:
   - Occupation: `A + B1` (RRF fusion)
   - Skill: `A` only
-- Occupation final ranking path:
-  - lexical/embedding candidate generation
+- Candidate generation path:
+  - lexical phrases from extracted fields
+  - optional embedding retrieval
+  - LLM candidate generation (seed IDs + phrase expansion)
+- Final ranking path:
   - profile filter
   - graph rerank
-  - LLM occupation rerank (jury aggregation)
   - category guardrail
+- Output caps:
+  - `occupation_candidates`: top 20
+  - `skill_candidates`: top 50
 - In `auto`, pipeline attempts embedding only when all are available:
   - `OPENAI_API_KEY`
   - `MILVUS_URI`
   - Milvus collections for occupation/skill embeddings
   - required packages (`openai`, `pymilvus`)
 - If embedding is unavailable, pipeline runs without embedding.
-- If LLM occupation rerank is unavailable, pipeline falls back to non-LLM ranking path.
+- If LLM candidate generation is unavailable, pipeline falls back to lexical/embedding-only candidate generation.
+- If `record_workers > 1`, document-level normalization runs in parallel threads.
 
 ## Environment Variables
 - `OPENAI_API_KEY`
@@ -142,24 +175,141 @@ python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capst
 python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --source-record-ids 19818707,25213006 --limit 0 --metrics-out .\script\pipeline_mongo\metrics_targeted.json
 ```
 
-4. Run normalization without LLM occupation rerank (for speed/baseline)
+4. Run normalization without LLM candidate generation (baseline)
 ```bash
-python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --limit 0 --llm-occ-rerank-mode off --metrics-out .\script\pipeline_mongo\metrics_no_llm_occ.json
+python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --limit 0 --llm-candidate-mode off --metrics-out .\script\pipeline_mongo\metrics_no_llm_candidate.json
 ```
 
-5. Compare A/B1/B2 experience-query variants (Milvus retrieval)
+5. Run normalization with record-level parallelism
+```bash
+python .\script\pipeline_mongo\normalize_1st_to_mongo.py --db-name prodapt_capstone --limit 0 --record-workers 4 --llm-candidate-mode always --metrics-out .\script\pipeline_mongo\metrics_parallel_workers4.json
+```
+
+6. Compare A/B1/B2 experience-query variants (Milvus retrieval)
 ```bash
 python .\script\pipeline_mongo\evaluate_milvus_ab_experience.py --db-name prodapt_capstone --sample-size 60 --top-k 10
 ```
 
-6. Generate gold annotation CSV samples (50 template + 200 stratified)
+7. Generate gold annotation CSV samples (50 template + 200 stratified)
 ```bash
 python .\script\pipeline_mongo\generate_gold_annotation_samples.py --db-name prodapt_capstone --template-size 50 --stratified-size 200 --out-template-csv .\script\pipeline_mongo\gold_annotation_template_50.csv --out-stratified-csv .\script\pipeline_mongo\gold_annotation_sample_200_stratified.csv --out-summary-json .\script\pipeline_mongo\gold_annotation_sampling_summary.json
 ```
 
 ## Related Docs
-- `docs/Issue11-12-Review.md`
-- `docs/Issue13-Plan-Review.md`
-- `docs/MongoDB-Normalization-Pipeline.md`
-- `docs/Issue6-Script-IO-Map.md`
-- `docs/Milvus-AB-Experience-Comparison.md`
+- `docs/issues/Issue11-12-Review.md`
+- `docs/issues/Issue13-Plan-Review.md`
+- `docs/pipeline/MongoDB-Normalization-Pipeline.md`
+- `docs/pipeline/Issue6-Script-IO-Map.md`
+- `docs/reports/retrieval/Milvus-AB-Experience-Comparison.md`
+
+## MMD: Issue Timeline
+```mermaid
+flowchart LR
+    I6["#6 Ingest CSV to Mongo<br/>source_1st_resumes + raw_esco_*"]
+    I7["#7 Parse sections"]
+    I8["#8 Parsing quality refinement"]
+    I9["#9 Deterministic field extraction<br/>extracted_fields"]
+    I10["#10 Normalization v1<br/>exact/alt/fuzzy + graph rerank"]
+    I11["#11 LLM gating readiness"]
+    I12["#12 Integrity readiness"]
+    I13["#13 Evaluation + retrieval refinement"]
+    I13U["#13 update (2026-03-16)<br/>LLM rerank rollback"]
+    I14["#14 (2026-03-16)<br/>LLM candidate generation"]
+
+    I6 --> I7 --> I8 --> I9 --> I10 --> I11 --> I12 --> I13 --> I13U --> I14
+```
+
+## MMD: Phase-based Script I/O (DB Explicit)
+```mermaid
+flowchart LR
+    subgraph P1["1_ingestion_phase"]
+        ESCOCSV["data/ESCO/*.csv"]
+        RESUMECSV["data/1st_data/Resume.csv"]
+        ING["ingest_csv_to_mongo.py"]
+    end
+
+    subgraph P2["2_esco_embedding_phase"]
+        BUILD["build_esco_milvus_index.py"]
+    end
+
+    subgraph P3["3_parsing_extraction_phase"]
+        PARSE["parse_sections_to_mongo.py"]
+        EXTRACT["extract_fields_to_mongo.py"]
+    end
+
+    subgraph P4["4_normalized_phase"]
+        NORM["normalize_1st_to_mongo.py"]
+    end
+
+    subgraph P4A["4A_normalized_eval_phase"]
+        EVALN["evaluate_normalization.py"]
+        EVALLLM["evaluate_llm_representative_samples.py"]
+    end
+
+    subgraph P5["5_real_embedding_phase_not_implemented"]
+        REALTBD["real_embedding_builder.py_tbd"]
+    end
+
+    subgraph PX["other_eval_support"]
+        EVALR["evaluate_milvus_retrieval_samples.py"]
+        EVALAB["evaluate_milvus_ab_experience.py"]
+    end
+
+    SRCDB[("MongoDB source_1st_resumes")]
+    ESCODB[("MongoDB raw_esco_*")]
+    NORMDB[("MongoDB normalized_candidates")]
+    OCCVDB[("Milvus DB esco_occupation_embeddings")]
+    SKLVDB[("Milvus DB esco_skill_embeddings")]
+    REALVDB[("Milvus DB real_profile_embeddings planned")]
+
+    OUTJSON["script/pipeline_mongo/*.json"]
+    OUTNORMMD["docs/reports/normalization/*.md"]
+    OUTRETMD["docs/reports/retrieval/*.md"]
+    OUTLLMMD["docs/reports/llm/*.md"]
+
+    ESCOCSV -->|read| ING
+    RESUMECSV -->|read| ING
+    ING -->|write| ESCODB
+    ING -->|write| SRCDB
+
+    ESCODB -->|read| BUILD
+    BUILD -->|write_vectors| OCCVDB
+    BUILD -->|write_vectors| SKLVDB
+
+    SRCDB -->|read_resume| PARSE
+    PARSE -->|update_parsed_sections| SRCDB
+    SRCDB -->|read_parsed_sections| EXTRACT
+    EXTRACT -->|update_extracted_fields| SRCDB
+
+    SRCDB -->|read_extracted_fields| NORM
+    ESCODB -->|read_labels_relations| NORM
+    OCCVDB -->|read_embedding_mode_auto| NORM
+    SKLVDB -->|read_embedding_mode_auto| NORM
+    NORM -->|upsert| NORMDB
+    NORM -->|write_metrics_json| OUTJSON
+
+    NORMDB -->|read| EVALN
+    EVALN -->|write_report| OUTNORMMD
+    EVALN -->|write_json| OUTJSON
+
+    NORMDB -->|read_sample| EVALLLM
+    EVALLLM -->|write_report| OUTLLMMD
+    EVALLLM -->|write_json| OUTJSON
+
+    SRCDB -->|read_sample| EVALR
+    OCCVDB -->|read| EVALR
+    SKLVDB -->|read| EVALR
+    EVALR -->|write_report| OUTRETMD
+    EVALR -->|write_json| OUTJSON
+
+    SRCDB -->|read_sample| EVALAB
+    OCCVDB -->|read| EVALAB
+    SKLVDB -->|read| EVALAB
+    EVALAB -->|write_report| OUTRETMD
+    EVALAB -->|write_json| OUTJSON
+
+    NORMDB -.->|planned_input| REALTBD
+    REALTBD -.->|planned_write_vectors| REALVDB
+```
+
+
