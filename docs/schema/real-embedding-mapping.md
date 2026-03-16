@@ -35,8 +35,8 @@ Reference docs:
 | `occupation_vector` | NOT NULL | `normalized_candidates.occupation_candidates[*]`, `source_1st_resumes.extracted_fields.occupation_candidates[*]`, `normalized_candidates.experiences[*]`, `source_1st_resumes.extracted_fields.name_title` | `computed` | 下記 Assembly Rule を参照 |
 | `category` | nullable | `normalized_candidates.category` | `as_is` | 既存 category guardrail / 互換フィルタ用 |
 | `industry_esco_id` | nullable | `normalized_candidates.occupation_candidates[*].hierarchy_json` | `computed` | primary occupation candidate の直近親 ESCO component |
-| `occupation_esco_ids_json` | NOT NULL | `normalized_candidates.occupation_candidates[*].esco_id` | `computed` | rank 順で保持 |
-| `skill_esco_ids_json` | NOT NULL | `normalized_candidates.skill_candidates[*].esco_id` | `computed` | rank 順で保持 |
+| `occupation_esco_ids_json` | NOT NULL | `normalized_candidates.occupation_candidates[*].esco_id` | `computed` | rank 順で保持（候補なしは `[]`） |
+| `skill_esco_ids_json` | NOT NULL | `normalized_candidates.skill_candidates[*].esco_id` | `computed` | rank 順で保持（候補なしは `[]`） |
 | `experience_months_total` | nullable | `normalized_candidates.experiences[*].duration_months` | `computed` | null を除いて合計 |
 | `highest_education_level_rank` | nullable | `normalized_candidates.educations[*].degree`, `normalized_candidates.educations[*].field_of_study` | `computed` | degree ヒューリスティックで最大 rank を採用 |
 | `current_location` | nullable | `normalized_candidates.current_location` | `as_is` | exact / prefix filter 用 |
@@ -114,6 +114,7 @@ Exclusion:
 - Rule:
   - `rank` 昇順で ESCO ID を配列化。
   - null / duplicate は除外。
+  - 候補が存在しない場合は `null` ではなく空配列 `[]` を設定する。
 
 ### `skill_esco_ids_json`
 - Source:
@@ -121,6 +122,11 @@ Exclusion:
 - Rule:
   - `rank` 昇順で ESCO ID を配列化。
   - null / duplicate は除外。
+  - 候補が存在しない場合は `null` ではなく空配列 `[]` を設定する。
+
+## Publish Inclusion Rule
+- `occupation_esco_ids_json` と `skill_esco_ids_json` がどちらも空配列でも publish 対象から除外しない。
+- hard filter 不一致時に除外される可能性はあるが、index publish 自体は実施する。
 
 ### `experience_months_total`
 - Source:
