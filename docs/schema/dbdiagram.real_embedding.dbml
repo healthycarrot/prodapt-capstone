@@ -68,8 +68,8 @@ Table candidate_search_collection {
 
   category varchar [note: 'Copied from normalized_candidates.category for legacy/category guardrail filters.']
   industry_esco_id varchar [note: 'Immediate parent ESCO component of the primary occupation candidate; used as industry filter.']
-  occupation_esco_ids_json jsonb [not null, note: 'Ordered ESCO occupation IDs derived from occupation_candidates top N.']
-  skill_esco_ids_json jsonb [not null, note: 'Ordered ESCO skill IDs derived from skill_candidates top N.']
+  occupation_esco_ids_json jsonb [not null, note: 'Ordered ESCO occupation IDs derived from occupation_candidates top N. Use [] when no occupation ESCO IDs are available.']
+  skill_esco_ids_json jsonb [not null, note: 'Ordered ESCO skill IDs derived from skill_candidates top N. Use [] when no skill ESCO IDs are available.']
   experience_months_total int [note: 'Total experience months derived from normalized experiences where available.']
   highest_education_level_rank int [note: 'Derived ordinal used for education-level filtering. Example: 0 unknown, 1 secondary, 2 associate, 3 bachelor, 4 master, 5 doctorate.']
   current_location varchar [note: 'Copied from normalized_candidates.current_location for exact/prefix location filtering when needed.']

@@ -169,10 +169,12 @@
   - `current_location`
 - Field derivation rules:
   - `industry_esco_id`: primary occupation candidate の直近親 ESCO component
-  - `occupation_esco_ids_json`: `occupation_candidates` の ESCO ID を rank 順に保持
-  - `skill_esco_ids_json`: `skill_candidates` の ESCO ID を rank 順に保持
+  - `occupation_esco_ids_json`: `occupation_candidates` の ESCO ID を rank 順に保持（候補が無い場合は `[]`）
+  - `skill_esco_ids_json`: `skill_candidates` の ESCO ID を rank 順に保持（候補が無い場合は `[]`）
   - `experience_months_total`: `experiences.duration_months` の合計
   - `highest_education_level_rank`: `educations.degree` / `field_of_study` から導出する ordinal
+  - publish include rule:
+    - `occupation_esco_ids_json` / `skill_esco_ids_json` が空でも候補者は publish 対象に含める
 - Vector assembly rules:
   - `skill_vector`
     - top normalized skill labels
