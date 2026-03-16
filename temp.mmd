@@ -35,9 +35,9 @@ flowchart LR
     SRCDB[("MongoDB source_1st_resumes")]
     ESCODB[("MongoDB raw_esco_*")]
     NORMDB[("MongoDB normalized_candidates")]
-    OCCVDB[("Milvus DB esco_occupation_embeddings")]
-    SKLVDB[("Milvus DB esco_skill_embeddings")]
-    REALVDB[("Milvus DB real_profile_embeddings planned")]
+    OCCVDB[("Milvus DB occupation_collection")]
+    SKLVDB[("Milvus DB skill_collection")]
+    REALVDB[("Milvus DB candidate_search_collection planned")]
 
     OUTJSON["script/pipeline_mongo/*.json"]
     OUTNORMMD["docs/reports/normalization/*.md"]
@@ -86,4 +86,4 @@ flowchart LR
     EVALAB -->|write_json| OUTJSON
 
     NORMDB -.->|planned_input| REALTBD
-    REALTBD -.->|planned_write_vectors| REALVDB
+    REALTBD -.->|planned_write_candidate_search_collection| REALVDB

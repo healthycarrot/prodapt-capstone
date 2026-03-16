@@ -1,0 +1,88 @@
+flowchart LR
+  UI["React"]
+
+  subgraph API["FastAPI"]
+    direction TB
+
+    subgraph QR["Query / Retrieval"]
+      direction LR
+      UQ["Understanding Query<br/>FR-01-01<br/>FR-01-02"]
+      QN["Query normalizer<br/>FR-01-03-01<br/>FR-01-03-02<br/>FR-01-03-03<br/>FR-01-03-04<br/>FR-01-03-05<br/>FR-01-03-06"]
+      HF["Hard Filter<br/>FR-01-03<br/>FR-01-03-07"]
+    end
+
+    subgraph QB["Query Builder / Search"]
+      direction LR
+      RSQ["Rephrasing Skill Query<br/>FR-01-04-02"]
+      ROQ["Rephrasing Occupation Query<br/>FR-01-05-02"]
+      VS["Vector search<br/>FR-01-04<br/>FR-01-04-01<br/>FR-01-05"]
+      KWS["KW Search<br/>FR-02"]
+    end
+
+    subgraph RANK["Fusion / Rerank"]
+      direction LR
+      FUS["Fusion<br/>FR-02-01<br/>FR-02-03"]
+      CE["Cross Encoder<br/>FR-02-02"]
+      RR["Reranking<br/>FR-01-03-05<br/>FR-03-01<br/>FR-03-02<br/>FR-03-03"]
+    end
+
+    OUT["Create retrieval result<br/>MVP API response"]
+  end
+
+  subgraph MDB["MongoDB"]
+    direction TB
+    SR[(source_1st_resumes)]
+    NC[(normalized_candidates)]
+  end
+
+  subgraph MILVUS["Milvus"]
+    direction TB
+    CSC[(candidate_search_collection)]
+    OCC[(occupation_collection)]
+    SKL[(skill_collection)]
+    MDF["Fields<br/>- skill_vector<br/>- occupation_vector<br/>Metadata<br/>- industry_esco_id<br/>- occupation_esco_ids_json<br/>- skill_esco_ids_json<br/>- experience_months_total<br/>- highest_education_level_rank<br/>- current_location"]
+  end
+
+  subgraph DP["Data pipeline"]
+    PIPE["ingestion / normalization / publish"]
+  end
+
+  UI --> UQ
+  UQ -- "retry when conflict (FR-01-02)" --> UI
+
+  UQ --> QN
+  UQ --> RSQ
+  UQ --> ROQ
+  UQ --> KWS
+
+  QN --> HF
+  QN --> RSQ
+  QN --> ROQ
+  QN --> KWS
+
+  HF --> VS
+  HF --> KWS
+  RSQ --> VS
+  ROQ --> VS
+
+  VS -- "vector_score" --> FUS
+  KWS -- "keyword_score" --> FUS
+  FUS --> CE
+  CE -- "cross_encoder_score" --> RR
+  FUS -- "fusion_score" --> RR
+  RR --> OUT
+
+  OCC --> QN
+  SKL --> QN
+  CSC --> VS
+  CSC --> KWS
+
+  NC --> CE
+  SR --> CE
+  NC --> OUT
+  SR --> OUT
+
+  MDF -.-> CSC
+  PIPE --> SR
+  PIPE --> NC
+  PIPE --> CSC

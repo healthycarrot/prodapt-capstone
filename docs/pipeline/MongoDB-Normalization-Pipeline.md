@@ -39,8 +39,8 @@
 - `MILVUS_URI`
 - `MILVUS_TOKEN` (optional)
 - `MILVUS_DB_NAME` (optional)
-- `MILVUS_OCC_COLLECTION` (optional)
-- `MILVUS_SKILL_COLLECTION` (optional)
+- `MILVUS_OCC_COLLECTION` (optional, default: `occupation_collection`)
+- `MILVUS_SKILL_COLLECTION` (optional, default: `skill_collection`)
 
 ## Typical Commands
 1. Build Milvus index

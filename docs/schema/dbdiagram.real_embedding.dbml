@@ -1,0 +1,84 @@
+Project candidate_search_collection_planned {
+  database_type: 'PostgreSQL'
+  Note: '''
+    Logical schema for the planned Milvus serving collection used by PR-06
+    real embedding phase.
+
+    Design goals:
+    - one row per candidate per published snapshot
+    - keep MongoDB (`normalized_candidates`, `source_1st_resumes`) as the
+      source of truth for explanation payloads and full profile details
+    - keep only the scalar metadata required for FR filters in Milvus
+    - support separate semantic search on skill and occupation without
+      duplicating metadata rows
+
+    Notes:
+    - This DBML is a logical representation of a Milvus collection, not a SQL table.
+    - `skill_vector` and `occupation_vector` are searched independently.
+    - `occupation_esco_ids_json` and `skill_esco_ids_json` are ordered ESCO ID arrays
+      derived from the ranked candidate lists in `normalized_candidates`.
+    - Education does not have a dedicated vector field in the current design.
+      It is handled primarily via scalar metadata filtering and downstream scoring.
+  '''
+}
+
+Table candidate_search_collection {
+  vector_doc_id varchar [pk, note: 'Milvus primary key. Recommended format: <snapshot_version>:<candidate_id>.']
+  candidate_id varchar [not null, note: 'Stable UUID copied from normalized_candidates.candidate_id.']
+  normalized_doc_id varchar [not null, note: 'Reference to normalized_candidates._id.']
+  source_dataset varchar [not null]
+  source_record_id varchar [not null]
+  snapshot_version varchar [not null, note: 'Serving/index publish snapshot identifier.']
+  normalizer_version varchar [not null]
+  embedding_model varchar [not null, note: 'Dense embedding model name used for both vector fields.']
+  embedding_version varchar [not null, note: 'Builder/version for profile text assembly and embedding generation.']
+
+  skill_vector vector [not null, note: '''
+    Dense vector searched for skill semantic retrieval. Dimension is deployment-specific.
+    Assembly order (high signal -> low signal):
+    1. Top normalized skill labels from `normalized_candidates.skill_candidates` (recommended cap: top 12).
+    2. Deduplicated raw skill phrases from `source_1st_resumes.extracted_fields.skills.raw_text`
+       (recommended cap: top 20 after normalization/dedup).
+    3. Recent experience context using `experiences.title` plus short skill-bearing description snippets
+       from up to 3 recent experiences.
+    4. Optional light occupation context using top 2 occupation labels to anchor domain.
+    Rules:
+    - Keep canonical labels before raw phrases.
+    - Deduplicate exact/near-duplicate terms after lowercasing and trimming.
+    - Exclude company names, locations, debug payloads, and full resume dumps.
+    - Keep assembled text short and stable (recommended target: <= 1200 chars).
+  ''']
+  occupation_vector vector [not null, note: '''
+    Dense vector searched for occupation semantic retrieval. Dimension is deployment-specific.
+    Assembly order (high signal -> low signal):
+    1. Primary and top occupation labels from `normalized_candidates.occupation_candidates`
+       (recommended cap: top 3).
+    2. Hierarchy labels of the top occupation candidates to preserve broader role context.
+    3. Deduplicated raw occupation phrases from `source_1st_resumes.extracted_fields.occupation_candidates`
+       (recommended cap: top 5).
+    4. Recent experience titles using `experiences.title` and `experiences.raw_title`
+       from up to 5 experiences.
+    5. Optional current headline/name title from raw extraction when present.
+    Rules:
+    - Keep normalized occupation labels before raw titles.
+    - Preserve hierarchy in label order from narrow to broad.
+    - Exclude company names, locations, skill-only lists, debug payloads, and full resume dumps.
+    - Keep assembled text short and stable (recommended target: <= 1200 chars).
+  ''']
+
+  category varchar [note: 'Copied from normalized_candidates.category for legacy/category guardrail filters.']
+  industry_esco_id varchar [note: 'Immediate parent ESCO component of the primary occupation candidate; used as industry filter.']
+  occupation_esco_ids_json jsonb [not null, note: 'Ordered ESCO occupation IDs derived from occupation_candidates top N.']
+  skill_esco_ids_json jsonb [not null, note: 'Ordered ESCO skill IDs derived from skill_candidates top N.']
+  experience_months_total int [note: 'Total experience months derived from normalized experiences where available.']
+  highest_education_level_rank int [note: 'Derived ordinal used for education-level filtering. Example: 0 unknown, 1 secondary, 2 associate, 3 bachelor, 4 master, 5 doctorate.']
+  current_location varchar [note: 'Copied from normalized_candidates.current_location for exact/prefix location filtering when needed.']
+
+  indexes {
+    (candidate_id) [name: 'idx_candidate_id']
+    (snapshot_version) [name: 'idx_snapshot_version']
+    (industry_esco_id) [name: 'idx_industry_esco_id']
+    (experience_months_total) [name: 'idx_experience_months_total']
+    (highest_education_level_rank) [name: 'idx_education_level_rank']
+  }
+}

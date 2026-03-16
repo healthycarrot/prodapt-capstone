@@ -1,146 +1,131 @@
-Project normalized_resume_profile {
+Project normalized_candidates_current {
   database_type: 'PostgreSQL'
   Note: '''
-    Normalized resume schema. ESCO is used as reference DB; normalized result is stored here.
-    Field mapping: see docs/schema/field-mapping.md for full source_section / extractor_mode details.
+    Logical schema for MongoDB `normalized_candidates` written by:
+    - script/pipeline_mongo/normalize_1st_to_mongo.py
+    Version baseline: NORMALIZER_VERSION = issue14_llm_candidate_generation_v2
+    Notes:
+    - `_id` is MongoDB ObjectId.
+    - DBML tables under "*_embedded" are embedded document shapes, not physical collections.
+    - Additional Mongo path indexes exist on:
+      - llm_handoff.rerank_trigger
+      - llm_handoff.extracPtion_trigger
   '''
 }
 
-// ────────────────────────────────────────────────────────────────
-// HTML Section Types (from Issue #6 re-analysis):
-//   NAME (99.8%) | SUMM (99.9%) | HILT (90.5%) | EXPR (100.0%)
-//   EDUC (99.6%) | SKLL (96.5%) | TSKL (1.9%)  | ACCM (52.4%)
-//   AFIL (31.4%) | ADDI (20.4%) | CERT (13.4%)
-//
-// Extractor modes:
-//   as_is | generated | regex | heuristic | esco_matcher | computed | llm_fallback
-// ────────────────────────────────────────────────────────────────
+Table normalized_candidates {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  candidate_id varchar [note: 'Set only on insert via $setOnInsert UUID v4.']
+  source_dataset varchar [not null]
+  source_record_id varchar [not null]
+  category varchar
+  normalizer_version varchar [not null]
+  normalized_at timestamp [not null]
+  normalization_status varchar [not null, note: 'success | partial | failed']
 
-Table candidates {
-  candidate_id varchar [pk, note: 'generated: UUID v4']
-  source_dataset varchar [not null, note: 'as_is: "1st_data" | "2nd_data" | ...']
-  source_record_id varchar [not null, note: 'as_is: MongoDB source_record_id']
-  normalizer_version varchar [not null, note: 'generated: script version string']
-  normalized_at timestamp [not null, note: 'generated: execution timestamp']
-  normalization_status varchar [not null, note: 'computed: success | partial | failed']
+  current_location varchar
+  resume_text text [not null]
+  extraction_confidence decimal(6,5)
 
-  current_location varchar [note: 'section=NAME, mode=regex→llm_fallback, pattern: City, ST']
-  resume_text text [not null, note: 'as_is: full resume_text from source']
-  extraction_confidence decimal(6,5) [note: 'computed: weighted avg of child confidences']
+  occupation_candidates jsonb [not null, note: 'Array of normalized_occupation_candidate_embedded (top 20).']
+  skill_candidates jsonb [not null, note: 'Array of normalized_skill_candidate_embedded (top 50).']
+  experiences jsonb [not null, note: 'Array of normalized_experience_embedded from extracted_fields.experiences.']
+  educations jsonb [not null, note: 'Array of normalized_education_embedded from extracted_fields.educations.']
+  llm_handoff jsonb [not null, note: 'Object shape is normalized_llm_handoff_embedded.']
+  matching_debug jsonb [not null, note: 'Object shape is normalized_matching_debug_embedded.']
 
   indexes {
-    (source_dataset, source_record_id) [unique, name: 'uq_candidates_source_record']
-    (normalization_status) [name: 'idx_candidates_status']
-    (normalized_at) [name: 'idx_candidates_normalized_at']
+    (source_dataset, source_record_id) [unique, name: 'uq_source_record']
+    (candidate_id) [name: 'idx_candidate_id']
+    (normalization_status) [name: 'idx_normalization_status']
   }
 }
 
-Table candidate_occupation_candidates {
-  // source_section: NAME (title) > SUMM (occupation phrase) > EXPR (job titles)
-  id bigint [pk, increment]
-  candidate_id varchar [not null, ref: > candidates.candidate_id]
+Table normalized_occupation_candidate_embedded {
+  normalized_doc_id varchar [not null, ref: > normalized_candidates._id]
+  esco_id varchar [not null]
+  preferred_label varchar [not null]
+  raw_text text [not null]
+  confidence decimal(6,5) [not null]
+  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | embedding_b1 | llm_seed']
+  rank int [not null]
+  is_primary boolean [not null]
+  hierarchy_json jsonb [note: 'List[{"id","label"}] from broader relations.']
+  source_span text
+  base_confidence decimal(6,5) [note: 'Occupation only; set after graph rerank.']
+  graph_support jsonb [note: 'Occupation only; {essential_hits, optional_hits, boost}.']
 
-  raw_text text [not null, note: 'section=NAME>SUMM>EXPR, mode=heuristic']
-  esco_id varchar [note: 'mode=esco_matcher: exact→alt→fuzzy→graph']
-  preferred_label varchar [note: 'mode=esco_matcher']
-  confidence decimal(6,5) [not null, note: 'mode=esco_matcher']
-
-  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
-  rank int [not null, note: 'computed: confidence DESC']
-  is_primary boolean [not null, default: false, note: 'computed: rank=1→true']
-
-  hierarchy_json jsonb [note: 'mode=esco_matcher: broaderRelationsOccPillar']
-  source_span text [note: 'heuristic: extraction position info']
-
-  indexes {
-    (candidate_id, rank) [name: 'idx_occ_candidate_rank']
-    (candidate_id, is_primary) [name: 'idx_occ_candidate_primary']
-    (esco_id) [name: 'idx_occ_esco_id']
-  }
+  Note: 'Embedded inside normalized_candidates.occupation_candidates.'
 }
 
-Table candidate_skill_candidates {
-  // source_section: SKLL > HILT > TSKL > EXPR (supplementary)
-  id bigint [pk, increment]
-  candidate_id varchar [not null, ref: > candidates.candidate_id]
+Table normalized_skill_candidate_embedded {
+  normalized_doc_id varchar [not null, ref: > normalized_candidates._id]
+  esco_id varchar [not null]
+  preferred_label varchar [not null]
+  raw_text text [not null]
+  confidence decimal(6,5) [not null]
+  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | embedding_b1 | llm_seed']
+  rank int [not null]
+  is_primary boolean [not null]
+  hierarchy_json jsonb
+  source_span text
 
-  raw_text text [not null, note: 'section=SKLL>HILT>TSKL>EXPR, mode=heuristic, split by comma/bullet/semicolon']
-  esco_id varchar [note: 'mode=esco_matcher: exact→alt→fuzzy']
-  preferred_label varchar [note: 'mode=esco_matcher']
-  confidence decimal(6,5) [not null, note: 'mode=esco_matcher']
-
-  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
-  rank int [not null, note: 'computed: confidence DESC']
-  is_primary boolean [not null, default: false, note: 'computed: rank=1→true']
-
-  hierarchy_json jsonb [note: 'mode=esco_matcher: broaderRelationsSkillPillar']
-  source_span text [note: 'heuristic: extraction position info']
-
-  indexes {
-    (candidate_id, rank) [name: 'idx_skill_candidate_rank']
-    (candidate_id, is_primary) [name: 'idx_skill_candidate_primary']
-    (esco_id) [name: 'idx_skill_esco_id']
-  }
+  Note: 'Embedded inside normalized_candidates.skill_candidates.'
 }
 
-Table candidate_experiences {
-  // source_section: EXPR (split into multiple records per job block)
-  experience_id bigint [pk, increment]
-  candidate_id varchar [not null, ref: > candidates.candidate_id]
+Table normalized_experience_embedded {
+  normalized_doc_id varchar [not null, ref: > normalized_candidates._id]
+  title varchar
+  raw_title varchar
+  company varchar
+  start_date varchar [note: 'ISO-ish string: yyyy-MM-dd | yyyy-MM | yyyy']
+  end_date varchar [note: 'ISO-ish string: yyyy-MM-dd | yyyy-MM | yyyy']
+  is_current boolean
+  location varchar
+  duration_months int
+  description_raw text
+  confidence decimal(6,5)
 
-  title varchar [note: 'section=EXPR, mode=regex→llm_fallback']
-  raw_title varchar [note: 'section=EXPR, mode=heuristic: pre-normalization text']
-  company varchar [note: 'section=EXPR, mode=regex→llm_fallback, pattern: Company Name']
-  start_date date [note: 'section=EXPR, mode=regex, pattern: MM/YYYY | Month YYYY']
-  end_date date [note: 'section=EXPR, mode=regex, Current/Present→null+is_current']
-  is_current boolean [not null, default: false, note: 'section=EXPR, mode=heuristic']
-  location varchar [note: 'section=EXPR, mode=regex, pattern: City, State']
-  duration_months int [note: 'computed: end_date - start_date in months']
-  description_raw text [note: 'section=EXPR, mode=as_is: full job block text']
-
-  indexes {
-    (candidate_id) [name: 'idx_exp_candidate']
-    (candidate_id, start_date, end_date) [name: 'idx_exp_candidate_period']
-  }
+  Note: 'Copied from source_1st_resumes.extracted_fields.experiences.'
 }
 
-Table experience_occupation_candidates {
-  // source: candidate_experiences.title → ESCO matching
-  id bigint [pk, increment]
-  experience_id bigint [not null, ref: > candidate_experiences.experience_id]
+Table normalized_education_embedded {
+  normalized_doc_id varchar [not null, ref: > normalized_candidates._id]
+  institution varchar
+  degree varchar
+  field_of_study varchar
+  graduation_year varchar
+  start_date varchar [note: 'ISO-ish string']
+  end_date varchar [note: 'ISO-ish string']
+  location varchar
+  confidence decimal(6,5)
 
-  raw_text text [not null, note: 'from experience.title, mode=heuristic']
-  esco_id varchar [note: 'mode=esco_matcher: exact→alt→fuzzy→graph']
-  preferred_label varchar [note: 'mode=esco_matcher']
-  confidence decimal(6,5) [not null, note: 'mode=esco_matcher']
-
-  match_method varchar [not null, note: 'exact | alt_label | fuzzy | embedding | llm']
-  rank int [not null, note: 'computed: confidence DESC']
-  is_primary boolean [not null, default: false, note: 'computed: rank=1→true']
-
-  hierarchy_json jsonb [note: 'mode=esco_matcher: broaderRelationsOccPillar']
-
-  indexes {
-    (experience_id, rank) [name: 'idx_exp_occ_rank']
-    (experience_id, is_primary) [name: 'idx_exp_occ_primary']
-    (esco_id) [name: 'idx_exp_occ_esco_id']
-  }
+  Note: 'Copied from source_1st_resumes.extracted_fields.educations.'
 }
 
-Table candidate_educations {
-  // source_section: EDUC (split into multiple records per education block)
-  education_id bigint [pk, increment]
-  candidate_id varchar [not null, ref: > candidates.candidate_id]
+Table normalized_llm_handoff_embedded {
+  normalized_doc_id varchar [not null, ref: > normalized_candidates._id]
+  rerank_trigger boolean [not null, note: 'Monitoring metadata; not active rerank execution path.']
+  extraction_trigger boolean [not null]
+  top_occupation_confidence decimal(6,5) [not null]
+  top2_margin decimal(6,5)
+  top_graph_hits int [not null]
+  skill_candidate_count int [not null]
 
-  institution varchar [note: 'section=EDUC, mode=regex→llm_fallback, max 100 chars guard']
-  degree varchar [note: 'section=EDUC, mode=regex→llm_fallback, pattern: Bachelor|Master|PhD|Associate']
-  field_of_study varchar [note: 'section=EDUC, mode=regex→llm_fallback, pattern: in [Field] | : [Field]']
-  start_date date [note: 'section=EDUC, mode=regex, YYYY pattern']
-  end_date date [note: 'section=EDUC, mode=regex, YYYY pattern']
-  graduation_year varchar [note: 'section=EDUC, mode=regex, fallback to end_date year']
-  location varchar [note: 'section=EDUC, mode=regex, pattern: City, State']
+  Note: 'Embedded inside normalized_candidates.llm_handoff.'
+}
 
-  indexes {
-    (candidate_id) [name: 'idx_edu_candidate']
-  }
+Table normalized_matching_debug_embedded {
+  normalized_doc_id varchar [not null, ref: > normalized_candidates._id]
+  ranking_profile varchar [not null, note: 'precision | balanced | coverage']
+  threshold_strictness varchar [not null, note: 'strict | medium | lenient']
+  fuzzy_thresholds jsonb [not null, note: '{"occupation": float, "skill": float}']
+  graph jsonb [not null, note: '{"essential_weight","optional_weight","max_boost","rerank_applied","rank_changed"}']
+  embedding jsonb [not null, note: '{"mode","enabled","disabled_reason",candidate_counts...}']
+  llm_candidate_generation jsonb [not null, note: '{"mode","enabled","applied","reason",reference_counts,seed_counts,term_counts,"fallback_used"}']
+  output_caps jsonb [not null, note: '{"occupation_top_n":20,"skill_top_n":50}']
+  category_guardrail jsonb [not null, note: '{"removed_count","removed_examples"}']
+  llm_handoff jsonb [not null, note: 'Copy of llm_handoff object at write time.']
+
+  Note: 'Embedded inside normalized_candidates.matching_debug.'
 }

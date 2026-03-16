@@ -1,234 +1,103 @@
-Project esco_raw_minimal_subset {
+Project mongodb_source_resume_layer {
   database_type: 'PostgreSQL'
-  Note: 'Raw source-aligned ESCO minimal subset for initial ingestion and data understanding. URI/code are logical keys; integrity is checked by ETL validation.'
+  Note: '''
+    Logical schema for MongoDB source resume collection managed by:
+    - script/pipeline_mongo/ingest_csv_to_mongo.py
+    - script/pipeline_mongo/parse_sections_to_mongo.py
+    - script/pipeline_mongo/extract_fields_to_mongo.py
+    Notes:
+    - `_id` is MongoDB ObjectId.
+    - DBML tables under "*_embedded" are embedded document shapes, not physical collections.
+    - raw_esco_* collections are defined in docs/schema/dbdiagram.raw_esco.dbml.
+  '''
 }
 
-Table raw_esco_occupations {
-  id bigint [pk, increment]
-  concept_uri varchar [not null]
-  isco_group varchar
-  preferred_label varchar
-  alt_labels text
-  hidden_labels text
-  status varchar
-  modified_date varchar
-  scope_note text
-  definition text
-  in_scheme text
-  description text
-  code varchar
-  nace_code varchar
+Table source_1st_resumes {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  source_dataset varchar [not null, note: 'Current ingestion path stores "1st_data".']
+  source_record_id varchar [not null]
+  category varchar
+  resume_text text
+  resume_html text
+
+  parsed_sections jsonb [note: 'Array of source_1st_parsed_section_embedded.']
+  parsing_method varchar [note: 'html | whitespace | none']
+  parser_version varchar [note: 'e.g. parse_sections_v1.0']
+  section_count int
+  section_types jsonb [note: 'Unique section_type list, sorted.']
+
+  extracted_fields jsonb [note: 'Object shape is source_1st_extracted_fields_embedded; null on extraction error.']
+  extractor_version varchar [note: 'e.g. extract_fields_v1.0']
+  extraction_method varchar [note: 'html | text | none | error']
+  experience_count int
+  education_count int
+  skill_count int
 
   indexes {
-    (concept_uri) [unique, name: 'uq_raw_occ_uri']
-    (concept_uri) [name: 'idx_raw_occ_uri']
-    (isco_group) [name: 'idx_raw_occ_isco_group']
-    (preferred_label) [name: 'idx_raw_occ_label']
+    (source_dataset, source_record_id) [unique, name: 'uq_source_dataset_record']
+    (category) [name: 'idx_source_category']
   }
 }
 
-Table raw_esco_skills {
-  id bigint [pk, increment]
-  concept_uri varchar [not null]
-  skill_type varchar
-  reuse_level varchar
-  preferred_label varchar
-  alt_labels text
-  hidden_labels text
-  status varchar
-  modified_date varchar
-  scope_note text
-  definition text
-  in_scheme text
-  description text
+Table source_1st_parsed_section_embedded {
+  source_doc_id varchar [not null, ref: > source_1st_resumes._id]
+  section_type varchar [not null]
+  section_id varchar [not null]
+  title varchar
+  text text [not null]
+  char_count int [not null]
 
-  indexes {
-    (concept_uri) [unique, name: 'uq_raw_skill_uri']
-    (concept_uri) [name: 'idx_raw_skill_uri']
-    (skill_type) [name: 'idx_raw_skill_type']
-    (preferred_label) [name: 'idx_raw_skill_label']
-  }
+  Note: 'Embedded inside source_1st_resumes.parsed_sections.'
 }
 
-Table raw_esco_isco_groups {
-  id bigint [pk, increment]
-  concept_uri varchar [not null]
-  code varchar
-  preferred_label varchar
-  alt_labels text
-  status varchar
-  in_scheme text
-  description text
+Table source_1st_extracted_fields_embedded {
+  source_doc_id varchar [not null, ref: > source_1st_resumes._id]
+  name_title varchar
+  current_location varchar
+  experiences jsonb [note: 'Array of source_1st_experience_embedded.']
+  educations jsonb [note: 'Array of source_1st_education_embedded.']
+  skills jsonb [note: 'Array of source_1st_skill_phrase_embedded.']
+  occupation_candidates jsonb [note: 'String array from NAME + EXPR titles.']
+  extraction_method varchar [note: 'html | text | none']
+  extractor_version varchar
 
-  indexes {
-    (code) [unique, name: 'uq_raw_isco_code']
-    (concept_uri) [name: 'idx_raw_isco_uri']
-    (code) [name: 'idx_raw_isco_code']
-  }
+  Note: 'Embedded inside source_1st_resumes.extracted_fields.'
 }
 
-Table raw_esco_skill_groups {
-  id bigint [pk, increment]
-  concept_uri varchar [not null]
-  preferred_label varchar
-  alt_labels text
-  hidden_labels text
-  status varchar
-  modified_date varchar
-  scope_note text
-  in_scheme text
-  description text
-  code varchar
+Table source_1st_experience_embedded {
+  source_doc_id varchar [not null, ref: > source_1st_resumes._id]
+  title varchar
+  raw_title varchar
+  company varchar
+  start_date varchar [note: 'ISO-ish string: yyyy-MM-dd | yyyy-MM | yyyy']
+  end_date varchar [note: 'ISO-ish string: yyyy-MM-dd | yyyy-MM | yyyy']
+  is_current boolean
+  location varchar
+  duration_months int
+  description_raw text
+  confidence decimal(6,5)
 
-  indexes {
-    (code) [unique, name: 'uq_raw_skill_group_code']
-    (concept_uri) [name: 'idx_raw_skill_group_uri']
-    (code) [name: 'idx_raw_skill_group_code']
-  }
+  Note: 'Embedded inside source_1st_resumes.extracted_fields.experiences.'
 }
 
-Table raw_esco_broader_relations_occ {
-  id bigint [pk, increment]
-  concept_type varchar
-  concept_uri varchar [not null]
-  concept_label varchar
-  broader_type varchar
-  broader_uri varchar [not null]
-  broader_label varchar
+Table source_1st_education_embedded {
+  source_doc_id varchar [not null, ref: > source_1st_resumes._id]
+  institution varchar
+  degree varchar
+  field_of_study varchar
+  graduation_year varchar
+  start_date varchar [note: 'ISO-ish string']
+  end_date varchar [note: 'ISO-ish string']
+  location varchar
+  confidence decimal(6,5)
 
-  indexes {
-    (concept_uri) [name: 'idx_raw_broader_occ_concept_uri']
-    (broader_uri) [name: 'idx_raw_broader_occ_parent_uri']
-  }
+  Note: 'Embedded inside source_1st_resumes.extracted_fields.educations.'
 }
 
-Table raw_esco_broader_relations_skill {
-  id bigint [pk, increment]
-  concept_type varchar
-  concept_uri varchar [not null]
-  concept_label varchar
-  broader_type varchar
-  broader_uri varchar [not null]
-  broader_label varchar
+Table source_1st_skill_phrase_embedded {
+  source_doc_id varchar [not null, ref: > source_1st_resumes._id]
+  raw_text varchar [not null]
+  source_section varchar [not null, note: 'SKLL | HILT | TSKL | CERT']
 
-  indexes {
-    (concept_uri) [name: 'idx_raw_broader_skill_concept_uri']
-    (broader_uri) [name: 'idx_raw_broader_skill_parent_uri']
-  }
-}
-
-Table raw_esco_occupation_skill_relations {
-  id bigint [pk, increment]
-  occupation_uri varchar [not null]
-  occupation_label varchar
-  relation_type varchar
-  skill_type varchar
-  skill_uri varchar [not null]
-  skill_label varchar
-
-  Note: 'Join keys: occupation_uri -> raw_esco_occupations.concept_uri, skill_uri -> raw_esco_skills.concept_uri'
-
-  indexes {
-    (occupation_uri, relation_type) [name: 'idx_raw_occ_skill_occ_rel']
-    (skill_uri, relation_type) [name: 'idx_raw_occ_skill_skill_rel']
-    (occupation_uri, skill_uri, relation_type) [name: 'idx_raw_occ_skill_pair']
-  }
-}
-
-// -----------------------------------------------------------------
-// Join strategy (raw layer)
-// 1) Logical-key join: URI/code で直接JOIN
-// 2) Physical-key join: ETLで解決後に *_resolved テーブルへIDで保持
-// -----------------------------------------------------------------
-
-Table raw_join_occ_isco_group_resolved {
-  id bigint [pk, increment]
-  occupation_id bigint [not null, ref: > raw_esco_occupations.id]
-  isco_group_id bigint [not null, ref: > raw_esco_isco_groups.id]
-  join_key_name varchar [not null, default: 'isco_group=code']
-  join_key_value varchar
-  is_resolved boolean [not null, default: true]
-
-  Note: 'Logical key: raw_esco_occupations.isco_group = raw_esco_isco_groups.code'
-
-  indexes {
-    (occupation_id) [unique, name: 'uq_resolved_occ_group_occ']
-    (isco_group_id) [name: 'idx_resolved_occ_group_group']
-  }
-}
-
-Table raw_join_occ_skill_resolved {
-  id bigint [pk, increment]
-  relation_row_id bigint [not null, ref: > raw_esco_occupation_skill_relations.id]
-  occupation_id bigint [not null, ref: > raw_esco_occupations.id]
-  skill_id bigint [not null, ref: > raw_esco_skills.id]
-  join_key_name varchar [not null, default: 'occupation_uri/skill_uri']
-  occupation_join_value varchar
-  skill_join_value varchar
-  is_resolved boolean [not null, default: true]
-
-  Note: 'Logical keys: occupation_uri=raw_esco_occupations.concept_uri, skill_uri=raw_esco_skills.concept_uri'
-
-  indexes {
-    (relation_row_id) [unique, name: 'uq_resolved_occ_skill_relation_row']
-    (occupation_id, skill_id) [name: 'idx_resolved_occ_skill_pair']
-  }
-}
-
-Table raw_join_broader_occ_resolved {
-  id bigint [pk, increment]
-  relation_row_id bigint [not null, ref: > raw_esco_broader_relations_occ.id]
-  child_occupation_id bigint [ref: > raw_esco_occupations.id]
-  child_isco_group_id bigint [ref: > raw_esco_isco_groups.id]
-  parent_occupation_id bigint [ref: > raw_esco_occupations.id]
-  parent_isco_group_id bigint [ref: > raw_esco_isco_groups.id]
-  join_key_name varchar [not null, default: 'concept_uri/broader_uri']
-  is_resolved boolean [not null, default: true]
-
-  Note: 'Logical keys: concept_uri / broader_uri を occupation or ISCO group URI に解決'
-
-  indexes {
-    (relation_row_id) [unique, name: 'uq_resolved_broader_occ_relation_row']
-  }
-}
-
-Table raw_join_broader_skill_resolved {
-  id bigint [pk, increment]
-  relation_row_id bigint [not null, ref: > raw_esco_broader_relations_skill.id]
-  child_skill_id bigint [ref: > raw_esco_skills.id]
-  child_skill_group_id bigint [ref: > raw_esco_skill_groups.id]
-  parent_skill_id bigint [ref: > raw_esco_skills.id]
-  parent_skill_group_id bigint [ref: > raw_esco_skill_groups.id]
-  join_key_name varchar [not null, default: 'concept_uri/broader_uri']
-  is_resolved boolean [not null, default: true]
-
-  Note: 'Logical keys: concept_uri / broader_uri を skill or skill group URI に解決'
-
-  indexes {
-    (relation_row_id) [unique, name: 'uq_resolved_broader_skill_relation_row']
-  }
-}
-
-Table etl_validation_runs {
-  id bigint [pk, increment]
-  run_at timestamp [not null]
-  target_layer varchar [not null, note: 'raw | normalized']
-  status varchar [not null, note: 'success | warning | failed']
-  note text
-}
-
-Table etl_validation_issues {
-  id bigint [pk, increment]
-  validation_run_id bigint [not null]
-  table_name varchar [not null]
-  issue_type varchar [not null, note: 'missing_parent | duplicate_key | invalid_code | unresolved_join']
-  join_key_name varchar [not null, note: 'concept_uri | skill_uri | occupation_uri | isco_group | code']
-  join_key_value varchar [not null]
-  record_id bigint
-  detail text
-
-  indexes {
-    (validation_run_id, table_name) [name: 'idx_etl_issues_run_table']
-    (issue_type, join_key_name) [name: 'idx_etl_issues_type_key']
-  }
+  Note: 'Embedded inside source_1st_resumes.extracted_fields.skills.'
 }

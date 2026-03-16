@@ -287,11 +287,11 @@ def build_embedding_runtime(args: argparse.Namespace) -> EmbeddingRuntime:
     milvus_db_name = args.milvus_db_name or os.getenv("MILVUS_DB_NAME", "")
     milvus_occ_collection = args.milvus_occ_collection or os.getenv(
         "MILVUS_OCC_COLLECTION",
-        "esco_occupation_embeddings",
+        "occupation_collection",
     )
     milvus_skill_collection = args.milvus_skill_collection or os.getenv(
         "MILVUS_SKILL_COLLECTION",
-        "esco_skill_embeddings",
+        "skill_collection",
     )
     openai_api_key = args.openai_api_key or os.getenv("OPENAI_API_KEY", "")
 

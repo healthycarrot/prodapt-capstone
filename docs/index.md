@@ -3,7 +3,7 @@
 `docs/` 配下のドキュメント一覧と用途です。新規追加・移動時はこのファイルを更新してください。
 
 ## 運用ルール
-- ドキュメントは用途別フォルダに配置する（`overview/`, `pipeline/`, `schema/`, `issues/`, `reports/`）。
+- ドキュメントは用途別フォルダに配置する（`overview/`, `design/`, `pipeline/`, `schema/`, `issues/`, `reports/`）。
 - 実行結果・評価レポートは各カテゴリ直下に最新を置き、旧版は同カテゴリの `old/` に移動する。
 - `docs/` 直下に新規ドキュメントを増やさない（例外: `docs/index.md`）。
 
@@ -12,7 +12,14 @@
 |---|---|
 | `docs/overview/AI-Powered Resume Matching System-jp.md` | システム全体像、課題、設計方針を説明する日本語版の提案/解説ドキュメント。 |
 | `docs/overview/AI-Powered Resume Matching System.pdf` | 上記の配布用PDF。 |
-| `docs/overview/Resume-Dataset-Comparison-jp.md` | 1st〜5thデータセット比較、用途別の推奨使い分け。 |
+
+## design
+| Path | 内容 |
+|---|---|
+| `docs/design/Architecture-Requirements-Baseline.md` | アーキテクチャ設計フェーズ向けの要件ベースライン（Planningのみ、実装なし）。 |
+| `docs/design/Architecture-Requirements-Baseline.mmd` | 要件構造と目標フローを示す Mermaid 図。 |
+| `docs/design/Pipeline.md` | パイプライン設計の現行メモ。旧ルート `Pipeline.md` から移動した設計ドキュメント。 |
+| `docs/design/pipeline_design_memo.md` | 旧 `memo.md` を設計メモとして再配置した補助ドキュメント。 |
 
 ## pipeline
 | Path | 内容 |
@@ -23,12 +30,11 @@
 ## schema
 | Path | 内容 |
 |---|---|
-| `docs/schema/dbdiagram.dbml` | 全体スキーマ定義（DBML）。 |
-| `docs/schema/dbdiagram.dbdiagram` | 全体スキーマの dbdiagram 用定義。 |
-| `docs/schema/dbdiagram.raw.dbml` | rawコレクション相当のスキーマ定義（DBML）。 |
-| `docs/schema/dbdiagram.raw.dbdiagram` | rawスキーマの dbdiagram 用定義。 |
+| `docs/schema/dbdiagram.raw.dbml` | `source_1st_resumes`（解析/抽出結果を含む）スキーマ定義（DBML）。 |
+| `docs/schema/dbdiagram.raw_esco.dbml` | `raw_esco_*` コレクション専用のスキーマ定義（DBML、論理キー接続付き）。 |
 | `docs/schema/dbdiagram.normalized.dbml` | normalizedコレクション相当のスキーマ定義（DBML）。 |
-| `docs/schema/dbdiagram.normalized.dbdiagram` | normalizedスキーマの dbdiagram 用定義。 |
+| `docs/schema/dbdiagram.real_embedding.dbml` | PR-06 real embedding phase 向けの Milvus serving collection 論理スキーマ（DBML）。 |
+| `docs/schema/real-embedding-mapping.md` | `candidate_search_collection` の各フィールドと source Mongo データの対応表。 |
 | `docs/schema/field-mapping.md` | HTMLセクションから各正規化フィールドへ落とし込む抽出・対応表。 |
 | `docs/schema/normalized-candidates-mapping.md` | `normalized_candidates` の実装準拠マッピング（トップレベル/候補配列の意味）。 |
 

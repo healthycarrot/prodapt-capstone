@@ -1,0 +1,166 @@
+Project mongodb_raw_esco_layer {
+  database_type: 'PostgreSQL'
+  Note: '''
+    Logical schema for MongoDB raw ESCO collections loaded by:
+    - script/pipeline_mongo/ingest_csv_to_mongo.py
+    Notes:
+    - `_id` is MongoDB ObjectId.
+    - Columns like concept_uri / occupation_uri / skill_uri are normalized helper keys
+      created at ingestion time from conceptUri / occupationUri / skillUri.
+    - Ref definitions below are logical-key links for readability/analysis, not MongoDB FK constraints.
+  '''
+}
+
+Table raw_esco_occupations {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  conceptType varchar
+  conceptUri varchar [not null]
+  concept_uri varchar
+  iscoGroup varchar
+  preferredLabel varchar
+  preferred_label varchar
+  preferred_label_normalized varchar
+  altLabels text
+  alt_labels_list jsonb
+  alt_labels_normalized jsonb
+  hiddenLabels text
+  hidden_labels_list jsonb
+  hidden_labels_normalized jsonb
+  status varchar
+  modifiedDate varchar
+  regulatedProfessionNote text
+  scopeNote text
+  definition text
+  inScheme text
+  description text
+  code varchar
+  naceCode varchar
+
+  indexes {
+    (concept_uri) [name: 'idx_concept_uri']
+    (preferred_label_normalized) [name: 'idx_pref_label_norm']
+    (alt_labels_normalized) [name: 'idx_alt_labels_norm']
+  }
+}
+
+Table raw_esco_skills {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  conceptType varchar
+  conceptUri varchar [not null]
+  concept_uri varchar
+  skillType varchar
+  reuseLevel varchar
+  preferredLabel varchar
+  preferred_label varchar
+  preferred_label_normalized varchar
+  altLabels text
+  alt_labels_list jsonb
+  alt_labels_normalized jsonb
+  hiddenLabels text
+  hidden_labels_list jsonb
+  hidden_labels_normalized jsonb
+  status varchar
+  modifiedDate varchar
+  scopeNote text
+  definition text
+  inScheme text
+  description text
+
+  indexes {
+    (concept_uri) [name: 'idx_concept_uri']
+    (preferred_label_normalized) [name: 'idx_pref_label_norm']
+    (alt_labels_normalized) [name: 'idx_alt_labels_norm']
+  }
+}
+
+Table raw_esco_isco_groups {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  conceptType varchar
+  conceptUri varchar [not null]
+  concept_uri varchar
+  code varchar
+  preferredLabel varchar
+  preferred_label varchar
+  preferred_label_normalized varchar
+  altLabels text
+  alt_labels_list jsonb
+  alt_labels_normalized jsonb
+  status varchar
+  inScheme text
+  description text
+}
+
+Table raw_esco_skill_groups {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  conceptType varchar
+  conceptUri varchar [not null]
+  concept_uri varchar
+  preferredLabel varchar
+  preferred_label varchar
+  preferred_label_normalized varchar
+  altLabels text
+  alt_labels_list jsonb
+  alt_labels_normalized jsonb
+  hiddenLabels text
+  hidden_labels_list jsonb
+  hidden_labels_normalized jsonb
+  status varchar
+  modifiedDate varchar
+  scopeNote text
+  inScheme text
+  description text
+  code varchar
+}
+
+Table raw_esco_broader_relations_occ {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  conceptType varchar
+  conceptUri varchar [not null]
+  concept_uri varchar
+  conceptLabel varchar
+  broaderType varchar
+  broaderUri varchar [not null]
+  broaderLabel varchar
+}
+
+Table raw_esco_broader_relations_skill {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  conceptType varchar
+  conceptUri varchar [not null]
+  concept_uri varchar
+  conceptLabel varchar
+  broaderType varchar
+  broaderUri varchar [not null]
+  broaderLabel varchar
+}
+
+Table raw_esco_occupation_skill_relations {
+  _id varchar [pk, note: 'MongoDB ObjectId']
+  occupationUri varchar [not null]
+  occupation_uri varchar
+  occupationLabel varchar
+  relationType varchar
+  skillType varchar
+  skillUri varchar [not null]
+  skill_uri varchar
+  skillLabel varchar
+
+  indexes {
+    (occupation_uri, relationType) [name: 'idx_occ_rel']
+    (skill_uri, relationType) [name: 'idx_skill_rel']
+  }
+}
+
+Ref: raw_esco_occupation_skill_relations.occupation_uri > raw_esco_occupations.concept_uri
+Ref: raw_esco_occupation_skill_relations.skill_uri > raw_esco_skills.concept_uri
+Ref: raw_esco_occupations.iscoGroup > raw_esco_isco_groups.code
+
+Ref: raw_esco_broader_relations_occ.concept_uri > raw_esco_occupations.concept_uri
+Ref: raw_esco_broader_relations_occ.broaderUri > raw_esco_occupations.concept_uri
+Ref: raw_esco_broader_relations_occ.concept_uri > raw_esco_isco_groups.concept_uri
+Ref: raw_esco_broader_relations_occ.broaderUri > raw_esco_isco_groups.concept_uri
+
+Ref: raw_esco_broader_relations_skill.concept_uri > raw_esco_skills.concept_uri
+Ref: raw_esco_broader_relations_skill.broaderUri > raw_esco_skills.concept_uri
+Ref: raw_esco_broader_relations_skill.concept_uri > raw_esco_skill_groups.concept_uri
+Ref: raw_esco_broader_relations_skill.broaderUri > raw_esco_skill_groups.concept_uri

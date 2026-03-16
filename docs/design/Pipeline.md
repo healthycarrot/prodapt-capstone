@@ -107,6 +107,26 @@
   - occupation top N = 20
   - skill top N = 50
 
+13. PR-06 schema design note (2026-03-16)
+- Designed a serving-only Milvus collection for candidate search:
+  - `candidate_search_collection` (planned)
+- Decision: do not add new canonical fields to `source_1st_resumes` or `normalized_candidates` for PR-06.
+- Real embedding phase will derive publish-time scalar fields from `normalized_candidates`:
+  - `industry_esco_id`
+  - `occupation_esco_ids_json`
+  - `skill_esco_ids_json`
+  - `experience_months_total`
+  - `highest_education_level_rank`
+  - `current_location`
+- Real embedding phase will store two dense vector fields in one Milvus row:
+  - `skill_vector`
+  - `occupation_vector`
+- Explanation payloads, source spans, and full profile details remain in MongoDB and are fetched by `candidate_id` / `normalized_doc_id` after retrieval.
+- Rationale:
+  - keep MongoDB as source of truth
+  - keep Milvus limited to vector search + metadata filtering
+  - avoid duplicating large explanation/debug payloads into the serving index
+
 ## Phase Definition (2026-03-16)
 | Phase | Status | Purpose | Main Input | Main Output | Main Script(s) |
 |---|---|---|---|---|---|
@@ -115,13 +135,76 @@
 | 3. `parsing_extraction phase` | implemented | `source_1st_resumes` のsection parsingとfield extractionを行う | `source_1st_resumes` | `source_1st_resumes.parsed_sections`, `source_1st_resumes.extracted_fields` | `script/pipeline_mongo/parse_sections_to_mongo.py`, `script/pipeline_mongo/extract_fields_to_mongo.py` |
 | 4. `normalized phase` | implemented | `source_1st_resumes` と `raw_esco_*` と Milvus を照合して `normalized_candidates` を作る | `source_1st_resumes`, `raw_esco_*`, Milvus ESCO vectors | `normalized_candidates` | `script/pipeline_mongo/normalize_1st_to_mongo.py` |
 | 4A. `normalized eval phase` | implemented | 正規化結果を評価する（現状: Weak評価 + LLM評価） | `normalized_candidates` | 評価Markdown/JSONレポート | `script/pipeline_mongo/evaluate_normalization.py`, `script/pipeline_mongo/evaluate_llm_representative_samples.py` |
-| 5. `real embedding phase` | not_implemented | RAG用semantic search対象フィールドをembeddingしてMilvusへ格納する | `normalized_candidates` (planned) | Milvus profile/search vectors (planned) | TBD |
+| 5. `real embedding phase` | planned | `normalized_candidates` から検索用 vector と filter 用 scalar を生成して Milvus へ publish する | `normalized_candidates` | Milvus `candidate_search_collection` collection | TBD |
 
 ## Additional Phase Proposals
 - `retrieval eval phase` (implemented): embedding検索品質をAB/サンプルで検証する補助フェーズ。  
   scripts: `evaluate_milvus_retrieval_samples.py`, `evaluate_milvus_ab_experience.py`
 - `quality gate phase` (proposed): 正規化実行後に最小品質基準（P@1, coverage, failed rate）を満たさない場合はpublishを止める運用フェーズ。
-- `serving/index publish phase` (proposed): `normalized_candidates` / real embeddings を検索サービス向けにスナップショット化して配布するフェーズ。
+- `serving/index publish phase` (proposed): `normalized_candidates` から `candidate_search_collection` をスナップショット化して検索サービス向けに配布するフェーズ。
+
+## Planned Phase 5 Collection Design
+- Collection name:
+  - `candidate_search_collection`
+- One row represents:
+  - one candidate in one published snapshot
+- Vector fields:
+  - `skill_vector`: skill semantic retrieval for `FR-01-04`
+  - `occupation_vector`: occupation semantic retrieval for `FR-01-05`
+- Required scalar filter fields:
+  - `candidate_id`
+  - `normalized_doc_id`
+  - `source_dataset`
+  - `source_record_id`
+  - `snapshot_version`
+  - `normalizer_version`
+  - `embedding_model`
+  - `embedding_version`
+  - `category`
+  - `industry_esco_id`
+  - `occupation_esco_ids_json`
+  - `skill_esco_ids_json`
+  - `experience_months_total`
+  - `highest_education_level_rank`
+  - `current_location`
+- Field derivation rules:
+  - `industry_esco_id`: primary occupation candidate の直近親 ESCO component
+  - `occupation_esco_ids_json`: `occupation_candidates` の ESCO ID を rank 順に保持
+  - `skill_esco_ids_json`: `skill_candidates` の ESCO ID を rank 順に保持
+  - `experience_months_total`: `experiences.duration_months` の合計
+  - `highest_education_level_rank`: `educations.degree` / `field_of_study` から導出する ordinal
+- Vector assembly rules:
+  - `skill_vector`
+    - top normalized skill labels
+    - deduplicated raw skill phrases from `source_1st_resumes.extracted_fields.skills`
+    - short recent experience context (`title` + skill-bearing snippets)
+    - optional light occupation context
+  - `occupation_vector`
+    - primary/top normalized occupation labels
+    - hierarchy labels of top occupation candidates
+    - raw occupation phrases from `source_1st_resumes.extracted_fields.occupation_candidates`
+    - recent experience titles / raw titles
+    - optional current headline/title
+  - Common rules
+    - canonical normalized labels first, raw phrases second, context last
+    - deduplicate near-identical phrases
+    - exclude company names, locations, full resume dumps, `matching_debug`, `llm_handoff`
+    - keep assembled text short and stable before embedding
+- Education handling:
+  - no dedicated `education_vector` in current design
+  - education is treated as:
+    - scalar filter via `highest_education_level_rank`
+    - downstream scoring signal in search/rerank/explanation layers
+  - if degree / field-of-study exact filtering becomes a hard requirement later,
+    add a scalar metadata field first rather than a third vector field
+- Explicit non-goals for Milvus:
+  - full resume text
+  - explanation payloads
+  - `matching_debug`
+  - `llm_handoff`
+  - UI display-specific denormalized text
+- Reference schema:
+  - `docs/schema/dbdiagram.real_embedding.dbml`
 
 ## Current Default Behavior
 - Normalizer script: `script/pipeline_mongo/normalize_1st_to_mongo.py`
@@ -156,8 +239,8 @@
 - `MILVUS_URI`
 - `MILVUS_TOKEN` (optional)
 - `MILVUS_DB_NAME` (optional)
-- `MILVUS_OCC_COLLECTION` (optional, default: `esco_occupation_embeddings`)
-- `MILVUS_SKILL_COLLECTION` (optional, default: `esco_skill_embeddings`)
+- `MILVUS_OCC_COLLECTION` (optional, default: `occupation_collection`)
+- `MILVUS_SKILL_COLLECTION` (optional, default: `skill_collection`)
 
 ## Recommended Commands
 1. Build Milvus embedding collections
@@ -258,9 +341,9 @@ flowchart LR
     SRCDB[("MongoDB source_1st_resumes")]
     ESCODB[("MongoDB raw_esco_*")]
     NORMDB[("MongoDB normalized_candidates")]
-    OCCVDB[("Milvus DB esco_occupation_embeddings")]
-    SKLVDB[("Milvus DB esco_skill_embeddings")]
-    REALVDB[("Milvus DB real_profile_embeddings planned")]
+    OCCVDB[("Milvus DB occupation_collection")]
+    SKLVDB[("Milvus DB skill_collection")]
+    REALVDB[("Milvus DB candidate_search_collection planned")]
 
     OUTJSON["script/pipeline_mongo/*.json"]
     OUTNORMMD["docs/reports/normalization/*.md"]
@@ -309,7 +392,5 @@ flowchart LR
     EVALAB -->|write_json| OUTJSON
 
     NORMDB -.->|planned_input| REALTBD
-    REALTBD -.->|planned_write_vectors| REALVDB
+    REALTBD -.->|planned_write_candidate_search_collection| REALVDB
 ```
-
-
