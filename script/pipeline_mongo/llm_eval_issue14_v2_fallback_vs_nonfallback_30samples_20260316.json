@@ -1,0 +1,1386 @@
+{
+  "generated_at_utc": "2026-03-16T04:05:20.129749",
+  "model": "gpt-4.1-mini",
+  "collection": "normalized_candidates",
+  "normalizer_version": "issue14_llm_candidate_generation_v2",
+  "sample": {
+    "fallback_n": 15,
+    "nonfallback_n": 15,
+    "total_n": 30
+  },
+  "summary": {
+    "fallback": {
+      "n": 15,
+      "avg_top1_fit_score": 72.67,
+      "avg_top10_filter_usefulness_score": 66.67,
+      "avg_overall_score": 70.07,
+      "verdict_counts": {
+        "good": 6,
+        "mixed": 5,
+        "poor": 4
+      }
+    },
+    "nonfallback": {
+      "n": 15,
+      "avg_top1_fit_score": 88.33,
+      "avg_top10_filter_usefulness_score": 83.33,
+      "avg_overall_score": 86.33,
+      "verdict_counts": {
+        "good": 12,
+        "mixed": 3
+      }
+    },
+    "delta": {
+      "overall_nonfallback_minus_fallback": 16.26,
+      "top1_nonfallback_minus_fallback": 15.66,
+      "top10_nonfallback_minus_fallback": 16.66
+    }
+  },
+  "evaluations": [
+    {
+      "cohort": "fallback",
+      "source_record_id": "22496394",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "drafter",
+          "confidence": 0.965,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "art director",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "industrial designer",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "production designer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "leather finishing operations manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "computer-aided design operator",
+          "confidence": 0.83636,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "22496394",
+        "top1_fit_score": 85,
+        "top10_filter_usefulness_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "CADデザイナーに近い職種多数で実務候補含むためフィルター有用。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "28035460",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "cyber incident responder",
+          "confidence": 0.965,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "ICT teacher secondary school",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "28035460",
+        "top1_fit_score": 75,
+        "top10_filter_usefulness_score": 70,
+        "overall_score": 73,
+        "verdict": "mixed",
+        "reason_ja": "ITスペシャリストに近いが候補少なく実務幅は限定的。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "15941675",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "manufacturing engineer",
+          "confidence": 0.935,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "surveying technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "electromechanical engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "maintenance and repair engineer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "oil refinery control room operator",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "mineral processing operator",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "15941675",
+        "top1_fit_score": 70,
+        "top10_filter_usefulness_score": 65,
+        "overall_score": 68,
+        "verdict": "mixed",
+        "reason_ja": "エンジニア系だが職種多様で絞り込みにやや難あり。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "23139819",
+      "category": "ACCOUNTANT",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "accountant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "financial controller",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "23139819",
+        "top1_fit_score": 95,
+        "top10_filter_usefulness_score": 90,
+        "overall_score": 93,
+        "verdict": "good",
+        "reason_ja": "会計士がトップで類似職種もあり実務候補として十分。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "23944036",
+      "category": "HEALTHCARE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "market research analyst",
+          "confidence": 0.935,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "23944036",
+        "top1_fit_score": 60,
+        "top10_filter_usefulness_score": 50,
+        "overall_score": 55,
+        "verdict": "poor",
+        "reason_ja": "トップ職種が市場調査分析で医療分析職と乖離。候補少なく実務活用困難。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "92524964",
+      "category": "FINANCE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "accountant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "financial manager",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "financial controller",
+          "confidence": 0.995,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "housekeeping supervisor",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "stage manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "92524964",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "財務管理職中心で類似職種もあり実務候補として有用。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "16244633",
+      "category": "ARTS",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "office manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "16244633",
+        "top1_fit_score": 40,
+        "top10_filter_usefulness_score": 30,
+        "overall_score": 35,
+        "verdict": "poor",
+        "reason_ja": "営業・事務混在で職種乖離大。実務候補として不適。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "15433732",
+      "category": "CONSULTANT",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "commercial director",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "sales account manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "business manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "marketing manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "product manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "15433732",
+        "top1_fit_score": 80,
+        "top10_filter_usefulness_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "マーケ系中心で類似職種多いが一部乖離あり。フィルター活用は限定的。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "17412079",
+      "category": "HR",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "talent acquisition manager",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "human resources assistant",
+          "confidence": 0.935,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "human resources officer",
+          "confidence": 0.935,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "17412079",
+        "top1_fit_score": 85,
+        "top10_filter_usefulness_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "HR関連職種が上位に揃い実務候補として有用。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "37735467",
+      "category": "SALES",
+      "normalization_status": "partial",
+      "top10_occupations": [
+        {
+          "preferred_label": "sales account manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "bank manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "business analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "37735467",
+        "top1_fit_score": 50,
+        "top10_filter_usefulness_score": 40,
+        "overall_score": 45,
+        "verdict": "poor",
+        "reason_ja": "営業職だが候補が少なく職種乖離もあり実務活用困難。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "89197180",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "customer service representative",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "client relations manager",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "bank manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "business analyst",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "service manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "management assistant",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "lottery cashier",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "marketing assistant",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "administrative assistant",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "89197180",
+        "top1_fit_score": 85,
+        "top10_filter_usefulness_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "顧客サービス関連職種が多く実務候補として有用。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "94492380",
+      "category": "DIGITAL-MEDIA",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "brand manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "chief marketing officer",
+          "confidence": 0.98,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "video and motion picture director",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "sport facility manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "94492380",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "ブランドマネージャー等適切な職種で実務候補含む。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "10953078",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "administrative assistant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "statistical assistant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "mine manager",
+          "confidence": 0.935,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "accommodation manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "10953078",
+        "top1_fit_score": 30,
+        "top10_filter_usefulness_score": 25,
+        "overall_score": 28,
+        "verdict": "poor",
+        "reason_ja": "看護職に対し事務職中心で乖離大。実務候補不適。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "26987539",
+      "category": "BANKING",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "financial planner",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "public relations manager",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "public affairs consultant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "marketing manager",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "office manager",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "assistant video and motion picture director",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "executive assistant",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "26987539",
+        "top1_fit_score": 75,
+        "top10_filter_usefulness_score": 70,
+        "overall_score": 73,
+        "verdict": "mixed",
+        "reason_ja": "銀行業務関連だが職種多様で絞り込みに難あり。"
+      }
+    },
+    {
+      "cohort": "fallback",
+      "source_record_id": "11522068",
+      "category": "FITNESS",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "fitness instructor",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        }
+      ],
+      "judge": {
+        "cohort": "fallback",
+        "source_record_id": "11522068",
+        "top1_fit_score": 80,
+        "top10_filter_usefulness_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "フィットネス指導者中心だが秘書等乖離職種も混在。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "14726000",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "operations manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "sales manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "aftersales service manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "wholesale merchant in textiles and textile semi-finished and raw materials",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "financial markets back office administrator",
+          "confidence": 0.98,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "business manager",
+          "confidence": 0.98,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "business analyst",
+          "confidence": 0.98,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "mine manager",
+          "confidence": 0.965,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "business consultant",
+          "confidence": 0.965,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "economic development coordinator",
+          "confidence": 0.965,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "14726000",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "営業・管理職種が適切に抽出され実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "32954522",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "art director",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "32954522",
+        "top1_fit_score": 80,
+        "top10_filter_usefulness_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "花卉デザイナーに対しアートディレクターのみで候補少なめ。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "11197262",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "agricultural technician",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "forester",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "agricultural machinery technician",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "nature conservation officer",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "consumer electronics repair technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "steward/stewardess",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "crowd controller",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "bacteriology technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "11197262",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "農業技術者等適切な職種が上位に揃い実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "74191424",
+      "category": "ADVOCATE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "child welfare worker",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "lawyer",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "justice of the peace",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "executive assistant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "management assistant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "letting agent",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "activity leader",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "outdoor activities coordinator",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "professional athlete",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "74191424",
+        "top1_fit_score": 85,
+        "top10_filter_usefulness_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "児童福祉関連職種が適切に抽出され実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "17422560",
+      "category": "HR",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "human resources assistant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "human resources officer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "talent acquisition manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "lottery cashier",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "armed forces officer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "customer service representative",
+          "confidence": 0.84778,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "17422560",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "人事関連職種が上位に揃い実務候補として有用。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "10333051",
+      "category": "FITNESS",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "fitness instructor",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "sport therapist",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "sports coach",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "corporate trainer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "business coach",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "public funding advisor",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "employment and vocational integration consultant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "sport facility manager",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "video and motion picture director",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "physiologist",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "10333051",
+        "top1_fit_score": 95,
+        "top10_filter_usefulness_score": 90,
+        "overall_score": 93,
+        "verdict": "good",
+        "reason_ja": "フィットネス指導者等適切な職種が多く実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "10839851",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "ICT consultant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "ICT system developer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "IT auditor",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "mobile application developer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "ICT teacher secondary school",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "cyber incident responder",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "interpreter",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "cloud architect",
+          "confidence": 0.9,
+          "match_method": "llm_seed"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "10839851",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "ICT関連職種が適切に抽出され実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "18714571",
+      "category": "HEALTHCARE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "healthcare assistant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "doctors' surgery assistant",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "nurse assistant",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "medical administrative assistant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "18714571",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "医療補助職種が上位に揃い実務候補として有用。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "19786924",
+      "category": "TEACHER",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "special educational needs teacher primary school",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "early years special educational needs teacher",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "special educational needs teacher",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "politics lecturer",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "teacher of talented and gifted students",
+          "confidence": 1.0,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "first aid instructor",
+          "confidence": 1.0,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "19786924",
+        "top1_fit_score": 95,
+        "top10_filter_usefulness_score": 90,
+        "overall_score": 93,
+        "verdict": "good",
+        "reason_ja": "特別支援教育教師等適切な職種が多く実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "27888251",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "agricultural technician",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "agricultural policy officer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "forester",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "aquaculture harvesting manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "agricultural machinery technician",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "nature conservation officer",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "consumer electronics repair technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "drain technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "oil refinery control room operator",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "27888251",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "農業技術者等適切な職種が上位に揃い実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "20835760",
+      "category": "HEALTHCARE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "medical sales representative",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "healthcare institution manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "chief executive officer",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "human resources officer",
+          "confidence": 0.84597,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "20835760",
+        "top1_fit_score": 80,
+        "top10_filter_usefulness_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "医療営業職中心だが一部乖離職種混在。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "15727656",
+      "category": "ADVOCATE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "administrative assistant",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "child welfare worker",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "social worker",
+          "confidence": 1.0,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "victim support officer",
+          "confidence": 1.0,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "secretary",
+          "confidence": 0.98,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "statistical assistant",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "lawyer",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "justice of the peace",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "consumer electronics repair technician",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "15727656",
+        "top1_fit_score": 85,
+        "top10_filter_usefulness_score": 80,
+        "overall_score": 83,
+        "verdict": "good",
+        "reason_ja": "社会福祉関連職種が多く実務候補として有用。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "12547982",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "interior designer",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "project manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "interior planner",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "interior architect",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "art director",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "12547982",
+        "top1_fit_score": 95,
+        "top10_filter_usefulness_score": 90,
+        "overall_score": 93,
+        "verdict": "good",
+        "reason_ja": "インテリアデザイナー等適切な職種が上位に揃い実務候補含む。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "72652441",
+      "category": "ADVOCATE",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "lawyer",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "justice of the peace",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "waiter/waitress",
+          "confidence": 0.95,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "customer contact centre information clerk",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "drawing artist",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "make-up artist",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "human resources officer",
+          "confidence": 0.84597,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "72652441",
+        "top1_fit_score": 80,
+        "top10_filter_usefulness_score": 75,
+        "overall_score": 78,
+        "verdict": "mixed",
+        "reason_ja": "法務関連職種中心だが一部乖離職種混在。"
+      }
+    },
+    {
+      "cohort": "nonfallback",
+      "source_record_id": "14287992",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "top10_occupations": [
+        {
+          "preferred_label": "ICT business development manager",
+          "confidence": 1.0,
+          "match_method": "exact"
+        },
+        {
+          "preferred_label": "sales account manager",
+          "confidence": 1.0,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "business analyst",
+          "confidence": 0.98,
+          "match_method": "alt_label"
+        },
+        {
+          "preferred_label": "bank manager",
+          "confidence": 0.95,
+          "match_method": "fuzzy"
+        },
+        {
+          "preferred_label": "financial controller",
+          "confidence": 0.92,
+          "match_method": "fuzzy"
+        }
+      ],
+      "judge": {
+        "cohort": "nonfallback",
+        "source_record_id": "14287992",
+        "top1_fit_score": 90,
+        "top10_filter_usefulness_score": 85,
+        "overall_score": 88,
+        "verdict": "good",
+        "reason_ja": "ICT営業・管理職種が適切に抽出され実務候補含む。"
+      }
+    }
+  ]
+}

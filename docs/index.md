@@ -43,6 +43,7 @@
 ## reports/llm
 | Path | 内容 |
 |---|---|
+| `docs/reports/llm/LLM-Eval-Issue14-v2-Fallback-vs-NonFallback-30samples-20260316.md` | Issue14 v2 の fallback群/非fallback群を30件（各15件）で比較した LLM 評価レポート。 |
 | `docs/reports/llm/LLM-Eval-Issue14-v2-Custom-10samples-20260316.md` | Issue14 v2（LLM候補生成）を対象にした代表10件の LLM 評価レポート。 |
 | `docs/reports/llm/LLM-Eval-10samples-20260316-Latest.md` | 代表10件の最新 LLM 評価結果。 |
 | `docs/reports/llm/old/LLM-Eval-10samples.md` | 初回版の LLM 評価レポート（旧版）。 |
@@ -52,6 +53,7 @@
 ## reports/normalization
 | Path | 内容 |
 |---|---|
+| `docs/reports/normalization/Eval-Normalization-Issue14-v2-Full-Weak-20260316.md` | Issue14 v2 全件（2484件）に対する weak 評価レポート。 |
 | `docs/reports/normalization/Eval-Normalization-Issue13-20-Weak-After-Target-Refresh.md` | 20件 weak 評価（ターゲット更新後）の現行参照結果。 |
 | `docs/reports/normalization/Eval-AB20-With-LLM-Weak.md` | AB20（LLMあり） weak 評価レポート。 |
 | `docs/reports/normalization/Eval-AB20-No-LLM-Weak.md` | AB20（LLMなし） weak 評価レポート。 |
