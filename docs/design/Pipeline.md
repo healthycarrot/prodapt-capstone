@@ -127,6 +127,20 @@
   - keep Milvus limited to vector search + metadata filtering
   - avoid duplicating large explanation/debug payloads into the serving index
 
+14. PR-06 publish job implementation update (2026-03-16)
+- Added candidate serving index publish script:
+  - `script/pipeline_mongo/publish_candidate_search_collection.py`
+- Script behavior (default):
+  - builds `skill_vector` / `occupation_vector` from `normalized_candidates` + `source_1st_resumes`
+  - derives scalar metadata fields for FR hard filters
+  - publishes into single Milvus `candidate_search_collection` with `snapshot_version` coexistence
+  - keeps `occupation_esco_ids_json` / `skill_esco_ids_json` as `[]` when empty and still publishes
+- Operational decisions in script:
+  - initial embedding model default: `text-embedding-3-small`
+  - full publish only (no partial by `normalizer_version`)
+  - all-or-nothing rollback for failed snapshot publish
+  - index/search defaults follow Issue #14 decision (`HNSW`, `COSINE`, `M=32`, `efConstruction=200`, `ef=128`)
+
 ## Phase Definition (2026-03-16)
 | Phase | Status | Purpose | Main Input | Main Output | Main Script(s) |
 |---|---|---|---|---|---|
@@ -135,7 +149,7 @@
 | 3. `parsing_extraction phase` | implemented | `source_1st_resumes` のsection parsingとfield extractionを行う | `source_1st_resumes` | `source_1st_resumes.parsed_sections`, `source_1st_resumes.extracted_fields` | `script/pipeline_mongo/parse_sections_to_mongo.py`, `script/pipeline_mongo/extract_fields_to_mongo.py` |
 | 4. `normalized phase` | implemented | `source_1st_resumes` と `raw_esco_*` と Milvus を照合して `normalized_candidates` を作る | `source_1st_resumes`, `raw_esco_*`, Milvus ESCO vectors | `normalized_candidates` | `script/pipeline_mongo/normalize_1st_to_mongo.py` |
 | 4A. `normalized eval phase` | implemented | 正規化結果を評価する（現状: Weak評価 + LLM評価） | `normalized_candidates` | 評価Markdown/JSONレポート | `script/pipeline_mongo/evaluate_normalization.py`, `script/pipeline_mongo/evaluate_llm_representative_samples.py` |
-| 5. `real embedding phase` | planned | `normalized_candidates` から検索用 vector と filter 用 scalar を生成して Milvus へ publish する | `normalized_candidates` | Milvus `candidate_search_collection` collection | TBD |
+| 5. `real embedding phase` | implemented | `normalized_candidates` から検索用 vector と filter 用 scalar を生成して Milvus へ publish する | `normalized_candidates`, `source_1st_resumes` | Milvus `candidate_search_collection` collection | `script/pipeline_mongo/publish_candidate_search_collection.py` |
 
 ## Additional Phase Proposals
 - `retrieval eval phase` (implemented): embedding検索品質をAB/サンプルで検証する補助フェーズ。  
@@ -243,6 +257,7 @@
 - `MILVUS_DB_NAME` (optional)
 - `MILVUS_OCC_COLLECTION` (optional, default: `occupation_collection`)
 - `MILVUS_SKILL_COLLECTION` (optional, default: `skill_collection`)
+- `MILVUS_CANDIDATE_COLLECTION` (optional, default: `candidate_search_collection`)
 
 ## Recommended Commands
 1. Build Milvus embedding collections
@@ -280,6 +295,11 @@ python .\script\pipeline_mongo\evaluate_milvus_ab_experience.py --db-name prodap
 python .\script\pipeline_mongo\generate_gold_annotation_samples.py --db-name prodapt_capstone --template-size 50 --stratified-size 200 --out-template-csv .\script\pipeline_mongo\gold_annotation_template_50.csv --out-stratified-csv .\script\pipeline_mongo\gold_annotation_sample_200_stratified.csv --out-summary-json .\script\pipeline_mongo\gold_annotation_sampling_summary.json
 ```
 
+8. Publish candidate search serving collection (PR-06)
+```bash
+python .\script\pipeline_mongo\publish_candidate_search_collection.py --db-name prodapt_capstone --snapshot-version snapshot_20260316 --batch-size 64 --summary-out .\script\pipeline_mongo\candidate_search_publish_report.json
+```
+
 ## Related Docs
 - `docs/issues/Issue11-12-Review.md`
 - `docs/issues/Issue13-Plan-Review.md`
@@ -300,8 +320,9 @@ flowchart LR
     I13["#13 Evaluation + retrieval refinement"]
     I13U["#13 update (2026-03-16)<br/>LLM rerank rollback"]
     I14["#14 (2026-03-16)<br/>LLM candidate generation"]
+    I14P["#14 update (2026-03-16)<br/>PR-06 publish job implementation"]
 
-    I6 --> I7 --> I8 --> I9 --> I10 --> I11 --> I12 --> I13 --> I13U --> I14
+    I6 --> I7 --> I8 --> I9 --> I10 --> I11 --> I12 --> I13 --> I13U --> I14 --> I14P
 ```
 
 ## MMD: Phase-based Script I/O (DB Explicit)
@@ -331,8 +352,8 @@ flowchart LR
         EVALLLM["evaluate_llm_representative_samples.py"]
     end
 
-    subgraph P5["5_real_embedding_phase_not_implemented"]
-        REALTBD["real_embedding_builder.py_tbd"]
+    subgraph P5["5_real_embedding_phase"]
+        REALPUB["publish_candidate_search_collection.py"]
     end
 
     subgraph PX["other_eval_support"]
@@ -345,7 +366,7 @@ flowchart LR
     NORMDB[("MongoDB normalized_candidates")]
     OCCVDB[("Milvus DB occupation_collection")]
     SKLVDB[("Milvus DB skill_collection")]
-    REALVDB[("Milvus DB candidate_search_collection planned")]
+    REALVDB[("Milvus DB candidate_search_collection")]
 
     OUTJSON["script/pipeline_mongo/*.json"]
     OUTNORMMD["docs/reports/normalization/*.md"]
@@ -393,6 +414,8 @@ flowchart LR
     EVALAB -->|write_report| OUTRETMD
     EVALAB -->|write_json| OUTJSON
 
-    NORMDB -.->|planned_input| REALTBD
-    REALTBD -.->|planned_write_candidate_search_collection| REALVDB
+    NORMDB -->|read_normalized_candidates| REALPUB
+    SRCDB -->|read_extracted_fields| REALPUB
+    REALPUB -->|write_candidate_search_collection| REALVDB
+    REALPUB -->|write_summary_json| OUTJSON
 ```
