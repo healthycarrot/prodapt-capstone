@@ -1,0 +1,131 @@
+{
+  "generated_at_utc": "2026-03-16T15:50:34.892127",
+  "model": "gpt-4.1-mini",
+  "sample_size": 10,
+  "source_eval": "script\\pipeline_mongo\\llm_eval_issue14_v2_10samples_20260317.json",
+  "summary": {
+    "avg_top30_ranking_score": 60.0
+  },
+  "evaluations": [
+    {
+      "source_record_id": "22323967",
+      "category": "HR",
+      "normalization_status": "success",
+      "top30_count": 16,
+      "judge": {
+        "source_record_id": "22323967",
+        "top30_ranking_score": 90,
+        "verdict": "good",
+        "reason_ja": "人事関連職が上位に多く、スキル・職務内容と整合性が高い。"
+      }
+    },
+    {
+      "source_record_id": "37058472",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "top30_count": 7,
+      "judge": {
+        "source_record_id": "37058472",
+        "top30_ranking_score": 85,
+        "verdict": "good",
+        "reason_ja": "デザイナー関連職が多く、スキルや経験とよく合致している。"
+      }
+    },
+    {
+      "source_record_id": "33241454",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "top30_count": 10,
+      "judge": {
+        "source_record_id": "33241454",
+        "top30_ranking_score": 80,
+        "verdict": "good",
+        "reason_ja": "IT関連職が中心で経験と合致。若干関連薄い職も混在。"
+      }
+    },
+    {
+      "source_record_id": "37292350",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "top30_count": 4,
+      "judge": {
+        "source_record_id": "37292350",
+        "top30_ranking_score": 50,
+        "verdict": "mixed",
+        "reason_ja": "農業関連職は少なく、事務系職も混在し関連性がやや低い。"
+      }
+    },
+    {
+      "source_record_id": "77576845",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "top30_count": 4,
+      "judge": {
+        "source_record_id": "77576845",
+        "top30_ranking_score": 60,
+        "verdict": "mixed",
+        "reason_ja": "ビジネス開発関連はあるが、映像関連職が混入しやや不適切。"
+      }
+    },
+    {
+      "source_record_id": "17926546",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "top30_count": 1,
+      "judge": {
+        "source_record_id": "17926546",
+        "top30_ranking_score": 40,
+        "verdict": "poor",
+        "reason_ja": "エンジニアリング職が少なく、関連性の低い職種が多い。"
+      }
+    },
+    {
+      "source_record_id": "43752620",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "top30_count": 2,
+      "judge": {
+        "source_record_id": "43752620",
+        "top30_ranking_score": 55,
+        "verdict": "mixed",
+        "reason_ja": "機械系職はあるが、食品開発など関連薄い職も含まれ混在。"
+      }
+    },
+    {
+      "source_record_id": "98379112",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "partial",
+      "top30_count": 4,
+      "judge": {
+        "source_record_id": "98379112",
+        "top30_ranking_score": 65,
+        "verdict": "mixed",
+        "reason_ja": "ビジネス開発・銀行関連職が多いが、職種の幅が狭くやや限定的。"
+      }
+    },
+    {
+      "source_record_id": "30757456",
+      "category": "FITNESS",
+      "normalization_status": "partial",
+      "top30_count": 2,
+      "judge": {
+        "source_record_id": "30757456",
+        "top30_ranking_score": 30,
+        "verdict": "poor",
+        "reason_ja": "フィットネス関連職が少なく、映像関連職が上位にあり不適切。"
+      }
+    },
+    {
+      "source_record_id": "37201447",
+      "category": "AGRICULTURE",
+      "normalization_status": "partial",
+      "top30_count": 3,
+      "judge": {
+        "source_record_id": "37201447",
+        "top30_ranking_score": 45,
+        "verdict": "mixed",
+        "reason_ja": "農業教育関連職はあるが、職種数が少なく関連性が限定的。"
+      }
+    }
+  ]
+}

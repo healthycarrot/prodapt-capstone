@@ -1,0 +1,123 @@
+{
+  "generated_at_utc": "2026-03-16T15:57:07.659666",
+  "model": "gpt-4.1-mini",
+  "sample_size": 10,
+  "source_eval": "script\\pipeline_mongo\\llm_eval_issue14_v2_10samples_20260317.json",
+  "summary": {
+    "recall_like_hit_at_3": 0.5,
+    "recall_like_hit_at_10": 0.5,
+    "recall_like_hit_at_20": 0.5
+  },
+  "evaluations": [
+    {
+      "source_record_id": "22323967",
+      "category": "HR",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "HRスペシャリストにhuman resources officer等が上位にあり適合"
+      }
+    },
+    {
+      "source_record_id": "37058472",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "家具デザイナーやインテリアデザイナーが上位にあり職務内容と合致"
+      }
+    },
+    {
+      "source_record_id": "33241454",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "IT監査人やICTコンサルタントが上位にありIT経験と一致"
+      }
+    },
+    {
+      "source_record_id": "37292350",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "農業関連職が上位にない。事務補助で農業職とは関連薄い"
+      }
+    },
+    {
+      "source_record_id": "77576845",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "ビジネス開発ディレクターにcommercial director等が上位で適合"
+      }
+    },
+    {
+      "source_record_id": "17926546",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "電気機械技術者のみで職務内容の幅広いエンジニアリングと乖離"
+      }
+    },
+    {
+      "source_record_id": "43752620",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "工学インターンに機械整備士等は合致度低く専門性不足"
+      }
+    },
+    {
+      "source_record_id": "98379112",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "ビジネス開発コンサルに銀行マネージャー等が上位で関連性高い"
+      }
+    },
+    {
+      "source_record_id": "30757456",
+      "category": "FITNESS",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "フィットネス関連職に映像監督等は不適合で関連職なし"
+      }
+    },
+    {
+      "source_record_id": "37201447",
+      "category": "AGRICULTURE",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "農業教育者職が上位にない。教育職中心で農業職とは乖離"
+      }
+    }
+  ]
+}

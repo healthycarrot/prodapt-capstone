@@ -1,0 +1,125 @@
+{
+  "generated_at_utc": "2026-03-16T16:15:20.817853",
+  "model": "gpt-4.1-mini",
+  "sample_size": 10,
+  "source_eval": "script\\pipeline_mongo\\llm_eval_issue14_v2_recall_like_10samples_20260317.json",
+  "input_mode": "full_normalized_candidate_record",
+  "retry_policy": "max_3_json_retries",
+  "summary": {
+    "recall_like_hit_at_3": 1.0,
+    "recall_like_hit_at_10": 1.0,
+    "recall_like_hit_at_20": 1.0
+  },
+  "evaluations": [
+    {
+      "source_record_id": "22323967",
+      "category": "HR",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「human resources officer」であり、候補者の職務経歴（HR Specialist, US HR Operationsなど）とスキル（human resources department processes、manage human resources、hire human resourcesなど）が一致しているため、hit_at_3はtrue。トップ10およびトップ20にも関連職業（human resources assistant、recruitment consultant、labour relations officer、talent acquisition managerなど）が含まれており、全ての範囲でヒットしている。"
+      }
+    },
+    {
+      "source_record_id": "37058472",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「project manager」であり、記録の職歴に「Project Manager」が含まれているためhit_at_3はtrue。さらに、関連する職業候補として「furniture designer」「interior designer」などのデザイナー関連職も上位20位以内に存在し、職務内容やスキルもデザイン関連で一致しているため、hit_at_10およびhit_at_20もtrueと判断した。"
+      }
+    },
+    {
+      "source_record_id": "33241454",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「IT auditor」であり、候補者の職務経験やスキル（情報技術監督、技術者経験、Cisco、トラブルシュートなど）と関連性が高い。トップ3以内に関連職業（ICT consultant、Information Technology Technician）が含まれており、トップ10およびトップ20にも関連職業が存在するため、hit_at_3、hit_at_10、hit_at_20すべてtrueと判断した。"
+      }
+    },
+    {
+      "source_record_id": "37292350",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「agriculture, forestry and fishery vocational teacher」であり、記録の職歴に複数の「Agriculture Teacher」としての経験が詳細に記載されているため、トップ1は正確かつ関連性が高い。トップ3以内に関連職業が存在し、トップ10およびトップ20にも含まれているため、hit_at_3、hit_at_10、hit_at_20すべてtrueと判断。"
+      }
+    },
+    {
+      "source_record_id": "77576845",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「commercial director」であり、元の職務タイトル「DIRECTOR OF BUSINESS DEVELOPMENT」と高い関連性があるためhit_at_3はtrue。トップ10およびトップ20にも関連職業が含まれているため、それらもtrueと判断。"
+      }
+    },
+    {
+      "source_record_id": "17926546",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「electrical mechanic」であり、候補者の職歴に「Electrical Technician and Mechanist」が含まれているため、トップ3以内に正しい関連職業が存在する。したがって、hit_at_3、hit_at_10、hit_at_20はすべてtrueと判断される。"
+      }
+    },
+    {
+      "source_record_id": "43752620",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「industrial machinery mechanic」であり、関連性が高い。職歴やスキル情報からエンジニアリング分野での経験が豊富であり、機械工学インターンやエンジニアリングインターンの経験が含まれているため、hit_at_3、hit_at_10、hit_at_20すべてでヒットと判断した。"
+      }
+    },
+    {
+      "source_record_id": "98379112",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ3の候補に関連する職業（bank manager, business analyst, business consultant, economic development coordinator）が含まれており、レコードの内容と一致しているため、hit_at_3、hit_at_10、hit_at_20すべてtrueと判断した。"
+      }
+    },
+    {
+      "source_record_id": "30757456",
+      "category": "FITNESS",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "候補の上位に関連する職業（スポーツ施設マネージャーなど）が含まれており、職務内容やスキルがフィットネス分野のディレクターやパフォーマンスコーチに一致しているため、hit_at_3、hit_at_10、hit_at_20すべてtrueと判断しました。"
+      }
+    },
+    {
+      "source_record_id": "37201447",
+      "category": "AGRICULTURE",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "トップ1の職業候補は「zoo educator」となっているが、実際の職歴は主に「Agriculture Teacher」や「Adult Education Instructor」であり、ESCOの職業候補に「agriculture, forestry and fishery vocational teacher」（3位）や「politics lecturer」（2位）が含まれているため、関連性が高い。したがって、トップ3以内に関連職業が存在し、hit_at_3、hit_at_10、hit_at_20すべてtrueと判断した。"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+[
+  {
+    "v": 2,
+    "key": {
+      "_id": 1
+    },
+    "name": "_id_"
+  },
+  {
+    "v": 2,
+    "key": {
+      "occupation_uri": 1,
+      "relationType": 1
+    },
+    "name": "idx_occ_rel"
+  },
+  {
+    "v": 2,
+    "key": {
+      "skill_uri": 1,
+      "relationType": 1
+    },
+    "name": "idx_skill_rel"
+  }
+]

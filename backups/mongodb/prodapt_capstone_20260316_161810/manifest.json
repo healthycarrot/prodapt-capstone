@@ -1,0 +1,104 @@
+{
+  "created_at_utc": "2026-03-16T16:18:10.314373",
+  "mongo_uri": "mongodb://localhost:27017",
+  "db_name": "prodapt_capstone",
+  "format": "jsonl.gz (Extended JSON)",
+  "collections": [
+    {
+      "name": "normalized_candidates",
+      "documents": 2484,
+      "data_file": "normalized_candidates.jsonl.gz",
+      "indexes_file": "normalized_candidates.indexes.json"
+    },
+    {
+      "name": "raw_esco_occupation_skill_relations",
+      "documents": 126051,
+      "data_file": "raw_esco_occupation_skill_relations.jsonl.gz",
+      "indexes_file": "raw_esco_occupation_skill_relations.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_ab_with_llm_20",
+      "documents": 20,
+      "data_file": "normalized_candidates_ab_with_llm_20.jsonl.gz",
+      "indexes_file": "normalized_candidates_ab_with_llm_20.indexes.json"
+    },
+    {
+      "name": "raw_esco_occupations",
+      "documents": 3043,
+      "data_file": "raw_esco_occupations.jsonl.gz",
+      "indexes_file": "raw_esco_occupations.indexes.json"
+    },
+    {
+      "name": "raw_esco_broader_relations_occ",
+      "documents": 3648,
+      "data_file": "raw_esco_broader_relations_occ.jsonl.gz",
+      "indexes_file": "raw_esco_broader_relations_occ.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_tmp_check_36856210_v2",
+      "documents": 1,
+      "data_file": "normalized_candidates_tmp_check_36856210_v2.jsonl.gz",
+      "indexes_file": "normalized_candidates_tmp_check_36856210_v2.indexes.json"
+    },
+    {
+      "name": "raw_esco_skills",
+      "documents": 13960,
+      "data_file": "raw_esco_skills.jsonl.gz",
+      "indexes_file": "raw_esco_skills.indexes.json"
+    },
+    {
+      "name": "raw_esco_isco_groups",
+      "documents": 619,
+      "data_file": "raw_esco_isco_groups.jsonl.gz",
+      "indexes_file": "raw_esco_isco_groups.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_issue14_v2_eval",
+      "documents": 262,
+      "data_file": "normalized_candidates_issue14_v2_eval.jsonl.gz",
+      "indexes_file": "normalized_candidates_issue14_v2_eval.indexes.json"
+    },
+    {
+      "name": "raw_esco_skill_groups",
+      "documents": 640,
+      "data_file": "raw_esco_skill_groups.jsonl.gz",
+      "indexes_file": "raw_esco_skill_groups.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_tmp_issue14_verify",
+      "documents": 1,
+      "data_file": "normalized_candidates_tmp_issue14_verify.jsonl.gz",
+      "indexes_file": "normalized_candidates_tmp_issue14_verify.indexes.json"
+    },
+    {
+      "name": "raw_esco_broader_relations_skill",
+      "documents": 20819,
+      "data_file": "raw_esco_broader_relations_skill.jsonl.gz",
+      "indexes_file": "raw_esco_broader_relations_skill.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_tmp_issue14",
+      "documents": 1,
+      "data_file": "normalized_candidates_tmp_issue14.jsonl.gz",
+      "indexes_file": "normalized_candidates_tmp_issue14.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_ab_no_llm_20",
+      "documents": 20,
+      "data_file": "normalized_candidates_ab_no_llm_20.jsonl.gz",
+      "indexes_file": "normalized_candidates_ab_no_llm_20.indexes.json"
+    },
+    {
+      "name": "source_1st_resumes",
+      "documents": 2484,
+      "data_file": "source_1st_resumes.jsonl.gz",
+      "indexes_file": "source_1st_resumes.indexes.json"
+    },
+    {
+      "name": "normalized_candidates_tmp_issue14_v2_verify",
+      "documents": 1,
+      "data_file": "normalized_candidates_tmp_issue14_v2_verify.jsonl.gz",
+      "indexes_file": "normalized_candidates_tmp_issue14_v2_verify.indexes.json"
+    }
+  ]
+}

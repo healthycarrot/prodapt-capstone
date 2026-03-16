@@ -1,0 +1,25 @@
+[
+  {
+    "v": 2,
+    "key": {
+      "_id": 1
+    },
+    "name": "_id_"
+  },
+  {
+    "v": 2,
+    "key": {
+      "source_dataset": 1,
+      "source_record_id": 1
+    },
+    "name": "uq_source_dataset_record",
+    "unique": true
+  },
+  {
+    "v": 2,
+    "key": {
+      "category": 1
+    },
+    "name": "idx_source_category"
+  }
+]

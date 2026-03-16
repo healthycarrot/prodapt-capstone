@@ -1,0 +1,46 @@
+[
+  {
+    "v": 2,
+    "key": {
+      "_id": 1
+    },
+    "name": "_id_"
+  },
+  {
+    "v": 2,
+    "key": {
+      "source_dataset": 1,
+      "source_record_id": 1
+    },
+    "name": "uq_source_record",
+    "unique": true
+  },
+  {
+    "v": 2,
+    "key": {
+      "candidate_id": 1
+    },
+    "name": "idx_candidate_id"
+  },
+  {
+    "v": 2,
+    "key": {
+      "normalization_status": 1
+    },
+    "name": "idx_normalization_status"
+  },
+  {
+    "v": 2,
+    "key": {
+      "llm_handoff.rerank_trigger": 1
+    },
+    "name": "idx_llm_rerank_trigger"
+  },
+  {
+    "v": 2,
+    "key": {
+      "llm_handoff.extraction_trigger": 1
+    },
+    "name": "idx_llm_extraction_trigger"
+  }
+]

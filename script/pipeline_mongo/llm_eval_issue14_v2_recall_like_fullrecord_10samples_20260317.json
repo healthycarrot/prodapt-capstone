@@ -1,0 +1,124 @@
+{
+  "generated_at_utc": "2026-03-16T16:12:49.640671",
+  "model": "gpt-4.1-mini",
+  "sample_size": 10,
+  "source_eval": "script\\pipeline_mongo\\llm_eval_issue14_v2_recall_like_10samples_20260317.json",
+  "input_mode": "full_normalized_candidate_record",
+  "summary": {
+    "recall_like_hit_at_3": 0.6,
+    "recall_like_hit_at_10": 0.6,
+    "recall_like_hit_at_20": 0.6
+  },
+  "evaluations": [
+    {
+      "source_record_id": "22323967",
+      "category": "HR",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "履歴書の職務経験とスキルは人事関連職に合致し、上位3位以内に「human resources officer」など適切な職種が含まれているため。"
+      }
+    },
+    {
+      "source_record_id": "37058472",
+      "category": "DESIGNER",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "上位3件にプロジェクトマネージャー、家具デザイナー、インテリアデザイナーが含まれ、職務経歴と教育背景に合致。"
+      }
+    },
+    {
+      "source_record_id": "33241454",
+      "category": "INFORMATION-TECHNOLOGY",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "IT監督者・技術者経験と資格があり、上位3位以内に関連職種（IT auditor等）が含まれているため。"
+      }
+    },
+    {
+      "source_record_id": "37292350",
+      "category": "AGRICULTURE",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "履歴書の職歴と教育背景は農業教育職に一致し、上位3件の候補に農業職業教師が含まれているため。"
+      }
+    },
+    {
+      "source_record_id": "77576845",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "上位3件に関連職種「commercial director」が含まれており、職務内容もビジネス開発管理に合致。"
+      }
+    },
+    {
+      "source_record_id": "17926546",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": true,
+        "hit_at_10": true,
+        "hit_at_20": true,
+        "reason_ja": "上位3件以内に関連性の高い職業候補「electrical mechanic」が存在し、経験・スキルと整合性が高いため。"
+      }
+    },
+    {
+      "source_record_id": "43752620",
+      "category": "ENGINEERING",
+      "normalization_status": "success",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "LLM???JSON????"
+      }
+    },
+    {
+      "source_record_id": "98379112",
+      "category": "BUSINESS-DEVELOPMENT",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "LLM???JSON????"
+      }
+    },
+    {
+      "source_record_id": "30757456",
+      "category": "FITNESS",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "LLM???JSON????"
+      }
+    },
+    {
+      "source_record_id": "37201447",
+      "category": "AGRICULTURE",
+      "normalization_status": "partial",
+      "judge": {
+        "hit_at_3": false,
+        "hit_at_10": false,
+        "hit_at_20": false,
+        "reason_ja": "LLM???JSON????"
+      }
+    }
+  ]
+}
