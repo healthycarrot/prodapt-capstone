@@ -254,6 +254,50 @@
   - Keyword path can still return candidates under experience/education requests.
   - Milvus path remains the hard-filter authority for those scalar constraints.
 
+24. FR-08 DeepEval API evaluation harness baseline (2026-03-18)
+- Added live API evaluation harness for:
+  - `POST /retrieve`
+  - `POST /search`
+- Harness files:
+  - `backend/tests/eval_harness.py`
+  - `backend/tests/fixtures/search_eval_cases.json`
+  - `backend/tests/test_retrieve_quality_eval.py`
+  - `backend/tests/test_search_quality_eval.py`
+  - `backend/tests/test_eval_harness_support.py`
+- First metric slice:
+  - `/retrieve`:
+    - `ContextualPrecisionMetric`
+    - `ContextualRelevancyMetric`
+  - `/search`:
+    - `FaithfulnessMetric`
+    - `AnswerRelevancyMetric`
+    - `GEval(Skill Coverage)`
+    - `GEval(Experience Fit)`
+    - `BiasMetric`
+- Evidence source policy:
+  - after retrieval, candidate evidence is fetched from Mongo by `candidate_id`
+  - evaluation context uses `resume_text`, `occupation_labels`, `skill_labels`, `experiences`, `educations`
+- Runtime control policy:
+  - live harness is OFF by default (`RUN_LIVE_EVALS=false`)
+  - threshold enforcement is OFF by default (`EVAL_ENFORCE_THRESHOLDS=false`)
+  - default cost guardrails:
+    - `EVAL_CASE_LIMIT=1`
+    - `EVAL_SEARCH_RESULT_TOPN=1`
+
+25. FR-08 live eval report export baseline (2026-03-18)
+- Added report export script:
+  - `backend/tests/export_eval_report.py`
+- Report output scope:
+  - writes JSON + Markdown artifacts for the same live harness run
+  - captures:
+    - selected cases
+    - per-case `/retrieve` and `/search` execution status
+    - metric row details
+    - metric distribution summaries
+- Current active report snapshot:
+  - `docs/reports/eval/FR-08-Live-Eval-10cases-20260318.md`
+  - `docs/reports/eval/FR-08-Live-Eval-10cases-20260318.json`
+
 ## Phase Definition (2026-03-16)
 | Phase | Status | Purpose | Main Input | Main Output | Main Script(s) |
 |---|---|---|---|---|---|
@@ -421,6 +465,18 @@ python .\script\pipeline_mongo\publish_candidate_search_collection.py --db-name 
 9. Backfill keyword search text + create text index (FR-02 prerequisite)
 ```bash
 python .\script\pipeline_mongo\backfill_candidate_search_text.py --db-name prodapt_capstone --collection normalized_candidates --create-text-index --summary-out .\script\pipeline_mongo\backfill_candidate_search_text_report.json
+```
+
+10. Run FR-08 live DeepEval harness (from `backend/`)
+```powershell
+$env:RUN_LIVE_EVALS='1'
+.\.venv\Scripts\python.exe -m unittest tests.test_eval_harness_support tests.test_retrieve_quality_eval tests.test_search_quality_eval -v
+```
+
+11. Export FR-08 live eval report (from `backend/`)
+```powershell
+$env:RUN_LIVE_EVALS='1'
+.\.venv\Scripts\python.exe -m tests.export_eval_report --case-limit 10 --retrieval-top-k 5 --search-result-top-n 1 --json-out ..\docs\reports\eval\FR-08-Live-Eval-10cases-20260318.json --md-out ..\docs\reports\eval\FR-08-Live-Eval-10cases-20260318.md
 ```
 
 ## Related Docs

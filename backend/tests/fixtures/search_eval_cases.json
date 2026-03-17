@@ -1,0 +1,452 @@
+[
+  {
+    "name": "frontend_web_developer",
+    "request": {
+      "query_text": "frontend engineer focused on building interactive web applications",
+      "skill_terms": ["JavaScript", "CSS"],
+      "occupation_terms": ["web developer"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have frontend or web development experience, JavaScript and CSS skills, and evidence of building user-facing web applications.",
+    "required_skills": ["JavaScript", "CSS"],
+    "preferred_skills": ["HTML", "web application UX"],
+    "experience_expectations": ["frontend development", "web application implementation"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "backend_software_engineer",
+    "request": {
+      "query_text": "backend engineer with Python and API development experience",
+      "skill_terms": ["Python", "SQL"],
+      "occupation_terms": ["software engineer"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have backend or software engineering experience, Python and SQL skills, and evidence of API or service development.",
+    "required_skills": ["Python", "SQL"],
+    "preferred_skills": ["API development", "service design"],
+    "experience_expectations": ["backend engineering", "service or API development"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "data_analyst_reporting",
+    "request": {
+      "query_text": "data analyst who can analyze business data and build reports",
+      "skill_terms": ["SQL", "Python"],
+      "occupation_terms": ["data analyst"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have data analysis experience, SQL skills, report-building or dashboard experience, and evidence of working with business or analytical datasets.",
+    "required_skills": ["SQL"],
+    "preferred_skills": ["Python", "reporting"],
+    "experience_expectations": ["data analysis", "reporting", "business datasets"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "frontend_react_typescript",
+    "request": {
+      "query_text": "frontend developer with React and TypeScript for modern web applications",
+      "skill_terms": ["React", "TypeScript", "CSS"],
+      "occupation_terms": ["frontend developer", "web developer"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have frontend development experience, React and TypeScript skills, and evidence of building modern user-facing web applications.",
+    "required_skills": ["React", "TypeScript"],
+    "preferred_skills": ["CSS", "component-based UI"],
+    "experience_expectations": ["frontend development", "interactive web applications"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "data_engineer_etl",
+    "request": {
+      "query_text": "data engineer for ETL pipelines and analytics platforms",
+      "skill_terms": ["Spark", "ETL", "SQL"],
+      "occupation_terms": ["data engineer"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have data engineering experience, Spark, ETL, and SQL skills, and evidence of building or operating data pipelines.",
+    "required_skills": ["Spark", "ETL", "SQL"],
+    "preferred_skills": ["data platforms", "pipeline orchestration"],
+    "experience_expectations": ["data engineering", "ETL pipeline delivery"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "machine_learning_engineer",
+    "request": {
+      "query_text": "machine learning engineer with Python and model development experience",
+      "skill_terms": ["Machine Learning", "Python"],
+      "occupation_terms": ["machine learning engineer"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have machine learning engineering experience, Python skills, and evidence of model development or applied ML delivery.",
+    "required_skills": ["Machine Learning", "Python"],
+    "preferred_skills": ["model deployment", "applied AI"],
+    "experience_expectations": ["machine learning engineering", "model development"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "secretary_office_operations",
+    "request": {
+      "query_text": "secretary who can coordinate office tasks and support daily administration",
+      "skill_terms": ["use microsoft office", "use word processing software"],
+      "occupation_terms": ["secretary"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have secretary or office support experience, strong office software skills, and evidence of handling day-to-day administrative coordination.",
+    "required_skills": ["use microsoft office"],
+    "preferred_skills": ["use word processing software", "customer service"],
+    "experience_expectations": ["office administration", "calendar or document coordination"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "bank_manager_financial_analysis",
+    "request": {
+      "query_text": "bank manager with financial analysis and banking operations experience",
+      "skill_terms": ["financial analysis", "financial forecasting"],
+      "occupation_terms": ["bank manager"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have bank management or banking leadership experience, financial analysis and forecasting skills, and evidence of overseeing banking operations or client portfolios.",
+    "required_skills": ["financial analysis"],
+    "preferred_skills": ["financial forecasting", "banking activities"],
+    "experience_expectations": ["bank management", "banking operations"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "business_analyst_database_statistics",
+    "request": {
+      "query_text": "business analyst with database and statistics skills for process improvement",
+      "skill_terms": ["database", "statistics"],
+      "occupation_terms": ["business analyst"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have business analysis experience, database and statistics skills, and evidence of translating business needs into analytical or process improvements.",
+    "required_skills": ["database", "statistics"],
+    "preferred_skills": ["develop business case", "process improvement"],
+    "experience_expectations": ["business analysis", "requirements or process improvement"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "accountant_financial_reporting",
+    "request": {
+      "query_text": "accountant with accounting and financial statement reporting experience",
+      "skill_terms": ["accounting", "financial statements"],
+      "occupation_terms": ["accountant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have accounting experience, accounting and financial statement skills, and evidence of reporting, reconciliation, or financial close work.",
+    "required_skills": ["accounting", "financial statements"],
+    "preferred_skills": ["use accounting systems", "financial analysis"],
+    "experience_expectations": ["accounting", "financial reporting"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "sales_account_manager_client_growth",
+    "request": {
+      "query_text": "sales account manager focused on client growth and service delivery",
+      "skill_terms": ["customer service", "communication"],
+      "occupation_terms": ["sales account manager"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have account management or sales experience, strong customer service and communication skills, and evidence of managing client relationships and revenue growth.",
+    "required_skills": ["customer service", "communication"],
+    "preferred_skills": ["draw up marketing and sales plan", "relationship management"],
+    "experience_expectations": ["account management", "client growth"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "financial_controller_reporting_governance",
+    "request": {
+      "query_text": "financial controller with strong reporting and governance experience",
+      "skill_terms": ["financial statements", "financial analysis"],
+      "occupation_terms": ["financial controller"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have financial control or finance leadership experience, strong reporting and analysis skills, and evidence of governance, controls, or budget oversight.",
+    "required_skills": ["financial statements", "financial analysis"],
+    "preferred_skills": ["accounting", "financial forecasting"],
+    "experience_expectations": ["financial control", "governance or budget oversight"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "human_resources_officer_recruiting",
+    "request": {
+      "query_text": "human resources officer with recruiting and personnel management experience",
+      "skill_terms": ["human resource management", "recruit personnel"],
+      "occupation_terms": ["human resources officer"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have HR operations experience, human resource management skills, and evidence of recruiting, employee support, or personnel administration.",
+    "required_skills": ["human resource management"],
+    "preferred_skills": ["recruit personnel", "personnel management"],
+    "experience_expectations": ["human resources", "recruiting or personnel administration"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "ict_consultant_advisory",
+    "request": {
+      "query_text": "ict consultant who can advise on systems and information technology solutions",
+      "skill_terms": ["use consulting techniques", "database management systems"],
+      "occupation_terms": ["ICT consultant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have ICT consulting experience, consulting and problem-solving skills, and evidence of advising on systems, databases, or information technology solutions.",
+    "required_skills": ["use consulting techniques"],
+    "preferred_skills": ["database management systems", "keep up with the latest information systems solutions"],
+    "experience_expectations": ["ICT consulting", "systems advisory"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "commercial_sales_representative_sales_plan",
+    "request": {
+      "query_text": "commercial sales representative who can grow accounts and build sales plans",
+      "skill_terms": ["customer service", "draw up marketing and sales plan"],
+      "occupation_terms": ["commercial sales representative"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have commercial sales experience, customer service and sales planning skills, and evidence of prospecting, account development, or commercial negotiations.",
+    "required_skills": ["customer service"],
+    "preferred_skills": ["draw up marketing and sales plan", "communication"],
+    "experience_expectations": ["commercial sales", "account development"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "sales_support_assistant_office_support",
+    "request": {
+      "query_text": "sales support assistant with office coordination and customer support experience",
+      "skill_terms": ["customer service", "use microsoft office"],
+      "occupation_terms": ["sales support assistant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have sales support or administrative support experience, office software skills, and evidence of coordinating sales operations or customer communications.",
+    "required_skills": ["use microsoft office"],
+    "preferred_skills": ["customer service", "maintain data entry requirements"],
+    "experience_expectations": ["sales support", "administrative coordination"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "art_director_creative_suite",
+    "request": {
+      "query_text": "art director with creative direction and design software experience",
+      "skill_terms": ["think creatively", "use creative suite software"],
+      "occupation_terms": ["art director"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have art direction or design leadership experience, creative thinking and design software skills, and evidence of directing visual or brand work.",
+    "required_skills": ["think creatively"],
+    "preferred_skills": ["use creative suite software", "electronic communication"],
+    "experience_expectations": ["art direction", "creative leadership"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "financial_auditor_ifrs",
+    "request": {
+      "query_text": "financial auditor with accounting and IFRS compliance experience",
+      "skill_terms": ["accounting", "international financial reporting standards"],
+      "occupation_terms": ["financial auditor"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have audit or financial compliance experience, accounting skills, and evidence of IFRS, review, or control-oriented finance work.",
+    "required_skills": ["accounting", "international financial reporting standards"],
+    "preferred_skills": ["financial statements", "financial analysis"],
+    "experience_expectations": ["financial audit", "compliance or control review"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "executive_assistant_word_processing",
+    "request": {
+      "query_text": "executive assistant who can manage documents and stakeholder coordination",
+      "skill_terms": ["use word processing software", "use microsoft office"],
+      "occupation_terms": ["executive assistant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have executive assistance or high-level administrative support experience, strong document and office software skills, and evidence of stakeholder coordination or schedule management.",
+    "required_skills": ["use word processing software"],
+    "preferred_skills": ["use microsoft office", "communication"],
+    "experience_expectations": ["executive support", "stakeholder coordination"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "cook_kitchen_operations",
+    "request": {
+      "query_text": "cook with food preparation and kitchen operations experience",
+      "skill_terms": ["cook vegetable products", "customer service"],
+      "occupation_terms": ["cook"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have cooking or kitchen experience, practical food preparation skills, and evidence of working in day-to-day kitchen or food service environments.",
+    "required_skills": ["cook vegetable products"],
+    "preferred_skills": ["customer service", "ensure maintenance of kitchen equipment"],
+    "experience_expectations": ["kitchen operations", "food preparation"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "chef_kitchen_leadership",
+    "request": {
+      "query_text": "chef who can lead kitchen operations and manage supplies",
+      "skill_terms": ["monitor kitchen supplies", "ensure maintenance of kitchen equipment"],
+      "occupation_terms": ["chef"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have chef or kitchen leadership experience and evidence of managing kitchen operations, inventory, and food preparation quality.",
+    "required_skills": ["monitor kitchen supplies"],
+    "preferred_skills": ["ensure maintenance of kitchen equipment", "personnel management"],
+    "experience_expectations": ["kitchen leadership", "inventory or food service operations"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "cyber_incident_responder_ict_quality",
+    "request": {
+      "query_text": "cyber incident responder with ict quality and systems response experience",
+      "skill_terms": ["attend to ICT systems quality", "keep up with the latest information systems solutions"],
+      "occupation_terms": ["cyber incident responder"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have cyber incident response or ICT operations experience, quality-focused systems knowledge, and evidence of handling security or incident response workflows.",
+    "required_skills": ["attend to ICT systems quality"],
+    "preferred_skills": ["keep up with the latest information systems solutions", "database management systems"],
+    "experience_expectations": ["incident response", "ICT operations"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "business_consultant_business_case",
+    "request": {
+      "query_text": "business consultant who can build business cases and advise on strategy",
+      "skill_terms": ["use consulting techniques", "develop business case"],
+      "occupation_terms": ["business consultant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have business consulting experience, consulting and business case skills, and evidence of advising clients on strategy, transformation, or growth plans.",
+    "required_skills": ["use consulting techniques"],
+    "preferred_skills": ["develop business case", "align efforts towards business development"],
+    "experience_expectations": ["business consulting", "strategy advisory"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "business_manager_delivery_growth",
+    "request": {
+      "query_text": "business manager with project delivery and business growth experience",
+      "skill_terms": ["project management", "align efforts towards business development"],
+      "occupation_terms": ["business manager"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have business management experience, project management and growth-planning skills, and evidence of coordinating delivery with business development goals.",
+    "required_skills": ["project management"],
+    "preferred_skills": ["align efforts towards business development", "communication"],
+    "experience_expectations": ["business management", "delivery or growth planning"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "accounting_analyst_access_reporting",
+    "request": {
+      "query_text": "accounting analyst with reporting and financial analysis experience",
+      "skill_terms": ["financial analysis", "Microsoft Access"],
+      "occupation_terms": ["accounting analyst"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have accounting or financial analysis experience, strong reporting and analysis skills, and evidence of working with accounting data or finance systems.",
+    "required_skills": ["financial analysis"],
+    "preferred_skills": ["Microsoft Access", "accounting"],
+    "experience_expectations": ["accounting analysis", "financial reporting"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "human_resources_assistant_admin",
+    "request": {
+      "query_text": "human resources assistant who can support recruiting and hr administration",
+      "skill_terms": ["human resource management", "maintain data entry requirements"],
+      "occupation_terms": ["human resources assistant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have HR support experience, human resource management awareness, and evidence of recruiting coordination, data upkeep, or people administration.",
+    "required_skills": ["human resource management"],
+    "preferred_skills": ["maintain data entry requirements", "recruit personnel"],
+    "experience_expectations": ["HR administration", "recruiting coordination"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "administrative_assistant_data_entry",
+    "request": {
+      "query_text": "administrative assistant with office support and data entry accuracy",
+      "skill_terms": ["use microsoft office", "supervise data entry"],
+      "occupation_terms": ["administrative assistant"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have administrative assistance experience, office software skills, and evidence of document handling, data entry, or operational support.",
+    "required_skills": ["use microsoft office"],
+    "preferred_skills": ["supervise data entry", "use word processing software"],
+    "experience_expectations": ["administrative support", "data entry or documentation"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "talent_acquisition_manager_hiring",
+    "request": {
+      "query_text": "talent acquisition manager with hiring strategy and recruitment leadership",
+      "skill_terms": ["human resource management", "hire human resources"],
+      "occupation_terms": ["talent acquisition manager"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have talent acquisition or recruiting leadership experience, human resource management skills, and evidence of driving hiring plans or recruitment operations.",
+    "required_skills": ["human resource management"],
+    "preferred_skills": ["hire human resources", "recruit personnel"],
+    "experience_expectations": ["talent acquisition", "recruiting leadership"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "project_manager_delivery",
+    "request": {
+      "query_text": "project manager with delivery planning and stakeholder communication",
+      "skill_terms": ["project management", "communication"],
+      "occupation_terms": ["project manager"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have project management experience, communication skills, and evidence of planning delivery, coordinating stakeholders, or tracking execution.",
+    "required_skills": ["project management"],
+    "preferred_skills": ["communication", "accurately estimate work hours"],
+    "experience_expectations": ["project delivery", "stakeholder coordination"],
+    "top_k": 5,
+    "top_search_results": 2
+  },
+  {
+    "name": "customer_service_representative_support",
+    "request": {
+      "query_text": "customer service representative with communication and client support experience",
+      "skill_terms": ["customer service", "communication"],
+      "occupation_terms": ["customer service representative"],
+      "limit": 5
+    },
+    "expected_output": "Relevant candidates should have customer support experience, strong communication and service skills, and evidence of handling client issues, requests, or service operations.",
+    "required_skills": ["customer service"],
+    "preferred_skills": ["communication", "English"],
+    "experience_expectations": ["customer support", "service operations"],
+    "top_k": 5,
+    "top_search_results": 2
+  }
+]

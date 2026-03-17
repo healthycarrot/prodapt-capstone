@@ -76,6 +76,12 @@
 | `docs/reports/retrieval/Milvus-Retrieval-Samples.md` | Milvus 検索サンプル可視化（代表サンプル）。 |
 | `docs/reports/retrieval/Milvus-AB-Experience-Comparison.md` | A/B/B1/B2 系の Milvus 検索比較結果。 |
 
+## reports/eval
+| Path | 内容 |
+|---|---|
+| `docs/reports/eval/FR-08-Live-Eval-10cases-20260318.md` | FR-08 live DeepEval harness を 10 ケースで実行した Markdown レポート。実行状況、指標ごとの分布、低スコアケースの理由をまとめる。 |
+| `docs/reports/eval/FR-08-Live-Eval-10cases-20260318.json` | 上記と同一実行の JSON レポート。ケース別実行結果、metric row 詳細、集計値を保持する。 |
+
 ## test
 | Path | 内容 |
 |---|---|
