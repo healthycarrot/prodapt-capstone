@@ -90,6 +90,7 @@ class Settings:
     openai_model_query_understanding: str
     openai_model_query_builder: str
     openai_model_cross_encoder: str
+    openai_model_agent_scoring: str
     openai_embedding_model: str
 
     # Normalizer thresholds
@@ -115,6 +116,19 @@ class Settings:
     # Milvus query params
     milvus_metric_type: str
     milvus_search_ef: int
+
+    # Agent scoring
+    search_agent_candidate_top_n: int
+    agent_max_parallel: int
+    agent_timeout_sec: int
+    orchestrator_timeout_sec: int
+    integrated_retrieval_weight: float
+    integrated_fr04_weight: float
+    fr04_weight_skill: float
+    fr04_weight_experience: float
+    fr04_weight_education: float
+    fr04_weight_career: float
+    fr04_weight_soft_skill: float
 
     @property
     def mongo_configured(self) -> bool:
@@ -160,6 +174,7 @@ def get_settings(env_file: str | Path | None = None) -> Settings:
         openai_model_query_understanding=_get_str("OPENAI_MODEL_QUERY_UNDERSTANDING", "gpt-4.1-mini"),
         openai_model_query_builder=_get_str("OPENAI_MODEL_QUERY_BUILDER", "gpt-4.1-mini"),
         openai_model_cross_encoder=_get_str("OPENAI_MODEL_CROSS_ENCODER", ""),
+        openai_model_agent_scoring=_get_str("OPENAI_MODEL_AGENT_SCORING", "gpt-4.1-mini"),
         openai_embedding_model=_get_str("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small"),
         normalizer_high_threshold=_get_float("NORMALIZER_HIGH_THRESHOLD", 0.85),
         normalizer_medium_threshold=_get_float("NORMALIZER_MEDIUM_THRESHOLD", 0.60),
@@ -177,4 +192,15 @@ def get_settings(env_file: str | Path | None = None) -> Settings:
         cross_encoder_enabled=_get_bool("CROSS_ENCODER_ENABLED", True),
         milvus_metric_type=_get_str("MILVUS_METRIC_TYPE", "COSINE"),
         milvus_search_ef=_get_int("MILVUS_SEARCH_EF", 128),
+        search_agent_candidate_top_n=_get_int("SEARCH_AGENT_CANDIDATE_TOPN", 20),
+        agent_max_parallel=_get_int("AGENT_MAX_PARALLEL", 4),
+        agent_timeout_sec=_get_int("AGENT_TIMEOUT_SEC", 60),
+        orchestrator_timeout_sec=_get_int("ORCHESTRATOR_TIMEOUT_SEC", 90),
+        integrated_retrieval_weight=_get_float("INTEGRATED_RETRIEVAL_WEIGHT", 0.60),
+        integrated_fr04_weight=_get_float("INTEGRATED_FR04_WEIGHT", 0.40),
+        fr04_weight_skill=_get_float("FR04_WEIGHT_SKILL", 0.40),
+        fr04_weight_experience=_get_float("FR04_WEIGHT_EXPERIENCE", 0.35),
+        fr04_weight_education=_get_float("FR04_WEIGHT_EDUCATION", 0.10),
+        fr04_weight_career=_get_float("FR04_WEIGHT_CAREER", 0.075),
+        fr04_weight_soft_skill=_get_float("FR04_WEIGHT_SOFT_SKILL", 0.075),
     )

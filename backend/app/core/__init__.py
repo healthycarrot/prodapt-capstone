@@ -30,6 +30,12 @@ def get_retrieval_pipeline_service():
 
     return _fn()
 
+
+def get_search_orchestration_service():
+    from .dependencies import get_search_orchestration_service as _fn
+
+    return _fn()
+
 __all__ = [
     "Settings",
     "get_settings",
@@ -38,4 +44,5 @@ __all__ = [
     "get_esco_lexical_repository",
     "get_esco_embedding_repository",
     "get_retrieval_pipeline_service",
+    "get_search_orchestration_service",
 ]

@@ -1,33 +1,53 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
-from app.api.routes.search import get_retrieval_pipeline_service
-from app.domain import RerankHit, RetrievalPipelineOutput, SearchQueryInput
+from app.core import get_search_orchestration_service
+from app.domain import SearchQueryInput
 from app.main import app
+from app.services.search_orchestration import SearchOrchestrationOutput, SearchOrchestrationResultItem
 
 
-class _StubPipeline:
+class _StubSearchOrchestrationService:
     def __init__(self) -> None:
         self.calls: list[tuple[SearchQueryInput, int | None]] = []
 
-    def run(self, search_input: SearchQueryInput, result_limit: int | None = None) -> RetrievalPipelineOutput:
+    def run(self, search_input: SearchQueryInput, result_limit: int | None = None) -> SearchOrchestrationOutput:
         self.calls.append((search_input, result_limit))
-        return RetrievalPipelineOutput(
+        return SearchOrchestrationOutput(
             retry_required=False,
             conflict_fields=[],
             conflict_reason="no conflict",
             results=[
-                RerankHit(
+                SearchOrchestrationResultItem(
                     candidate_id="cand-001",
+                    rank=1,
                     keyword_score=0.5,
                     vector_score=0.7,
                     fusion_score=0.6,
                     cross_encoder_score=0.8,
-                    final_score=0.74,
+                    retrieval_final_score=0.74,
+                    fr04_overall_score=0.67,
+                    final_score=0.71,
+                    recommendation_summary="skill_match: strong backend experience",
+                    skill_matches=["python", "fastapi"],
+                    transferable_skills=["django"],
+                    experience_matches=["backend service development"],
+                    major_gaps=["kubernetes"],
+                    agent_scores={
+                        "skill_match": {
+                            "score": 0.72,
+                            "breakdown": {
+                                "match_score": 0.80,
+                                "skill_depth_score": 0.65,
+                                "management_score": 0.60,
+                            },
+                            "reason": "core skills align",
+                        }
+                    },
+                    agent_errors=[],
                 )
             ],
         )
@@ -35,15 +55,14 @@ class _StubPipeline:
 
 class SearchApiTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.stub_pipeline = _StubPipeline()
-        app.dependency_overrides[get_retrieval_pipeline_service] = lambda: self.stub_pipeline
+        self.stub_service = _StubSearchOrchestrationService()
+        app.dependency_overrides[get_search_orchestration_service] = lambda: self.stub_service
         self.client = TestClient(app)
 
     def tearDown(self) -> None:
         app.dependency_overrides.clear()
 
-    @patch("app.api.routes.search.fetch_normalized_candidates_raw", return_value=[])
-    def test_search_returns_200_with_expected_payload(self, _mock_raw_candidates) -> None:
+    def test_search_returns_200_with_expected_payload(self) -> None:
         payload = {
             "query_text": "string",
             "skill_terms": ["string"],
@@ -65,11 +84,18 @@ class SearchApiTests(unittest.TestCase):
         self.assertEqual(body["conflict_fields"], [])
         self.assertEqual(body["conflict_reason"], "no conflict")
         self.assertEqual(len(body["results"]), 1)
-        self.assertEqual(body["results"][0]["candidate_id"], "cand-001")
-        self.assertEqual(body["raw_candidates"], [])
 
-        self.assertEqual(len(self.stub_pipeline.calls), 1)
-        search_input, result_limit = self.stub_pipeline.calls[0]
+        first = body["results"][0]
+        self.assertEqual(first["candidate_id"], "cand-001")
+        self.assertEqual(first["rank"], 1)
+        self.assertGreater(first["final_score"], 0.0)
+        self.assertGreater(first["retrieval_final_score"], 0.0)
+        self.assertGreater(first["fr04_overall_score"], 0.0)
+        self.assertIn("skill_match", first["agent_scores"])
+        self.assertEqual(first["major_gaps"], ["kubernetes"])
+
+        self.assertEqual(len(self.stub_service.calls), 1)
+        search_input, result_limit = self.stub_service.calls[0]
         self.assertEqual(result_limit, 20)
         self.assertEqual(search_input.query_text, "string")
         self.assertEqual(search_input.requested_skill_terms, ["string"])
@@ -106,3 +132,7 @@ class SearchApiTests(unittest.TestCase):
         response = self.client.post("/search", json=payload)
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["detail"], "education_min_rank must be <= education_max_rank")
+
+
+if __name__ == "__main__":
+    unittest.main()

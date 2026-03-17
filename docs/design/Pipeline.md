@@ -206,6 +206,54 @@
   - `normalized_candidates` stores skill/occupation ESCO IDs and occupation hierarchy IDs under nested candidate arrays for Mongo keyword serving path.
   - using flattened `*_esco_ids_json` in Mongo filter produced zero keyword candidates.
 
+20. FR-06 endpoint split + rollback alignment update (2026-03-17)
+- Introduced endpoint split for serving boundary clarity:
+  - `POST /retrieve`: FR-01..03 retrieval/rerank output only
+  - `POST /search`: retrieval + FR-04 agent scoring + integrated final ranking
+- Applied rollback alignment from Issue #28:
+  - removed temporary raw Mongo payload (`raw_candidates`) from API response path
+  - removed temporary route implementation under `backend/app/api/routes/temp.py`
+
+21. FR-04 agent orchestration update (2026-03-17)
+- Added Orchestrator-based multi-agent scoring stage after FR-01..03 retrieval.
+- Agent SDK policy:
+  - OpenAI Agent SDK based implementation
+  - no handoff usage
+  - Orchestrator executes selected agents with `asyncio.gather` style parallelism
+- Current FR-04 implementation scope:
+  - in scope: skill / experience / education / career progression / soft-skill + FR-04-09 aggregation
+  - out of scope (current step): occupation match (`FR-04-04`), certification match (`FR-04-06`)
+- Education agent trigger policy:
+  - decided by Orchestrator query analysis (LLM few-shot), not by query_normalizer
+- Failure policy:
+  - partial agent failure returns partial scored response
+  - all-agent failure falls back to retrieval ranking
+
+22. FR-01 query normalizer fuzzy score safety update (2026-03-17)
+- Updated lexical fuzzy score merge logic in `backend/app/repositories/esco_lexical_repo.py`:
+  - from: `merged_score = max(confidence, repo_match.score)`
+  - to: `merged_score = min(confidence, repo_match.score)`
+- Reason:
+  - Prevent fuzzy matches from being inflated to lexical base confidence (`0.98` / `0.87`),
+    which could incorrectly promote weakly related terms into `high` confidence.
+- Impact:
+  - Exact/alt paths keep their original confidence behavior.
+  - Fuzzy path confidence now stays bounded by both similarity and lexical base cap.
+
+23. FR-02 Mongo keyword hard-filter scalar fallback update (2026-03-17)
+- Updated `backend/app/services/hard_filter_compiler.py` to avoid applying unavailable scalar fields
+  on Mongo keyword path:
+  - Mongo `$text` filter no longer includes:
+    - `experience_months_total`
+    - `highest_education_level_rank`
+  - Milvus scalar hard filter remains unchanged and still applies both fields.
+- Reason:
+  - `normalized_candidates` (Mongo keyword source) does not store the above scalar fields,
+    causing keyword path false-zero results when experience/education filters were specified.
+- Impact:
+  - Keyword path can still return candidates under experience/education requests.
+  - Milvus path remains the hard-filter authority for those scalar constraints.
+
 ## Phase Definition (2026-03-16)
 | Phase | Status | Purpose | Main Input | Main Output | Main Script(s) |
 |---|---|---|---|---|---|

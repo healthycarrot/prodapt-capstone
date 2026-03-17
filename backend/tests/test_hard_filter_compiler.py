@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from app.domain import HardFilterInput
+from app.domain import EducationFilter, ExperienceFilter, HardFilterInput
 from app.services.hard_filter_compiler import HardFilterCompilerService
 
 
@@ -36,6 +36,23 @@ class HardFilterCompilerTests(unittest.TestCase):
         )
 
         self.assertEqual(compiled.mongo_filter, {"skill_candidates.esco_id": {"$in": ["skill-1"]}})
+
+    def test_experience_and_education_filters_are_milvus_only(self) -> None:
+        compiled = HardFilterCompilerService().compile(
+            HardFilterInput(
+                experience=ExperienceFilter(min_months=12, max_months=36),
+                education=EducationFilter(min_rank=3, max_rank=5),
+                locations=["Tokyo"],
+            )
+        )
+
+        self.assertIn("experience_months_total >= 12", compiled.milvus_expr)
+        self.assertIn("experience_months_total <= 36", compiled.milvus_expr)
+        self.assertIn("highest_education_level_rank >= 3", compiled.milvus_expr)
+        self.assertIn("highest_education_level_rank <= 5", compiled.milvus_expr)
+        self.assertIn('current_location in ["Tokyo"]', compiled.milvus_expr)
+        # Mongo keyword path keeps location filter only (no experience/education scalar fields).
+        self.assertEqual(compiled.mongo_filter, {"current_location": {"$in": ["Tokyo"]}})
 
 
 if __name__ == "__main__":

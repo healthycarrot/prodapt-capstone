@@ -189,7 +189,10 @@ def _fuzzy_search(
             if confidence < min_score:
                 continue
             _, repo_match = values[index]
-            merged_score = max(confidence, repo_match.score)
+            # Prevent fuzzy matches from being inflated to lexical base scores.
+            # This keeps fuzzy confidence aligned with similarity while preserving
+            # exact/alt confidence behavior in their dedicated paths.
+            merged_score = min(confidence, repo_match.score)
             current = score_map.get(repo_match.esco_id)
             candidate = RepoMatch(
                 esco_id=repo_match.esco_id,
@@ -203,7 +206,8 @@ def _fuzzy_search(
             confidence = SequenceMatcher(a=query, b=value).ratio()
             if confidence < min_score:
                 continue
-            merged_score = max(confidence, repo_match.score)
+            # Prevent fuzzy matches from being inflated to lexical base scores.
+            merged_score = min(confidence, repo_match.score)
             current = score_map.get(repo_match.esco_id)
             candidate = RepoMatch(
                 esco_id=repo_match.esco_id,

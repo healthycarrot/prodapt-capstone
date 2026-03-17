@@ -80,3 +80,4 @@
 | Path | 内容 |
 |---|---|
 | `docs/test/Search-API-Test-Patterns.md` | `/search` のハードフィルタ挙動と Vector 検索挙動を確認するためのリクエストパターンと期待値。 |
+| `docs/test/Search-API-RequestBody-Samples.md` | `/search` を実行確認するための代表的な Request Body サンプル集（正常系/異常系）。 |

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
-from ...core import get_retrieval_pipeline_service
-from ...domain import EducationFilter, ExperienceFilter, SearchQueryInput
-from ...services import RetrievalPipelineService
-from ..schemas import SearchRequest, SearchResponse, SearchResultItem
-from .temp import fetch_normalized_candidates_raw
+from ...core import get_search_orchestration_service
+from ...services import SearchOrchestrationService
+from ..schemas import AgentScoreCard, SearchRequest, SearchResponse, SearchResultItem
+from ._request_mapper import to_search_input, validate_search_request
 
 router = APIRouter(tags=["search"])
 
@@ -14,45 +13,11 @@ router = APIRouter(tags=["search"])
 @router.post("/search", response_model=SearchResponse)
 def search_candidates(
     payload: SearchRequest,
-    pipeline: RetrievalPipelineService = Depends(get_retrieval_pipeline_service),
+    service: SearchOrchestrationService = Depends(get_search_orchestration_service),
 ) -> SearchResponse:
-    if (
-        payload.experience_min_months is not None
-        and payload.experience_max_months is not None
-        and payload.experience_min_months > payload.experience_max_months
-    ):
-        raise HTTPException(status_code=422, detail="experience_min_months must be <= experience_max_months")
-    if (
-        payload.education_min_rank is not None
-        and payload.education_max_rank is not None
-        and payload.education_min_rank > payload.education_max_rank
-    ):
-        raise HTTPException(status_code=422, detail="education_min_rank must be <= education_max_rank")
-
-    search_input = SearchQueryInput(
-        query_text=payload.query_text,
-        requested_locations=[value.strip() for value in payload.locations if value.strip()],
-        requested_skill_terms=[value.strip() for value in payload.skill_terms if value.strip()],
-        requested_occupation_terms=[value.strip() for value in payload.occupation_terms if value.strip()],
-        requested_industry_terms=[value.strip() for value in payload.industry_terms if value.strip()],
-        requested_experience=ExperienceFilter(
-            min_months=payload.experience_min_months,
-            max_months=payload.experience_max_months,
-        ),
-        requested_education=EducationFilter(
-            min_rank=payload.education_min_rank,
-            max_rank=payload.education_max_rank,
-        ),
-    )
-
-    output = pipeline.run(search_input, result_limit=payload.limit)
-    candidate_ids = [item.candidate_id for item in output.results]
-    candidate_final_scores = {item.candidate_id: item.final_score for item in output.results}
-    raw_candidates = fetch_normalized_candidates_raw(
-        candidate_ids,
-        candidate_final_scores=candidate_final_scores,
-        top_k=5,
-    )
+    validate_search_request(payload)
+    search_input = to_search_input(payload)
+    output = service.run(search_input, result_limit=payload.limit)
     return SearchResponse(
         retry_required=output.retry_required,
         conflict_fields=list(output.conflict_fields),
@@ -60,13 +25,30 @@ def search_candidates(
         results=[
             SearchResultItem(
                 candidate_id=item.candidate_id,
+                rank=item.rank,
                 keyword_score=item.keyword_score,
                 vector_score=item.vector_score,
                 fusion_score=item.fusion_score,
                 cross_encoder_score=item.cross_encoder_score,
+                retrieval_final_score=item.retrieval_final_score,
+                fr04_overall_score=item.fr04_overall_score,
                 final_score=item.final_score,
+                recommendation_summary=item.recommendation_summary,
+                skill_matches=list(item.skill_matches),
+                transferable_skills=list(item.transferable_skills),
+                experience_matches=list(item.experience_matches),
+                major_gaps=list(item.major_gaps),
+                agent_scores={
+                    name: AgentScoreCard(
+                        score=float((value.get("score") or 0.0)),
+                        breakdown={k: float(v) for k, v in dict(value.get("breakdown") or {}).items()},
+                        reason=str(value.get("reason") or ""),
+                    )
+                    for name, value in item.agent_scores.items()
+                },
+                agent_errors=list(item.agent_errors),
             )
             for item in output.results
         ],
-        raw_candidates=raw_candidates,
     )
+

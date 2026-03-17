@@ -1,6 +1,6 @@
 # Backend
 
-## Run `/search` API tests
+## Run `/search` and `/retrieve` API tests
 
 Run from `backend/` directory.
 
@@ -22,4 +22,6 @@ If you use the project virtual environment, run:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-This runs the `/search` API tests in `tests/test_search_api.py`.
+This runs the API tests in:
+- `tests/test_search_api.py`
+- `tests/test_retrieve_api.py`

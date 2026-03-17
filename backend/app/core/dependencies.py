@@ -10,19 +10,24 @@ from ..repositories import (
     MongoRepository,
 )
 from ..services import (
+    AgentRuntime,
+    AgentScoreAggregatorService,
     ConflictCheckerService,
     CrossEncoderService,
+    Fr04AgentWeights,
     FusionService,
     HardFilterCompilerService,
     KeywordSearchService,
     NormalizerThresholds,
     OpenAICrossEncoderModel,
+    OrchestratorAgentService,
     QueryBuilderService,
     QueryNormalizerService,
     QueryUnderstandingService,
     RerankService,
     ResponseBuilderService,
     RetrievalPipelineService,
+    SearchOrchestrationService,
     VectorSearchService,
 )
 from .config import get_settings
@@ -116,6 +121,42 @@ def get_retrieval_pipeline_service() -> RetrievalPipelineService:
             cross_encoder_top_k=settings.cross_encoder_top_k,
             rerank_top_k=settings.rerank_top_k,
         ),
+    )
+
+
+@lru_cache(maxsize=1)
+def get_search_orchestration_service() -> SearchOrchestrationService:
+    settings = get_settings()
+    retrieval_pipeline = get_retrieval_pipeline_service()
+    mongo_repo = get_mongo_repository()
+    orchestrator = OrchestratorAgentService(
+        runtime=AgentRuntime(
+            model=settings.openai_model_agent_scoring or settings.openai_model_query_understanding,
+            timeout_sec=float(settings.agent_timeout_sec),
+            api_key=settings.openai_api_key,
+            max_turns=1,
+            temperature=0.0,
+        ),
+        max_parallel=settings.agent_max_parallel,
+        orchestrator_timeout_sec=float(settings.orchestrator_timeout_sec),
+        default_agent_weights=Fr04AgentWeights(
+            skill=settings.fr04_weight_skill,
+            experience=settings.fr04_weight_experience,
+            education=settings.fr04_weight_education,
+            career_progression=settings.fr04_weight_career,
+            soft_skill=settings.fr04_weight_soft_skill,
+        ),
+    )
+    aggregator = AgentScoreAggregatorService(
+        retrieval_weight=settings.integrated_retrieval_weight,
+        fr04_weight=settings.integrated_fr04_weight,
+    )
+    return SearchOrchestrationService(
+        retrieval_pipeline=retrieval_pipeline,
+        candidate_profile_repo=mongo_repo,
+        orchestrator=orchestrator,
+        aggregator=aggregator,
+        candidate_top_n=settings.search_agent_candidate_top_n,
     )
 
 

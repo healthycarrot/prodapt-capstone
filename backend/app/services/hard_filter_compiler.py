@@ -42,17 +42,18 @@ class HardFilterCompilerService:
 
         if hard_filter.experience.min_months is not None:
             milvus_parts.append(f"experience_months_total >= {hard_filter.experience.min_months}")
-            mongo_clauses.append({"experience_months_total": {"$gte": hard_filter.experience.min_months}})
         if hard_filter.experience.max_months is not None:
             milvus_parts.append(f"experience_months_total <= {hard_filter.experience.max_months}")
-            mongo_clauses.append({"experience_months_total": {"$lte": hard_filter.experience.max_months}})
 
         if hard_filter.education.min_rank is not None:
             milvus_parts.append(f"highest_education_level_rank >= {hard_filter.education.min_rank}")
-            mongo_clauses.append({"highest_education_level_rank": {"$gte": hard_filter.education.min_rank}})
         if hard_filter.education.max_rank is not None:
             milvus_parts.append(f"highest_education_level_rank <= {hard_filter.education.max_rank}")
-            mongo_clauses.append({"highest_education_level_rank": {"$lte": hard_filter.education.max_rank}})
+        # NOTE:
+        # - For current serving schema, experience/education scalar fields are available in Milvus.
+        # - The Mongo keyword source (`normalized_candidates`) does not store these scalar fields.
+        # - Therefore, we apply experience/education hard filters only on Milvus side to avoid
+        #   keyword path false-zero results caused by missing Mongo fields.
 
         if hard_filter.locations:
             escaped_locations = ",".join(json.dumps(value) for value in hard_filter.locations)

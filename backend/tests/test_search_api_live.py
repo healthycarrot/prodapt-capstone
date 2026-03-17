@@ -49,9 +49,6 @@ class SearchApiLiveIntegrationTests(unittest.TestCase):
         self.assertGreaterEqual(max(vector_scores), 0.20)
         self.assertGreaterEqual(max(final_scores), 0.45)
 
-        raw_candidates = body.get("raw_candidates", [])
-        self.assertGreater(len(raw_candidates), 0)
-
 
 if __name__ == "__main__":
     unittest.main()

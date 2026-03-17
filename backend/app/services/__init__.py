@@ -1,3 +1,17 @@
+from .agent_scoring import (
+    AgentCandidateScore,
+    AgentExecutionResult,
+    AgentRuntime,
+    AgentScoreAggregatorService,
+    AggregatedCandidateScore,
+    CandidateProfile,
+    Fr04AgentWeights,
+    IntegratedSearchCandidate,
+    OrchestratorAgentService,
+    OrchestratorOutput,
+    QueryAnalysisOutput,
+    is_agent_sdk_available,
+)
 from .conflict_checker import ConflictCheckerService
 from .cross_encoder import CandidateTextRepo, CrossEncoderModel, CrossEncoderService
 from .fusion import FusionService, FusionStrategy
@@ -16,10 +30,18 @@ from .query_understanding import QueryUnderstandingLLMClient, QueryUnderstanding
 from .rerank import CandidateEscoRepo, RerankService
 from .response_builder import ResponseBuilderService
 from .retrieval_pipeline import RetrievalPipelineService
+from .search_orchestration import CandidateProfileRepo, SearchOrchestrationOutput, SearchOrchestrationService
 from .vector_search import CandidateVectorRepo, VectorRepoHit, VectorSearchService
 
 __all__ = [
+    "AgentCandidateScore",
+    "AgentExecutionResult",
+    "AgentRuntime",
+    "AgentScoreAggregatorService",
+    "AggregatedCandidateScore",
     "CandidateEscoRepo",
+    "CandidateProfile",
+    "CandidateProfileRepo",
     "CandidateTextRepo",
     "CandidateVectorRepo",
     "ConflictCheckerService",
@@ -30,21 +52,29 @@ __all__ = [
     "FusionService",
     "FusionStrategy",
     "HardFilterCompilerService",
+    "IntegratedSearchCandidate",
     "KeywordRepoHit",
     "KeywordSearchRepo",
     "KeywordSearchService",
     "NormalizerThresholds",
     "OpenAICrossEncoderModel",
+    "OrchestratorAgentService",
+    "OrchestratorOutput",
     "QueryBuilderService",
     "QueryNormalizerService",
     "QueryRephraser",
+    "QueryAnalysisOutput",
     "QueryUnderstandingLLMClient",
     "QueryUnderstandingService",
     "RepoMatch",
     "ResponseBuilderService",
     "RetrievalPipelineService",
     "RerankService",
+    "SearchOrchestrationOutput",
+    "SearchOrchestrationService",
     "VectorRepoHit",
     "VectorSearchService",
+    "Fr04AgentWeights",
+    "is_agent_sdk_available",
     "parse_llm_json",
 ]
