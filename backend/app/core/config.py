@@ -73,6 +73,7 @@ class Settings:
     mongo_db_name: str
     mongo_normalized_collection: str
     mongo_source_collection: str
+    mongo_guardrail_audit_collection: str
     mongo_raw_esco_skills_collection: str
     mongo_raw_esco_occupations_collection: str
     mongo_raw_esco_isco_groups_collection: str
@@ -130,6 +131,17 @@ class Settings:
     fr04_weight_career: float
     fr04_weight_soft_skill: float
 
+    # Guardrails (FR-07)
+    input_guardrail_enabled: bool
+    input_guardrail_min_query_length: int
+    input_guardrail_max_query_length: int
+    input_guardrail_require_skill_or_occupation: bool
+    input_guardrail_prohibited_terms_csv: str
+    output_audit_enabled: bool
+    output_audit_prohibited_terms_csv: str
+    output_audit_safe_summary_template: str
+    output_audit_safe_reason_template: str
+
     @property
     def mongo_configured(self) -> bool:
         return bool(self.mongo_uri and self.mongo_db_name)
@@ -155,6 +167,7 @@ def get_settings(env_file: str | Path | None = None) -> Settings:
         mongo_db_name=_get_str("MONGO_DB_NAME", "prodapt_capstone"),
         mongo_normalized_collection=_get_str("MONGO_NORMALIZED_COLLECTION", "normalized_candidates"),
         mongo_source_collection=_get_str("MONGO_SOURCE_COLLECTION", "source_1st_resumes"),
+        mongo_guardrail_audit_collection=_get_str("MONGO_GUARDRAIL_AUDIT_COLLECTION", "guardrail_audit_logs"),
         mongo_raw_esco_skills_collection=_get_str("MONGO_RAW_ESCO_SKILLS_COLLECTION", "raw_esco_skills"),
         mongo_raw_esco_occupations_collection=_get_str(
             "MONGO_RAW_ESCO_OCCUPATIONS_COLLECTION",
@@ -203,4 +216,22 @@ def get_settings(env_file: str | Path | None = None) -> Settings:
         fr04_weight_education=_get_float("FR04_WEIGHT_EDUCATION", 0.10),
         fr04_weight_career=_get_float("FR04_WEIGHT_CAREER", 0.075),
         fr04_weight_soft_skill=_get_float("FR04_WEIGHT_SOFT_SKILL", 0.075),
+        input_guardrail_enabled=_get_bool("INPUT_GUARDRAIL_ENABLED", True),
+        input_guardrail_min_query_length=_get_int("INPUT_GUARDRAIL_MIN_QUERY_LENGTH", 20),
+        input_guardrail_max_query_length=_get_int("INPUT_GUARDRAIL_MAX_QUERY_LENGTH", 2000),
+        input_guardrail_require_skill_or_occupation=_get_bool(
+            "INPUT_GUARDRAIL_REQUIRE_SKILL_OR_OCCUPATION",
+            False,
+        ),
+        input_guardrail_prohibited_terms_csv=_get_str("INPUT_GUARDRAIL_PROHIBITED_TERMS_CSV", ""),
+        output_audit_enabled=_get_bool("OUTPUT_AUDIT_ENABLED", True),
+        output_audit_prohibited_terms_csv=_get_str("OUTPUT_AUDIT_PROHIBITED_TERMS_CSV", ""),
+        output_audit_safe_summary_template=_get_str(
+            "OUTPUT_AUDIT_SAFE_SUMMARY_TEMPLATE",
+            "This recommendation was generated from job-relevant evidence.",
+        ),
+        output_audit_safe_reason_template=_get_str(
+            "OUTPUT_AUDIT_SAFE_REASON_TEMPLATE",
+            "Details were sanitized by output guardrail policy.",
+        ),
     )

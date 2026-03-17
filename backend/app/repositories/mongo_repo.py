@@ -39,6 +39,10 @@ class MongoRepository(KeywordSearchRepo, CandidateTextRepo, CandidateEscoRepo):
         db = self._ensure_db()
         return db[self.settings.mongo_source_collection]
 
+    def _guardrail_audit_collection(self) -> Collection:
+        db = self._ensure_db()
+        return db[self.settings.mongo_guardrail_audit_collection]
+
     def search(
         self,
         query: str,
@@ -322,6 +326,14 @@ class MongoRepository(KeywordSearchRepo, CandidateTextRepo, CandidateEscoRepo):
             "source_record_id": source_record_id,
             "resume_text": resume_text,
         }
+
+    def insert_guardrail_audit_logs(self, rows: Sequence[Mapping[str, Any]]) -> int:
+        docs = [dict(row) for row in rows if isinstance(row, Mapping) and row]
+        if not docs:
+            return 0
+        collection = self._guardrail_audit_collection()
+        result = collection.insert_many(docs, ordered=False)
+        return len(result.inserted_ids)
 
 
 def _to_float(value: Any) -> float:

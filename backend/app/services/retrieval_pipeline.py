@@ -4,8 +4,10 @@ from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
 
 from ..domain import (
+    ConflictCheckResult,
     HardFilterCompiled,
     HardFilterInput,
+    InputGuardrailResult,
     KeywordHit,
     QueryBuilderOutput,
     RetrievalPipelineOutput,
@@ -17,6 +19,7 @@ from .conflict_checker import ConflictCheckerService
 from .cross_encoder import CrossEncoderService
 from .fusion import FusionService
 from .hard_filter_compiler import HardFilterCompilerService
+from .input_guardrail import InputGuardrailService
 from .keyword_search import KeywordSearchService
 from .query_builder import QueryBuilderService
 from .query_normalizer import QueryNormalizerService
@@ -28,6 +31,7 @@ from .vector_search import VectorSearchService
 
 @dataclass(slots=True)
 class RetrievalPipelineService:
+    input_guardrail: InputGuardrailService
     query_understanding: QueryUnderstandingService
     query_normalizer: QueryNormalizerService
     conflict_checker: ConflictCheckerService
@@ -42,7 +46,15 @@ class RetrievalPipelineService:
     stage_caps: StageCaps = field(default_factory=StageCaps)
 
     def run(self, search_input: SearchQueryInput, result_limit: int | None = None) -> RetrievalPipelineOutput:
+        pre_guardrail = self.input_guardrail.evaluate(search_input, understood=None)
+        if pre_guardrail.retry_required:
+            return self.response_builder.build(_to_conflict(pre_guardrail), [])
+
         understood = self.query_understanding.extract(search_input)
+        post_guardrail = self.input_guardrail.evaluate(search_input, understood=understood)
+        if post_guardrail.retry_required:
+            return self.response_builder.build(_to_conflict(post_guardrail), [])
+
         conflict = self.conflict_checker.check(search_input, understood)
         if conflict.retry_required:
             return self.response_builder.build(conflict, [])
@@ -101,6 +113,14 @@ def _compose_normalization_input(search_input: SearchQueryInput, understood):
         industry_terms=_prefer_requested_terms(search_input.requested_industry_terms, understood.industry_terms),
         experience=understood.experience,
         education=understood.education,
+    )
+
+
+def _to_conflict(result: InputGuardrailResult) -> ConflictCheckResult:
+    return ConflictCheckResult(
+        retry_required=bool(result.retry_required),
+        conflict_fields=list(result.conflict_fields),
+        conflict_reason=result.conflict_reason,
     )
 
 

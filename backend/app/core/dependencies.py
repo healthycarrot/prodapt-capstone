@@ -17,10 +17,12 @@ from ..services import (
     Fr04AgentWeights,
     FusionService,
     HardFilterCompilerService,
+    InputGuardrailService,
     KeywordSearchService,
     NormalizerThresholds,
     OpenAICrossEncoderModel,
     OrchestratorAgentService,
+    OutputAuditService,
     QueryBuilderService,
     QueryNormalizerService,
     QueryUnderstandingService,
@@ -75,6 +77,7 @@ def get_retrieval_pipeline_service() -> RetrievalPipelineService:
     cross_encoder_model = _build_cross_encoder_model()
 
     return RetrievalPipelineService(
+        input_guardrail=get_input_guardrail_service(),
         query_understanding=QueryUnderstandingService(llm_client=None),
         query_normalizer=QueryNormalizerService(
             lexical_repo=lexical_repo,
@@ -125,6 +128,29 @@ def get_retrieval_pipeline_service() -> RetrievalPipelineService:
 
 
 @lru_cache(maxsize=1)
+def get_input_guardrail_service() -> InputGuardrailService:
+    settings = get_settings()
+    return InputGuardrailService(
+        enabled=settings.input_guardrail_enabled,
+        min_query_length=settings.input_guardrail_min_query_length,
+        max_query_length=settings.input_guardrail_max_query_length,
+        require_skill_or_occupation=settings.input_guardrail_require_skill_or_occupation,
+        prohibited_terms_csv=settings.input_guardrail_prohibited_terms_csv,
+    )
+
+
+@lru_cache(maxsize=1)
+def get_output_audit_service() -> OutputAuditService:
+    settings = get_settings()
+    return OutputAuditService(
+        enabled=settings.output_audit_enabled,
+        safe_summary_template=settings.output_audit_safe_summary_template,
+        safe_reason_template=settings.output_audit_safe_reason_template,
+        prohibited_terms_csv=settings.output_audit_prohibited_terms_csv,
+    )
+
+
+@lru_cache(maxsize=1)
 def get_search_orchestration_service() -> SearchOrchestrationService:
     settings = get_settings()
     retrieval_pipeline = get_retrieval_pipeline_service()
@@ -156,6 +182,8 @@ def get_search_orchestration_service() -> SearchOrchestrationService:
         candidate_profile_repo=mongo_repo,
         orchestrator=orchestrator,
         aggregator=aggregator,
+        output_audit=get_output_audit_service(),
+        audit_log_repo=mongo_repo,
         candidate_top_n=settings.search_agent_candidate_top_n,
     )
 

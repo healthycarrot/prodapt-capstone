@@ -141,6 +141,21 @@ class RetrieveApiTests(unittest.TestCase):
         self.assertIn("invalid ESCO labels", detail)
         self.assertIn("skill_terms=['invalid-skill']", detail)
 
+    def test_retrieve_accepts_request_without_skill_or_occupation_terms(self) -> None:
+        payload = {
+            "query_text": "software engineer frontend",
+            "limit": 10,
+        }
+
+        response = self.client.post("/retrieve", json=payload)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(self.stub_pipeline.calls), 1)
+        search_input, result_limit = self.stub_pipeline.calls[0]
+        self.assertEqual(result_limit, 10)
+        self.assertEqual(search_input.requested_skill_terms, [])
+        self.assertEqual(search_input.requested_occupation_terms, [])
+
 
 if __name__ == "__main__":
     unittest.main()

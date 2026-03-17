@@ -6,8 +6,7 @@
 ## 1. 最小リクエスト
 ```json
 {
-  "query_text": "backend engineer with API development experience",
-  "occupation_terms": ["backend engineer"]
+  "query_text": "backend engineer with API development experience"
 }
 ```
 
@@ -99,7 +98,7 @@
 ## 補足
 - `limit` の許容範囲は `1..50`。
 - `query_text` は入力ガードレールで長さチェックされ、デフォルトは `20..2000` 文字（違反時は `HTTP 200 + retry_required=true`）。
-- 入力ガードレールでは、`skill_terms` または `occupation_terms` の明示入力（または query-understanding 抽出結果）が必要。
+- `skill_terms` と `occupation_terms` は任意。指定した場合は explicit filter として優先され、未指定でも `query_text` だけで検索できる。
 - `skill_terms` / `occupation_terms` / `industry_terms` は ESCO の preferred label または alt label を指定する（未登録語は `422`）。
 - `education rank` は `0..5`（0: unknown, 1: secondary, 2: associate/diploma/certificate, 3: bachelor, 4: master, 5: doctorate）。
 - エージェント実行込みの結果確認は `/search`、FR-01..03 のみ確認したい場合は `/retrieve` を使用。

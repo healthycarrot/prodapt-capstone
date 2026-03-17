@@ -25,10 +25,19 @@ class RetrieveResultItem(BaseModel):
     final_score: float
 
 
+class GuardrailWarning(BaseModel):
+    code: str
+    message: str
+    severity: str = "warning"
+    candidate_id: str | None = None
+    field: str | None = None
+
+
 class RetrieveResponse(BaseModel):
     retry_required: bool
     conflict_fields: list[str]
     conflict_reason: str
+    warnings: list[GuardrailWarning] = Field(default_factory=list)
     results: list[RetrieveResultItem] = Field(default_factory=list)
 
 
@@ -55,11 +64,12 @@ class SearchResultItem(BaseModel):
     major_gaps: list[str] = Field(default_factory=list)
     agent_scores: dict[str, AgentScoreCard] = Field(default_factory=dict)
     agent_errors: list[str] = Field(default_factory=list)
+    warnings: list[GuardrailWarning] = Field(default_factory=list)
 
 
 class SearchResponse(BaseModel):
     retry_required: bool
     conflict_fields: list[str]
     conflict_reason: str
+    warnings: list[GuardrailWarning] = Field(default_factory=list)
     results: list[SearchResultItem] = Field(default_factory=list)
-

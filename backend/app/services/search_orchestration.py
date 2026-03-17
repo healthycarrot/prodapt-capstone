@@ -4,8 +4,9 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Protocol, Sequence
+from uuid import uuid4
 
-from ..domain import SearchQueryInput
+from ..domain import OutputAuditResult, SearchQueryInput
 from .agent_scoring import (
     AgentScoreAggregatorService,
     CandidateProfile,
@@ -13,6 +14,7 @@ from .agent_scoring import (
     OrchestratorAgentService,
     QueryAnalysisOutput,
 )
+from .output_audit import GuardrailAuditLogRepo, OutputAuditService
 from .retrieval_pipeline import RetrievalPipelineService
 
 
@@ -39,6 +41,7 @@ class SearchOrchestrationResultItem:
     major_gaps: list[str] = field(default_factory=list)
     agent_scores: dict[str, dict[str, object]] = field(default_factory=dict)
     agent_errors: list[str] = field(default_factory=list)
+    warnings: list[dict[str, object]] = field(default_factory=list)
 
 
 @dataclass(slots=True)
@@ -46,6 +49,7 @@ class SearchOrchestrationOutput:
     retry_required: bool
     conflict_fields: list[str]
     conflict_reason: str
+    warnings: list[dict[str, object]] = field(default_factory=list)
     results: list[SearchOrchestrationResultItem] = field(default_factory=list)
     query_analysis: QueryAnalysisOutput = field(default_factory=QueryAnalysisOutput)
 
@@ -56,6 +60,8 @@ class SearchOrchestrationService:
     candidate_profile_repo: CandidateProfileRepo
     orchestrator: OrchestratorAgentService
     aggregator: AgentScoreAggregatorService
+    output_audit: OutputAuditService
+    audit_log_repo: GuardrailAuditLogRepo | None = None
     candidate_top_n: int = 20
 
     def run(self, search_input: SearchQueryInput, result_limit: int | None = None) -> SearchOrchestrationOutput:
@@ -93,10 +99,35 @@ class SearchOrchestrationService:
             orchestrator_output=orchestrator_output,
         )
         result_rows = [_map_integrated_row(row) for row in integrated[:limit]]
+        request_id = uuid4().hex
+        audit_result = self.output_audit.audit(
+            request_id=request_id,
+            candidate_rows=[_to_audit_row(item) for item in result_rows],
+        )
+        _apply_output_audit(result_rows, audit_result)
+        extra_global_warnings: list[dict[str, object]] = []
+        if audit_result.logs and self.audit_log_repo is not None:
+            try:
+                self.audit_log_repo.insert_guardrail_audit_logs(
+                    rows=[_log_to_dict(item) for item in audit_result.logs]
+                )
+            except Exception as exc:
+                extra_global_warnings.append(
+                    {
+                        "code": "output_audit_log_write_failed",
+                        "message": "Audit log persistence failed.",
+                        "severity": "warning",
+                        "candidate_id": None,
+                        "field": "audit_logs",
+                        "detail": str(exc),
+                    }
+                )
         return SearchOrchestrationOutput(
             retry_required=False,
             conflict_fields=list(retrieval_output.conflict_fields),
             conflict_reason=retrieval_output.conflict_reason,
+            warnings=[_warning_to_dict(item) for item in audit_result.warnings if item.candidate_id is None]
+            + extra_global_warnings,
             results=result_rows,
             query_analysis=orchestrator_output.query_analysis,
         )
@@ -130,6 +161,87 @@ def _map_integrated_row(row: IntegratedSearchCandidate) -> SearchOrchestrationRe
         agent_scores=agent_scores,
         agent_errors=list(row.aggregated.agent_errors),
     )
+
+
+def _to_audit_row(row: SearchOrchestrationResultItem) -> dict[str, Any]:
+    return {
+        "candidate_id": row.candidate_id,
+        "recommendation_summary": row.recommendation_summary,
+        "agent_scores": row.agent_scores,
+    }
+
+
+def _warning_to_dict(item) -> dict[str, object]:
+    if isinstance(item, dict):
+        return dict(item)
+    return {
+        "code": item.code,
+        "message": item.message,
+        "severity": item.severity,
+        "candidate_id": item.candidate_id,
+        "field": item.field,
+    }
+
+
+def _log_to_dict(item) -> dict[str, object]:
+    return {
+        "request_id": item.request_id,
+        "candidate_id": item.candidate_id,
+        "rule_id": item.rule_id,
+        "detected_text_hash": item.detected_text_hash,
+        "action": item.action,
+        "timestamp": item.timestamp_iso,
+        "metadata": dict(item.metadata),
+    }
+
+
+def _apply_output_audit(rows: list[SearchOrchestrationResultItem], audit_result: OutputAuditResult) -> None:
+    row_map = {row.candidate_id: row for row in rows}
+    for target in audit_result.sanitize_targets:
+        row = row_map.get(target.candidate_id)
+        if row is None:
+            continue
+        if target.field == "recommendation_summary":
+            row.recommendation_summary = target.replacement_text
+            continue
+        if target.field.startswith("agent_scores.") and target.field.endswith(".reason"):
+            agent_name = target.field[len("agent_scores.") : -len(".reason")]
+            payload = row.agent_scores.get(agent_name)
+            if isinstance(payload, dict):
+                payload["reason"] = target.replacement_text
+
+    fallback_ids = set(audit_result.ranking_fallback_candidate_ids)
+    for candidate_id in fallback_ids:
+        row = row_map.get(candidate_id)
+        if row is None:
+            continue
+        row.fr04_overall_score = 0.0
+        row.final_score = row.retrieval_final_score
+        if "output_audit_retrieval_fallback_applied" not in row.agent_errors:
+            row.agent_errors.append("output_audit_retrieval_fallback_applied")
+
+    warnings_by_candidate: dict[str, list[dict[str, object]]] = {}
+    for warning in audit_result.warnings:
+        if warning.candidate_id is None:
+            continue
+        warnings_by_candidate.setdefault(warning.candidate_id, []).append(_warning_to_dict(warning))
+    for row in rows:
+        row.warnings = warnings_by_candidate.get(row.candidate_id, [])
+
+    if fallback_ids:
+        rows.sort(
+            key=lambda item: (
+                -item.final_score,
+                -item.retrieval_final_score,
+                -item.cross_encoder_score,
+                -item.fusion_score,
+                -item.vector_score,
+                -item.keyword_score,
+                item.candidate_id,
+            )
+        )
+        for index, row in enumerate(rows, start=1):
+            row.rank = index
 
 
 def _resolve_limit(limit: int | None, *, default_limit: int, max_limit: int) -> int:

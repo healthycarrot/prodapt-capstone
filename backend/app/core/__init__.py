@@ -31,6 +31,18 @@ def get_retrieval_pipeline_service():
     return _fn()
 
 
+def get_input_guardrail_service():
+    from .dependencies import get_input_guardrail_service as _fn
+
+    return _fn()
+
+
+def get_output_audit_service():
+    from .dependencies import get_output_audit_service as _fn
+
+    return _fn()
+
+
 def get_search_orchestration_service():
     from .dependencies import get_search_orchestration_service as _fn
 
@@ -44,5 +56,7 @@ __all__ = [
     "get_esco_lexical_repository",
     "get_esco_embedding_repository",
     "get_retrieval_pipeline_service",
+    "get_input_guardrail_service",
+    "get_output_audit_service",
     "get_search_orchestration_service",
 ]

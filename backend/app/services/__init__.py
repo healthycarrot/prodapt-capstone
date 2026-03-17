@@ -16,8 +16,10 @@ from .conflict_checker import ConflictCheckerService
 from .cross_encoder import CandidateTextRepo, CrossEncoderModel, CrossEncoderService
 from .fusion import FusionService, FusionStrategy
 from .hard_filter_compiler import HardFilterCompilerService
+from .input_guardrail import InputGuardrailService
 from .keyword_search import KeywordRepoHit, KeywordSearchRepo, KeywordSearchService
 from .openai_cross_encoder import OpenAICrossEncoderModel
+from .output_audit import GuardrailAuditLogRepo, OutputAuditService
 from .query_builder import QueryBuilderService, QueryRephraser
 from .query_normalizer import (
     EscoEmbeddingRepo,
@@ -53,11 +55,14 @@ __all__ = [
     "FusionStrategy",
     "HardFilterCompilerService",
     "IntegratedSearchCandidate",
+    "InputGuardrailService",
+    "GuardrailAuditLogRepo",
     "KeywordRepoHit",
     "KeywordSearchRepo",
     "KeywordSearchService",
     "NormalizerThresholds",
     "OpenAICrossEncoderModel",
+    "OutputAuditService",
     "OrchestratorAgentService",
     "OrchestratorOutput",
     "QueryBuilderService",

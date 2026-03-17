@@ -179,6 +179,21 @@ class SearchApiTests(unittest.TestCase):
         self.assertIn("invalid ESCO labels", detail)
         self.assertIn("skill_terms=['not-an-esco-skill']", detail)
 
+    def test_search_accepts_request_without_skill_or_occupation_terms(self) -> None:
+        payload = {
+            "query_text": "software engineer frontend",
+            "limit": 10,
+        }
+
+        response = self.client.post("/search", json=payload)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(self.stub_service.calls), 1)
+        search_input, result_limit = self.stub_service.calls[0]
+        self.assertEqual(result_limit, 10)
+        self.assertEqual(search_input.requested_skill_terms, [])
+        self.assertEqual(search_input.requested_occupation_terms, [])
+
 
 if __name__ == "__main__":
     unittest.main()
