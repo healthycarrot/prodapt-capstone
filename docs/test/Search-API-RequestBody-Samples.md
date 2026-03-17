@@ -14,9 +14,9 @@
 ```json
 {
   "query_text": "backend engineer with Python and FastAPI",
-  "skill_terms": ["Python", "FastAPI"],
-  "occupation_terms": ["backend developer"],
-  "industry_terms": ["information technology"],
+  "skill_terms": ["Python", "SQL"],
+  "occupation_terms": ["software developer"],
+  "industry_terms": ["Information and communications technology professionals"],
   "experience_min_months": 36,
   "education_min_rank": 3,
   "locations": ["Tokyo", "Yokohama"],
@@ -83,9 +83,9 @@
 ```json
 {
   "query_text": "frontend engineer with React and TypeScript",
-  "skill_terms": ["React", "TypeScript", "CSS"],
-  "occupation_terms": ["frontend developer", "web developer"],
-  "industry_terms": ["software", "e-commerce"],
+  "skill_terms": ["JavaScript", "TypeScript", "CSS"],
+  "occupation_terms": ["web developer"],
+  "industry_terms": ["Information and communications technology professionals"],
   "experience_min_months": 24,
   "experience_max_months": 120,
   "education_min_rank": 2,

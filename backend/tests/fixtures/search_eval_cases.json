@@ -48,13 +48,13 @@
     "name": "frontend_react_typescript",
     "request": {
       "query_text": "frontend developer with React and TypeScript for modern web applications",
-      "skill_terms": ["React", "TypeScript", "CSS"],
-      "occupation_terms": ["frontend developer", "web developer"],
+      "skill_terms": ["JavaScript", "TypeScript", "CSS"],
+      "occupation_terms": ["web developer"],
       "limit": 5
     },
-    "expected_output": "Relevant candidates should have frontend development experience, React and TypeScript skills, and evidence of building modern user-facing web applications.",
-    "required_skills": ["React", "TypeScript"],
-    "preferred_skills": ["CSS", "component-based UI"],
+    "expected_output": "Relevant candidates should have frontend or web development experience, JavaScript and TypeScript skills, and evidence of building modern user-facing web applications.",
+    "required_skills": ["JavaScript", "TypeScript"],
+    "preferred_skills": ["CSS", "React", "component-based UI"],
     "experience_expectations": ["frontend development", "interactive web applications"],
     "top_k": 5,
     "top_search_results": 2
