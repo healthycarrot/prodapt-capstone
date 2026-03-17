@@ -19,48 +19,21 @@
   TextField,
   Typography,
 } from '@mui/material'
-import { useMemo, useState } from 'react'
-import { getCandidateDetail, getCandidateResumeRaw, postSearch } from './api'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { fetchEscoSuggestions, getCandidateDetail, getCandidateResumeRaw, postSearch } from './api'
 import type {
   CandidateDetailPayload,
   CandidateResumeRawPayload,
+  EscoDomain,
+  EscoOption,
   SearchRequestPayload,
   SearchResponsePayload,
   SearchResultItem,
 } from './types'
 
-const SKILL_OPTIONS = [
-  'Python',
-  'FastAPI',
-  'React',
-  'TypeScript',
-  'Java',
-  'Node.js',
-  'SQL',
-  'AWS',
-  'Docker',
-  'Kubernetes',
-]
-
-const OCCUPATION_OPTIONS = [
-  'Backend Developer',
-  'Frontend Developer',
-  'Full Stack Engineer',
-  'Data Engineer',
-  'ML Engineer',
-  'DevOps Engineer',
-]
-
-const INDUSTRY_OPTIONS = [
-  'Information Technology',
-  'Finance',
-  'Healthcare',
-  'Manufacturing',
-  'Retail',
-  'Telecommunications',
-]
-
 const LOCATION_OPTIONS = ['Remote', 'Tokyo', 'Yokohama', 'Osaka', 'Kyoto', 'Singapore', 'Bangalore']
+const ESCO_MIN_QUERY_LENGTH = 2
+const ESCO_DEBOUNCE_MS = 300
 
 const EDUCATION_RANK_OPTIONS = [
   { value: '', label: 'Not specified' },
@@ -74,9 +47,9 @@ const EDUCATION_RANK_OPTIONS = [
 
 type FormState = {
   queryText: string
-  skillTerms: string[]
-  occupationTerms: string[]
-  industryTerms: string[]
+  skillTerms: EscoOption[]
+  occupationTerms: EscoOption[]
+  industryTerms: EscoOption[]
   experienceMinMonths: string
   experienceMaxMonths: string
   educationMinRank: string
@@ -109,6 +82,21 @@ function normalizeTerms(values: string[]): string[] {
   return [...dedup]
 }
 
+function normalizeEscoOptions(values: EscoOption[]): EscoOption[] {
+  const dedup = new Map<string, EscoOption>()
+  for (const value of values) {
+    const escoId = value.esco_id.trim()
+    const label = value.label.trim()
+    if (!escoId || !label) {
+      continue
+    }
+    if (!dedup.has(escoId)) {
+      dedup.set(escoId, { esco_id: escoId, label })
+    }
+  }
+  return [...dedup.values()]
+}
+
 function parseOptionalNumber(value: string): number | null {
   if (!value.trim()) {
     return null
@@ -123,15 +111,89 @@ function parseOptionalNumber(value: string): number | null {
 function buildPayload(form: FormState): SearchRequestPayload {
   return {
     query_text: form.queryText.trim(),
-    skill_terms: normalizeTerms(form.skillTerms),
-    occupation_terms: normalizeTerms(form.occupationTerms),
-    industry_terms: normalizeTerms(form.industryTerms),
+    skill_terms: normalizeTerms(form.skillTerms.map((item) => item.label)),
+    occupation_terms: normalizeTerms(form.occupationTerms.map((item) => item.label)),
+    industry_terms: normalizeTerms(form.industryTerms.map((item) => item.label)),
     experience_min_months: parseOptionalNumber(form.experienceMinMonths),
     experience_max_months: parseOptionalNumber(form.experienceMaxMonths),
     education_min_rank: parseOptionalNumber(form.educationMinRank),
     education_max_rank: parseOptionalNumber(form.educationMaxRank),
     locations: normalizeTerms(form.locations),
     limit: form.limit,
+  }
+}
+
+type UseEscoSuggestResult = {
+  options: EscoOption[]
+  loading: boolean
+  inputValue: string
+  setInputValue: (value: string) => void
+  clear: () => void
+}
+
+function useEscoSuggest(domain: EscoDomain): UseEscoSuggestResult {
+  const [options, setOptions] = useState<EscoOption[]>([])
+  const [loading, setLoading] = useState(false)
+  const [inputValue, setInputValue] = useState('')
+  const requestIdRef = useRef(0)
+
+  const updateInputValue = (value: string) => {
+    setInputValue(value)
+    if (value.trim().length >= ESCO_MIN_QUERY_LENGTH) {
+      return
+    }
+    requestIdRef.current += 1
+    setLoading(false)
+    setOptions([])
+  }
+
+  useEffect(() => {
+    const query = inputValue.trim()
+    if (query.length < ESCO_MIN_QUERY_LENGTH) {
+      return
+    }
+
+    const requestId = requestIdRef.current + 1
+    requestIdRef.current = requestId
+    const timeoutId = window.setTimeout(() => {
+      setLoading(true)
+      fetchEscoSuggestions(domain, query)
+        .then((results) => {
+          if (requestIdRef.current !== requestId) {
+            return
+          }
+          setOptions(results)
+        })
+        .catch(() => {
+          if (requestIdRef.current !== requestId) {
+            return
+          }
+          setOptions([])
+        })
+        .finally(() => {
+          if (requestIdRef.current !== requestId) {
+            return
+          }
+          setLoading(false)
+        })
+    }, ESCO_DEBOUNCE_MS)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [domain, inputValue])
+
+  return {
+    options,
+    loading,
+    inputValue,
+    setInputValue: updateInputValue,
+    clear: () => {
+      requestIdRef.current += 1
+      setInputValue('')
+      setOptions([])
+      setLoading(false)
+    },
   }
 }
 
@@ -614,6 +676,9 @@ function App() {
   const [candidateResumeRaw, setCandidateResumeRaw] = useState<CandidateResumeRawPayload | null>(null)
   const [detailLoading, setDetailLoading] = useState(false)
   const [detailError, setDetailError] = useState('')
+  const skillSuggest = useEscoSuggest('skill')
+  const occupationSuggest = useEscoSuggest('occupation')
+  const industrySuggest = useEscoSuggest('industry')
 
   const validationError = useMemo(() => {
     const query = form.queryText.trim()
@@ -719,36 +784,85 @@ function App() {
 
               <Autocomplete
                 multiple
-                freeSolo
                 disablePortal
-                options={SKILL_OPTIONS}
+                filterOptions={(options) => options}
+                options={skillSuggest.options}
                 value={form.skillTerms}
-                onChange={(_, next) => setForm((current) => ({ ...current, skillTerms: normalizeTerms(next) }))}
+                inputValue={skillSuggest.inputValue}
+                loading={skillSuggest.loading}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.esco_id === value.esco_id}
+                onInputChange={(_, next) => skillSuggest.setInputValue(next)}
+                onChange={(_, next) => setForm((current) => ({ ...current, skillTerms: normalizeEscoOptions(next) }))}
+                noOptionsText={
+                  skillSuggest.inputValue.trim().length < ESCO_MIN_QUERY_LENGTH
+                    ? 'Type at least 2 characters'
+                    : 'No ESCO skill candidates'
+                }
                 renderInput={(params) => (
-                  <TextField {...params} label="Skill Terms" placeholder="Add skill and press Enter" fullWidth />
+                  <TextField
+                    {...params}
+                    label="Skill Terms"
+                    placeholder="Type to search ESCO skills"
+                    fullWidth
+                  />
                 )}
               />
 
               <Autocomplete
                 multiple
-                freeSolo
                 disablePortal
-                options={OCCUPATION_OPTIONS}
+                filterOptions={(options) => options}
+                options={occupationSuggest.options}
                 value={form.occupationTerms}
-                onChange={(_, next) => setForm((current) => ({ ...current, occupationTerms: normalizeTerms(next) }))}
+                inputValue={occupationSuggest.inputValue}
+                loading={occupationSuggest.loading}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.esco_id === value.esco_id}
+                onInputChange={(_, next) => occupationSuggest.setInputValue(next)}
+                onChange={(_, next) =>
+                  setForm((current) => ({ ...current, occupationTerms: normalizeEscoOptions(next) }))
+                }
+                noOptionsText={
+                  occupationSuggest.inputValue.trim().length < ESCO_MIN_QUERY_LENGTH
+                    ? 'Type at least 2 characters'
+                    : 'No ESCO occupation candidates'
+                }
                 renderInput={(params) => (
-                  <TextField {...params} label="Occupation Terms" placeholder="Add occupation term" fullWidth />
+                  <TextField
+                    {...params}
+                    label="Occupation Terms"
+                    placeholder="Type to search ESCO occupations"
+                    fullWidth
+                  />
                 )}
               />
 
               <Autocomplete
                 multiple
-                freeSolo
                 disablePortal
-                options={INDUSTRY_OPTIONS}
+                filterOptions={(options) => options}
+                options={industrySuggest.options}
                 value={form.industryTerms}
-                onChange={(_, next) => setForm((current) => ({ ...current, industryTerms: normalizeTerms(next) }))}
-                renderInput={(params) => <TextField {...params} label="Industry Terms" placeholder="Add industry" fullWidth />}
+                inputValue={industrySuggest.inputValue}
+                loading={industrySuggest.loading}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.esco_id === value.esco_id}
+                onInputChange={(_, next) => industrySuggest.setInputValue(next)}
+                onChange={(_, next) => setForm((current) => ({ ...current, industryTerms: normalizeEscoOptions(next) }))}
+                noOptionsText={
+                  industrySuggest.inputValue.trim().length < ESCO_MIN_QUERY_LENGTH
+                    ? 'Type at least 2 characters'
+                    : 'No ESCO industry candidates'
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Industry Terms"
+                    placeholder="Type to search ESCO industries"
+                    fullWidth
+                  />
+                )}
               />
 
               <Autocomplete
@@ -859,6 +973,9 @@ function App() {
                     setCandidateResumeRaw(null)
                     setDetailLoading(false)
                     setDetailError('')
+                    skillSuggest.clear()
+                    occupationSuggest.clear()
+                    industrySuggest.clear()
                   }}
                   disabled={loading}
                   sx={{ flex: 1 }}

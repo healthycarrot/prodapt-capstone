@@ -1,11 +1,16 @@
 import type {
   CandidateDetailPayload,
   CandidateResumeRawPayload,
+  EscoDomain,
+  EscoOption,
+  EscoSuggestResponsePayload,
   SearchRequestPayload,
   SearchResponsePayload,
 } from './types'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api'
+const ESCO_SUGGEST_CACHE_TTL_MS = 5 * 60 * 1000
+const escoSuggestCache = new Map<string, { expiresAt: number; results: EscoOption[] }>()
 
 async function parseErrorMessage(response: Response): Promise<string> {
   let message = `Request failed with status ${response.status}`
@@ -46,3 +51,29 @@ export async function getCandidateResumeRaw(candidateId: string): Promise<Candid
   return requestJson<CandidateResumeRawPayload>(`/candidates/${encodeURIComponent(candidateId)}/resume`)
 }
 
+export async function fetchEscoSuggestions(domain: EscoDomain, query: string, limit = 10): Promise<EscoOption[]> {
+  const trimmed = query.trim()
+  if (trimmed.length < 2) {
+    return []
+  }
+
+  const normalizedLimit = Math.max(1, Math.min(limit, 20))
+  const cacheKey = `${domain}::${trimmed.toLowerCase()}::${normalizedLimit}`
+  const now = Date.now()
+  const cached = escoSuggestCache.get(cacheKey)
+  if (cached && cached.expiresAt > now) {
+    return cached.results
+  }
+
+  const params = new URLSearchParams({
+    domain,
+    q: trimmed,
+    limit: String(normalizedLimit),
+  })
+  const response = await requestJson<EscoSuggestResponsePayload>(`/esco/suggest?${params.toString()}`)
+  escoSuggestCache.set(cacheKey, {
+    expiresAt: now + ESCO_SUGGEST_CACHE_TTL_MS,
+    results: response.results,
+  })
+  return response.results
+}

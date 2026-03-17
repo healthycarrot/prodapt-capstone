@@ -72,6 +72,57 @@ class EscoLexicalRepoTests(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertAlmostEqual(result[0].score, 0.87, places=6)
 
+    def test_suggest_prioritizes_exact_then_alt_then_partial(self) -> None:
+        repo = lexical_repo.EscoLexicalMongoRepository()
+        repo._index_cache["occupation"] = lexical_repo._build_index(
+            [
+                {
+                    "esco_id": "occupation-1",
+                    "preferred_label": "data engineer",
+                    "alt_labels": ["etl engineer"],
+                },
+                {
+                    "esco_id": "occupation-2",
+                    "preferred_label": "analytics engineer",
+                    "alt_labels": ["data engineer"],
+                },
+                {
+                    "esco_id": "occupation-3",
+                    "preferred_label": "senior data engineer",
+                },
+            ]
+        )
+
+        result = repo.suggest("occupation", "data engineer", limit=10)
+        ids = [item.esco_id for item in result]
+        self.assertEqual(ids[0], "occupation-1")
+        self.assertEqual(ids[1], "occupation-2")
+        self.assertIn("occupation-3", ids)
+
+    def test_suggest_respects_limit_and_deduplicates(self) -> None:
+        repo = lexical_repo.EscoLexicalMongoRepository()
+        repo._index_cache["skill"] = lexical_repo._build_index(
+            [
+                {
+                    "esco_id": "skill-1",
+                    "preferred_label": "python",
+                    "alt_labels": ["python", "py"],
+                },
+                {
+                    "esco_id": "skill-2",
+                    "preferred_label": "python programming",
+                },
+                {
+                    "esco_id": "skill-3",
+                    "preferred_label": "python scripting",
+                },
+            ]
+        )
+
+        result = repo.suggest("skill", "python", limit=2)
+        self.assertEqual(len(result), 2)
+        self.assertEqual(len({item.esco_id for item in result}), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

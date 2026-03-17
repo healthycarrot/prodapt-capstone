@@ -4,9 +4,10 @@ import unittest
 
 from fastapi.testclient import TestClient
 
-from app.core import get_retrieval_pipeline_service
+from app.core import get_esco_lexical_repository, get_retrieval_pipeline_service
 from app.domain import RerankHit, RetrievalPipelineOutput, SearchQueryInput
 from app.main import app
+from app.services.query_normalizer import RepoMatch
 
 
 class _StubPipeline:
@@ -32,10 +33,33 @@ class _StubPipeline:
         )
 
 
+class _StubEscoLexicalRepository:
+    def __init__(self) -> None:
+        self._exact: dict[str, set[str]] = {
+            "skill": {"string"},
+            "occupation": {"string"},
+            "industry": {"string"},
+        }
+
+    def find_exact(self, domain: str, term: str, limit: int = 5) -> list[RepoMatch]:
+        normalized = term.strip().lower()
+        if normalized and normalized in self._exact.get(domain, set()):
+            return [RepoMatch(esco_id=f"{domain}-exact", label=term.strip(), score=0.98)]
+        return []
+
+    def find_alt(self, domain: str, term: str, limit: int = 5) -> list[RepoMatch]:
+        return []
+
+    def find_fuzzy(self, domain: str, term: str, limit: int = 5) -> list[RepoMatch]:
+        return []
+
+
 class RetrieveApiTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stub_pipeline = _StubPipeline()
+        self.stub_lexical_repo = _StubEscoLexicalRepository()
         app.dependency_overrides[get_retrieval_pipeline_service] = lambda: self.stub_pipeline
+        app.dependency_overrides[get_esco_lexical_repository] = lambda: self.stub_lexical_repo
         self.client = TestClient(app)
 
     def tearDown(self) -> None:
@@ -104,6 +128,18 @@ class RetrieveApiTests(unittest.TestCase):
         response = self.client.post("/retrieve", json=payload)
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["detail"], "education_min_rank must be <= education_max_rank")
+
+    def test_retrieve_returns_422_when_filter_label_is_not_in_esco(self) -> None:
+        payload = {
+            "query_text": "string",
+            "skill_terms": ["invalid-skill"],
+            "limit": 20,
+        }
+        response = self.client.post("/retrieve", json=payload)
+        self.assertEqual(response.status_code, 422)
+        detail = response.json()["detail"]
+        self.assertIn("invalid ESCO labels", detail)
+        self.assertIn("skill_terms=['invalid-skill']", detail)
 
 
 if __name__ == "__main__":

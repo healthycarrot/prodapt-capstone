@@ -65,6 +65,62 @@ class EscoLexicalMongoRepository(EscoLexicalRepo):
             min_score=self.fuzzy_min_score,
         )
 
+    def has_exact_or_alt_label(self, domain: EscoDomain, term: str) -> bool:
+        key = _normalize(term)
+        if not key:
+            return False
+        index = self._get_index(domain)
+        return key in index.exact_map or key in index.alt_map
+
+    def suggest(self, domain: EscoDomain, query: str, limit: int = 10) -> Sequence[RepoMatch]:
+        if limit <= 0:
+            return []
+        key = _normalize(query)
+        if not key:
+            return []
+        index = self._get_index(domain)
+
+        ranked: dict[str, tuple[tuple[int, float, str], RepoMatch]] = {}
+
+        def _register(match: RepoMatch, *, priority: int, score: float | None = None) -> None:
+            value = _clamp01(score if score is not None else match.score)
+            rank = (priority, -value, match.label.lower())
+            current = ranked.get(match.esco_id)
+            candidate = RepoMatch(
+                esco_id=match.esco_id,
+                label=match.label,
+                score=value,
+            )
+            if current is None or rank < current[0]:
+                ranked[match.esco_id] = (rank, candidate)
+
+        for match in index.exact_map.get(key, []):
+            _register(match, priority=0)
+        for match in index.alt_map.get(key, []):
+            _register(match, priority=1)
+
+        def _register_partial(mapping: Mapping[str, list[RepoMatch]]) -> None:
+            for normalized, matches in mapping.items():
+                if normalized == key:
+                    continue
+                if normalized.startswith(key):
+                    for match in matches:
+                        _register(match, priority=2)
+                elif key in normalized:
+                    for match in matches:
+                        _register(match, priority=3)
+
+        _register_partial(index.exact_map)
+        _register_partial(index.alt_map)
+
+        if len(ranked) < limit:
+            fuzzy_limit = max(limit * 3, 10)
+            for match in self.find_fuzzy(domain, query, limit=fuzzy_limit):
+                _register(match, priority=4, score=match.score)
+
+        ordered = sorted(ranked.values(), key=lambda item: item[0])
+        return [item[1] for item in ordered[:limit]]
+
     def _get_index(self, domain: EscoDomain) -> _LexicalIndex:
         cached = self._index_cache.get(domain)
         if cached is not None:
@@ -240,6 +296,14 @@ def _dedupe_strings(values: Sequence[str]) -> list[str]:
         seen.add(key)
         out.append(value.strip())
     return out
+
+
+def _clamp01(score: float) -> float:
+    if score < 0.0:
+        return 0.0
+    if score > 1.0:
+        return 1.0
+    return score
 
 
 def _normalize(value: str) -> str:

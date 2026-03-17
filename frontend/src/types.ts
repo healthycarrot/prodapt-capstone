@@ -1,7 +1,20 @@
-﻿export type AgentScoreCard = {
+export type AgentScoreCard = {
   score: number
   breakdown: Record<string, number>
   reason: string
+}
+
+export type EscoDomain = 'skill' | 'occupation' | 'industry'
+
+export type EscoOption = {
+  esco_id: string
+  label: string
+}
+
+export type EscoSuggestResponsePayload = {
+  domain: EscoDomain
+  query: string
+  results: EscoOption[]
 }
 
 export type SearchRequestPayload = {

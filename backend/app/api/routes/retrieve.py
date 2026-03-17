@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 
-from ...core import get_retrieval_pipeline_service
+from ...core import get_esco_lexical_repository, get_retrieval_pipeline_service
+from ...repositories import EscoLexicalMongoRepository
 from ...services import RetrievalPipelineService
 from ..schemas import RetrieveResponse, RetrieveResultItem, SearchRequest
 from ._request_mapper import to_search_input, validate_search_request
@@ -14,8 +15,9 @@ router = APIRouter(tags=["search"])
 def retrieve_candidates(
     payload: SearchRequest,
     pipeline: RetrievalPipelineService = Depends(get_retrieval_pipeline_service),
+    lexical_repo: EscoLexicalMongoRepository = Depends(get_esco_lexical_repository),
 ) -> RetrieveResponse:
-    validate_search_request(payload)
+    validate_search_request(payload, lexical_repo=lexical_repo)
     search_input = to_search_input(payload)
     output = pipeline.run(search_input, result_limit=payload.limit)
     return RetrieveResponse(
@@ -34,4 +36,3 @@ def retrieve_candidates(
             for item in output.results
         ],
     )
-

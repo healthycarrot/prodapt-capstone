@@ -4,9 +4,10 @@ import unittest
 
 from fastapi.testclient import TestClient
 
-from app.core import get_search_orchestration_service
+from app.core import get_esco_lexical_repository, get_search_orchestration_service
 from app.domain import SearchQueryInput
 from app.main import app
+from app.services.query_normalizer import RepoMatch
 from app.services.search_orchestration import SearchOrchestrationOutput, SearchOrchestrationResultItem
 
 
@@ -53,10 +54,41 @@ class _StubSearchOrchestrationService:
         )
 
 
+class _StubEscoLexicalRepository:
+    def __init__(self) -> None:
+        self._exact: dict[str, set[str]] = {
+            "skill": {"string", "python", "fastapi"},
+            "occupation": {"string", "backend developer"},
+            "industry": {"string", "information technology"},
+        }
+        self._alt: dict[str, set[str]] = {
+            "skill": {"py"},
+            "occupation": {"backend engineer"},
+            "industry": {"it"},
+        }
+
+    def find_exact(self, domain: str, term: str, limit: int = 5) -> list[RepoMatch]:
+        normalized = term.strip().lower()
+        if normalized and normalized in self._exact.get(domain, set()):
+            return [RepoMatch(esco_id=f"{domain}-exact", label=term.strip(), score=0.98)]
+        return []
+
+    def find_alt(self, domain: str, term: str, limit: int = 5) -> list[RepoMatch]:
+        normalized = term.strip().lower()
+        if normalized and normalized in self._alt.get(domain, set()):
+            return [RepoMatch(esco_id=f"{domain}-alt", label=term.strip(), score=0.87)]
+        return []
+
+    def find_fuzzy(self, domain: str, term: str, limit: int = 5) -> list[RepoMatch]:
+        return []
+
+
 class SearchApiTests(unittest.TestCase):
     def setUp(self) -> None:
         self.stub_service = _StubSearchOrchestrationService()
+        self.stub_lexical_repo = _StubEscoLexicalRepository()
         app.dependency_overrides[get_search_orchestration_service] = lambda: self.stub_service
+        app.dependency_overrides[get_esco_lexical_repository] = lambda: self.stub_lexical_repo
         self.client = TestClient(app)
 
     def tearDown(self) -> None:
@@ -132,6 +164,20 @@ class SearchApiTests(unittest.TestCase):
         response = self.client.post("/search", json=payload)
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["detail"], "education_min_rank must be <= education_max_rank")
+
+    def test_search_returns_422_when_filter_label_is_not_in_esco(self) -> None:
+        payload = {
+            "query_text": "string",
+            "skill_terms": ["not-an-esco-skill"],
+            "occupation_terms": ["string"],
+            "industry_terms": ["string"],
+            "limit": 20,
+        }
+        response = self.client.post("/search", json=payload)
+        self.assertEqual(response.status_code, 422)
+        detail = response.json()["detail"]
+        self.assertIn("invalid ESCO labels", detail)
+        self.assertIn("skill_terms=['not-an-esco-skill']", detail)
 
 
 if __name__ == "__main__":
