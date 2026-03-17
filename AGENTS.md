@@ -6,6 +6,13 @@
 # Github issue rule
 - When you have to check issues, you must access the remote repository and check the issues on GitHub. You can use the GitHub API or any other method to access the issues. Make sure to check for any relevant issues that may be related to the task you are working on.
 
+## Issue Spec Management Rule
+- Treat GitHub Issues as the primary source of truth for requirements/spec changes.
+- Before starting implementation or docs updates, identify and read all related remote issues.
+- Maintain per-issue summaries in `docs/issues/issue-index.md` (single index file).
+- Consolidate key information from legacy files under `docs/issues/` into `docs/issues/issue-index.md`.
+- When issue scope/decision/status changes, update `docs/issues/issue-index.md` in the same task.
+
 ## GitHub CLI (`gh`)
 - `gh` is available via the executable path:
   - `C:\Program Files\GitHub CLI\gh.exe`

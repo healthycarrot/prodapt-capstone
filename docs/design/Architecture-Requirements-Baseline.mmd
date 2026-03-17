@@ -2,7 +2,7 @@ flowchart LR
   UI["React"]
 
   subgraph API["FastAPI"]
-    direction TB
+    direction TBskill_terms / occupation_terms / industry_terms / experience / educationskill_terms / occupation_terms / industry_terms / experience / education
 
     subgraph QR["Query / Retrieval"]
       direction LR
@@ -40,7 +40,7 @@ flowchart LR
     CSC[(candidate_search_collection)]
     OCC[(occupation_collection)]
     SKL[(skill_collection)]
-    MDF["Fields<br/>- skill_vector<br/>- occupation_vector<br/>Metadata<br/>- industry_esco_id<br/>- occupation_esco_ids_json<br/>- skill_esco_ids_json<br/>- experience_months_total<br/>- highest_education_level_rank<br/>- current_location"]
+    MDF["Fields<br/>- skill_vector<br/>- occupation_vector<br/>Metadata<br/>- industry_esco_id<br/>- industry_esco_ids_json<br/>- occupation_esco_ids_json<br/>- skill_esco_ids_json<br/>- experience_months_total<br/>- highest_education_level_rank<br/>- current_location"]
   end
 
   subgraph DP["Data pipeline"]

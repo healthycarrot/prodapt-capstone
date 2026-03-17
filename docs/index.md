@@ -3,7 +3,7 @@
 `docs/` 配下のドキュメント一覧と用途です。新規追加・移動時はこのファイルを更新してください。
 
 ## 運用ルール
-- ドキュメントは用途別フォルダに配置する（`overview/`, `design/`, `pipeline/`, `schema/`, `issues/`, `reports/`）。
+- ドキュメントは用途別フォルダに配置する（`overview/`, `design/`, `pipeline/`, `schema/`, `issues/`, `reports/`, `test/`）。
 - 実行結果・評価レポートは各カテゴリ直下に最新を置き、旧版は同カテゴリの `old/` に移動する。
 - `docs/` 直下に新規ドキュメントを増やさない（例外: `docs/index.md`）。
 
@@ -41,6 +41,7 @@
 ## issues
 | Path | 内容 |
 |---|---|
+| `docs/issues/issue-index.md` | GitHub Issue を仕様管理の一次情報源として運用するための統合サマリ。作業前確認・更新方針と主要 Issue の要点を管理。 |
 | `docs/issues/Issue11-12-Review.md` | Issue #11/#12 の readiness・整合性レビュー。 |
 | `docs/issues/Issue13-Plan-Review.md` | Issue #13 の計画見直しと評価方針。 |
 | `docs/issues/Issue13-GitHub-Issue-Body.md` | Issue #13 用の GitHub issue 本文案。 |
@@ -74,3 +75,8 @@
 |---|---|
 | `docs/reports/retrieval/Milvus-Retrieval-Samples.md` | Milvus 検索サンプル可視化（代表サンプル）。 |
 | `docs/reports/retrieval/Milvus-AB-Experience-Comparison.md` | A/B/B1/B2 系の Milvus 検索比較結果。 |
+
+## test
+| Path | 内容 |
+|---|---|
+| `docs/test/Search-API-Test-Patterns.md` | `/search` のハードフィルタ挙動と Vector 検索挙動を確認するためのリクエストパターンと期待値。 |

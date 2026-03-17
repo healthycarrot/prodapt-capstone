@@ -35,6 +35,7 @@ Reference docs:
 | `occupation_vector` | NOT NULL | `normalized_candidates.occupation_candidates[*]`, `source_1st_resumes.extracted_fields.occupation_candidates[*]`, `normalized_candidates.experiences[*]`, `source_1st_resumes.extracted_fields.name_title` | `computed` | 下記 Assembly Rule を参照 |
 | `category` | nullable | `normalized_candidates.category` | `as_is` | 既存 category guardrail / 互換フィルタ用 |
 | `industry_esco_id` | nullable | `normalized_candidates.occupation_candidates[*].hierarchy_json` | `computed` | primary occupation candidate の直近親 ESCO component |
+| `industry_esco_ids_json` | NOT NULL | `normalized_candidates.occupation_candidates[*].hierarchy_json` | `computed` | occupation candidates 全体の parent chain を primary優先 + rank順で統合（`isco` 親IDのみ、各候補は近い親 -> 遠い親、重複除去、取得不可時は `[]`） |
 | `occupation_esco_ids_json` | NOT NULL | `normalized_candidates.occupation_candidates[*].esco_id` | `computed` | rank 順で保持（候補なしは `[]`） |
 | `skill_esco_ids_json` | NOT NULL | `normalized_candidates.skill_candidates[*].esco_id` | `computed` | rank 順で保持（候補なしは `[]`） |
 | `experience_months_total` | nullable | `normalized_candidates.experiences[*].duration_months` | `computed` | null を除いて合計 |
@@ -105,8 +106,19 @@ Exclusion:
   - `normalized_candidates.occupation_candidates[*].hierarchy_json`
 - Rule:
   - `is_primary = true` の occupation candidate を first choice とする。
-  - その `hierarchy_json` のうち、対象 occupation の直近親 component の `id` を採用する。
+  - `industry_esco_ids_json` の先頭要素（直近親）を互換フィールドとして保持する。
   - 直近親が取得できない場合は null。
+
+### `industry_esco_ids_json`
+- Source:
+  - `normalized_candidates.occupation_candidates`
+  - `normalized_candidates.occupation_candidates[*].hierarchy_json`
+- Rule:
+  - `occupation_candidates` を `is_primary=true` 優先、その後 `rank` 順で処理する。
+  - 各 candidate の `hierarchy_json` から `id` を「近い親 -> 遠い親」で取り出す。
+  - `raw_esco_isco_groups` 相当の `isco` parent ID のみ採用する（`occupation` URI は除外）。
+  - 全 candidate 由来の `id` を重複除去して1配列に統合する。
+  - 取得できない場合は `null` ではなく空配列 `[]` を設定する。
 
 ### `occupation_esco_ids_json`
 - Source:
@@ -126,6 +138,7 @@ Exclusion:
 
 ## Publish Inclusion Rule
 - `occupation_esco_ids_json` と `skill_esco_ids_json` がどちらも空配列でも publish 対象から除外しない。
+- `industry_esco_ids_json` が空配列でも publish 対象から除外しない（`industry_esco_id` は `null` になりうる）。
 - hard filter 不一致時に除外される可能性はあるが、index publish 自体は実施する。
 
 ### `experience_months_total`
@@ -159,3 +172,4 @@ Exclusion:
 2. scalar metadata で filter
 3. `candidate_id` / `normalized_doc_id` で MongoDB の詳細を引く
 4. 後段 rerank / explanation を実行
+

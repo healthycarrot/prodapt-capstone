@@ -1,0 +1,29 @@
+{
+  "timestamp_utc": "2026-03-16T21:46:47.226210+00:00",
+  "db_name": "prodapt_capstone",
+  "collection": "normalized_candidates",
+  "search_text_version": "issue16_search_text_backfill_v1",
+  "args": {
+    "batch_size": 400,
+    "limit": 0,
+    "create_text_index": true,
+    "text_index_name": "idx_search_text_text"
+  },
+  "stats": {
+    "total_scanned": 2484,
+    "docs_updated": 0,
+    "docs_unchanged": 2484,
+    "docs_empty_text": 0,
+    "bulk_batches": 0,
+    "bulk_matched": 0,
+    "bulk_modified": 0
+  },
+  "index": {
+    "search_text_text_index_exists": true,
+    "index_name": "idx_search_text_text",
+    "index_created": false,
+    "conflicting_text_index": null,
+    "error": null
+  },
+  "duration_sec": 1.358
+}

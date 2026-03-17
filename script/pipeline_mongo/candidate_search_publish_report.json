@@ -1,0 +1,66 @@
+{
+  "generated_at_utc": "2026-03-16T19:32:32.248163+00:00",
+  "mongo_db": "prodapt_capstone",
+  "normalized_collection": "normalized_candidates",
+  "source_collection": "source_1st_resumes",
+  "snapshot_version": "snapshot_20260317_issue26_pr7",
+  "embedding_model": "text-embedding-3-small",
+  "embedding_version": "pr06_candidate_search_v1",
+  "batch_size": 64,
+  "dry_run": false,
+  "milvus": {
+    "uri_configured": true,
+    "db_name": "default",
+    "collection": "candidate_search_collection_v3",
+    "metric_type": "COSINE",
+    "index_type": "HNSW",
+    "index_m": 32,
+    "index_ef_construction": 200,
+    "search_ef": 128,
+    "overwrite_snapshot": true
+  },
+  "source_lookup": {
+    "source_docs": 2484,
+    "duplicate_source_keys": 0
+  },
+  "build_stats": {
+    "normalized_docs": 2484,
+    "status_counts": {
+      "success": 2381,
+      "partial": 101,
+      "failed": 2
+    },
+    "missing_source_docs": 0,
+    "empty_occupation_esco_ids_docs": 32,
+    "empty_skill_esco_ids_docs": 73,
+    "empty_both_esco_ids_docs": 2,
+    "empty_industry_esco_ids_docs": 32,
+    "missing_candidate_id_docs": 0,
+    "null_industry_esco_id_docs": 32,
+    "null_experience_months_total_docs": 210,
+    "unknown_education_rank_docs": 219
+  },
+  "counts": {
+    "records": 2484,
+    "missing_source_docs": 0,
+    "empty_occupation_esco_ids_docs": 32,
+    "empty_skill_esco_ids_docs": 73,
+    "empty_both_esco_ids_docs": 2,
+    "empty_industry_esco_ids_docs": 32,
+    "null_industry_esco_id_docs": 32,
+    "null_experience_months_total_docs": 210,
+    "unknown_education_rank_docs": 219
+  },
+  "preview": {
+    "first_skill_text": "skills: Adobe Photoshop; asset management; project management; human resources department processes; manage human resources; hire human resources; recruit personnel; personnel management; assess project resource needs; advise on personnel management; manage personnel agenda; develop employee retention programs raw_skills: Adobe Photoshop; Asset Management; Project Management; human resources department processes; manage human resources; hire human resources; recruit personnel; personnel manageme",
+    "first_occupation_text": "occupations: human resources officer; human resources assistant; recruitment consultant occupation_hierarchy: Personnel and careers professionals > Administration professionals > Business and administration professionals > Professionals > Personnel clerks > Other clerical support workers > Clerical support workers raw_occupations: human resources officer; human resources assistant; recruitment consultant source_occupations: HR SPECIALIST, US HR OPERATIONS; IT, Marketing and Communications Co-op;"
+  },
+  "publish_result": {
+    "inserted": 2484,
+    "snapshot_version": "snapshot_20260317_issue26_pr7",
+    "started_at_utc": "2026-03-16T19:32:46.824443+00:00",
+    "completed_at_utc": "2026-03-16T19:35:04.333437+00:00",
+    "rolled_back": false
+  },
+  "vector_dim": 1536
+}

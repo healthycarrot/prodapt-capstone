@@ -3593,13 +3593,13 @@
       "updated": 1773655216425,
       "link": null,
       "locked": false,
-      "text": "Fields\n- skill_vector\n- occupation_vector\nMetadata\n- industry_esco_id\n- occupation_esco_ids_json\n- skill_esco_ids_json\n- experience_months_total\n- highest_education_level_rank\n- current_location",
+      "text": "Fields\n- skill_vector\n- occupation_vector\nMetadata\n- industry_esco_id\n- industry_esco_ids_json\n- occupation_esco_ids_json\n- skill_esco_ids_json\n- experience_months_total\n- highest_education_level_rank\n- current_location",
       "fontSize": 16.637071952130775,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Fields\n- skill_vector\n- occupation_vector\nMetadata\n- industry_esco_id\n- occupation_esco_ids_json\n- skill_esco_ids_json\n- experience_months_total\n- highest_education_level_rank\n- current_location",
+      "originalText": "Fields\n- skill_vector\n- occupation_vector\nMetadata\n- industry_esco_id\n- industry_esco_ids_json\n- occupation_esco_ids_json\n- skill_esco_ids_json\n- experience_months_total\n- highest_education_level_rank\n- current_location",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -7035,3 +7035,4 @@
     }
   }
 }
+

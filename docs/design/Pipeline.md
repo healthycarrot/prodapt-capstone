@@ -141,6 +141,71 @@
   - all-or-nothing rollback for failed snapshot publish
   - index/search defaults follow Issue #14 decision (`HNSW`, `COSINE`, `M=32`, `efConstruction=200`, `ef=128`)
 
+15. PR-06 publish job follow-up update (2026-03-17)
+- Aligned scalar unknown/null handling with `docs/schema/real-embedding-mapping.md`:
+  - `industry_esco_id`: use `null` when immediate parent is unavailable
+  - `experience_months_total`: use `null` when all `duration_months` are missing
+  - `highest_education_level_rank`: use `0` for unknown (instead of sentinel negative values)
+- Tightened `skill_vector` experience snippet extraction:
+  - only keeps skill-bearing description sentences (skill anchor term match or skill-context hint)
+- Made experience ordering deterministic for vector text assembly:
+  - explicit recency sort with priority: `is_current` -> `end_date` -> `start_date`
+- Milvus schema compatibility note:
+  - `industry_esco_id` and `experience_months_total` are treated as nullable in publish payload.
+  - Existing collections created with non-nullable schema should be recreated (or use a new collection name) before re-publish.
+
+16. PR-07 industry multi-level metadata update (2026-03-17, Issue #26)
+- Added multi-value industry metadata in publish payload:
+  - `industry_esco_ids_json` is derived from all occupation candidate `hierarchy_json` entries.
+  - candidate order is primary-first, then rank order.
+  - each candidate hierarchy keeps near parent -> far parent order, then merged with dedup.
+  - only ISCO-group parent IDs are kept (occupation URIs are excluded).
+  - when hierarchy is unavailable, value is `[]` (not `null`).
+- Backward compatibility is preserved:
+  - existing `industry_esco_id` remains and is populated with the first element of `industry_esco_ids_json` (or `null`).
+- Hard filter policy update for FR-01-03 / FR-01-03-07:
+  - industry filter should be evaluated as query industry candidates ∩ candidate `industry_esco_ids_json`.
+  - legacy `industry_esco_id` can be used as fallback during migration.
+- Schema migration note:
+  - existing collections without `industry_esco_ids_json` should be recreated, or publish should target a new collection name (recommended: `candidate_search_collection_v3`).
+
+17. FR-02 keyword serving prep update (2026-03-17)
+- Added idempotent backfill/index script:
+  - `script/pipeline_mongo/backfill_candidate_search_text.py`
+- Script responsibilities:
+  - build `normalized_candidates.search_text` from normalized occupation/skill labels, raw phrases, recency-ordered experience snippets, and education fragments
+  - stamp `search_text_version`
+  - create `$text` index on `search_text` in the same run (if not already present)
+  - write JSON summary report
+- Verified execution snapshot:
+  - first run: scanned 2484, updated 2484, created `idx_search_text_text`
+  - second run: scanned 2484, updated 0 (idempotent), index reused
+- Retrieval impact:
+  - FR-02 keyword path is blocked without this preparation (`text index required for $text query`)
+  - after backfill + index creation, `/search` integrated pipeline can proceed
+
+18. FR-02 retrieval execution update (2026-03-17)
+- Updated backend retrieval orchestration to run vector search and keyword search in parallel:
+  - target: `backend/app/services/retrieval_pipeline.py`
+  - method: `ThreadPoolExecutor(max_workers=2)` inside `RetrievalPipelineService.run()`
+- Error handling policy (initial implementation):
+  - fail-fast (if either side raises, retrieval pipeline raises and stops)
+  - no partial-result fallback in this stage
+- Timeout policy (initial implementation):
+  - no per-search timeout added
+  - follows existing API/runtime timeout behavior
+
+19. FR-02 Mongo hard-filter field alignment update (2026-03-17)
+- Updated Mongo-side hard filter field mapping in backend compiler:
+  - skills: from `skill_esco_ids_json` -> `skill_candidates.esco_id`
+  - occupations: from `occupation_esco_ids_json` -> `occupation_candidates.esco_id`
+  - industries: from `industry_esco_ids_json` -> `occupation_candidates.hierarchy_json.id`
+- Milvus-side hard filter mapping is unchanged:
+  - still uses `json_contains_any(skill_esco_ids_json, ...)`, `json_contains_any(occupation_esco_ids_json, ...)`, and `json_contains_any(industry_esco_ids_json, ...)`
+- Reason:
+  - `normalized_candidates` stores skill/occupation ESCO IDs and occupation hierarchy IDs under nested candidate arrays for Mongo keyword serving path.
+  - using flattened `*_esco_ids_json` in Mongo filter produced zero keyword candidates.
+
 ## Phase Definition (2026-03-16)
 | Phase | Status | Purpose | Main Input | Main Output | Main Script(s) |
 |---|---|---|---|---|---|
@@ -176,13 +241,15 @@
   - `embedding_version`
   - `category`
   - `industry_esco_id`
+  - `industry_esco_ids_json`
   - `occupation_esco_ids_json`
   - `skill_esco_ids_json`
   - `experience_months_total`
   - `highest_education_level_rank`
   - `current_location`
 - Field derivation rules:
-  - `industry_esco_id`: primary occupation candidate の直近親 ESCO component
+  - `industry_esco_ids_json`: occupation candidates 全体の親チェーン ESCO component を primary優先 + rank順で統合（ISCO-group 親IDのみ、各候補は近い親 -> 遠い親、重複除去、取得不可時は `[]`）
+  - `industry_esco_id`: backward compatibility 用。`industry_esco_ids_json` の先頭要素（直近親）を保持
   - `occupation_esco_ids_json`: `occupation_candidates` の ESCO ID を rank 順に保持（候補が無い場合は `[]`）
   - `skill_esco_ids_json`: `skill_candidates` の ESCO ID を rank 順に保持（候補が無い場合は `[]`）
   - `experience_months_total`: `experiences.duration_months` の合計
@@ -234,6 +301,9 @@
   - lexical phrases from extracted fields
   - optional embedding retrieval
   - LLM candidate generation (seed IDs + phrase expansion)
+- Keyword retrieval prerequisite:
+  - `normalized_candidates.search_text` must be backfilled
+  - `$text` index on `search_text` must exist
 - Final ranking path:
   - profile filter
   - graph rerank
@@ -295,9 +365,14 @@ python .\script\pipeline_mongo\evaluate_milvus_ab_experience.py --db-name prodap
 python .\script\pipeline_mongo\generate_gold_annotation_samples.py --db-name prodapt_capstone --template-size 50 --stratified-size 200 --out-template-csv .\script\pipeline_mongo\gold_annotation_template_50.csv --out-stratified-csv .\script\pipeline_mongo\gold_annotation_sample_200_stratified.csv --out-summary-json .\script\pipeline_mongo\gold_annotation_sampling_summary.json
 ```
 
-8. Publish candidate search serving collection (PR-06)
+8. Publish candidate search serving collection (PR-06/PR-07)
 ```bash
-python .\script\pipeline_mongo\publish_candidate_search_collection.py --db-name prodapt_capstone --snapshot-version snapshot_20260316 --batch-size 64 --summary-out .\script\pipeline_mongo\candidate_search_publish_report.json
+python .\script\pipeline_mongo\publish_candidate_search_collection.py --db-name prodapt_capstone --milvus-candidate-collection candidate_search_collection_v3 --snapshot-version snapshot_20260317_issue26_pr7 --batch-size 64 --summary-out .\script\pipeline_mongo\candidate_search_publish_report.json
+```
+
+9. Backfill keyword search text + create text index (FR-02 prerequisite)
+```bash
+python .\script\pipeline_mongo\backfill_candidate_search_text.py --db-name prodapt_capstone --collection normalized_candidates --create-text-index --summary-out .\script\pipeline_mongo\backfill_candidate_search_text_report.json
 ```
 
 ## Related Docs
@@ -321,8 +396,10 @@ flowchart LR
     I13U["#13 update (2026-03-16)<br/>LLM rerank rollback"]
     I14["#14 (2026-03-16)<br/>LLM candidate generation"]
     I14P["#14 update (2026-03-16)<br/>PR-06 publish job implementation"]
+    I14PF["#14 follow-up (2026-03-17)<br/>PR-06 scalar/null + snippet + recency fix"]
+    I16K["#16 update (2026-03-17)<br/>FR-02 search_text backfill + text index"]
 
-    I6 --> I7 --> I8 --> I9 --> I10 --> I11 --> I12 --> I13 --> I13U --> I14 --> I14P
+    I6 --> I7 --> I8 --> I9 --> I10 --> I11 --> I12 --> I13 --> I13U --> I14 --> I14P --> I14PF --> I16K
 ```
 
 ## MMD: Phase-based Script I/O (DB Explicit)
@@ -359,6 +436,7 @@ flowchart LR
     subgraph PX["other_eval_support"]
         EVALR["evaluate_milvus_retrieval_samples.py"]
         EVALAB["evaluate_milvus_ab_experience.py"]
+        BKTXT["backfill_candidate_search_text.py"]
     end
 
     SRCDB[("MongoDB source_1st_resumes")]
@@ -413,6 +491,11 @@ flowchart LR
     SKLVDB -->|read| EVALAB
     EVALAB -->|write_report| OUTRETMD
     EVALAB -->|write_json| OUTJSON
+
+    NORMDB -->|read_candidates| BKTXT
+    BKTXT -->|update_search_text| NORMDB
+    BKTXT -->|create_text_index| NORMDB
+    BKTXT -->|write_summary_json| OUTJSON
 
     NORMDB -->|read_normalized_candidates| REALPUB
     SRCDB -->|read_extracted_fields| REALPUB

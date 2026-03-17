@@ -35,9 +35,35 @@ except Exception:
 
 EMBEDDING_VERSION_DEFAULT = "pr06_candidate_search_v1"
 MAX_VECTOR_TEXT_CHARS = 1200
-UNKNOWN_INT = -1
 DEFAULT_SNAPSHOT_PREFIX = "snapshot"
 SAFE_SNAPSHOT_RE = re.compile(r"^[A-Za-z0-9._-]+$")
+ESCO_ISCO_PREFIX = "http://data.europa.eu/esco/isco/"
+PRESENT_DATE_TOKENS = {
+    "present",
+    "current",
+    "ongoing",
+    "now",
+    "to date",
+    "till date",
+}
+SKILL_CONTEXT_HINTS = (
+    "skill",
+    "skills",
+    "tool",
+    "tools",
+    "technology",
+    "technologies",
+    "framework",
+    "frameworks",
+    "platform",
+    "platforms",
+    "develop",
+    "developed",
+    "implemented",
+    "programming",
+    "analysis",
+    "automation",
+)
 
 
 @dataclass
@@ -54,10 +80,11 @@ class CandidatePublishRecord:
     skill_text: str
     occupation_text: str
     category: str
-    industry_esco_id: str
+    industry_esco_id: str | None
+    industry_esco_ids_json: list[str]
     occupation_esco_ids_json: list[str]
     skill_esco_ids_json: list[str]
-    experience_months_total: int
+    experience_months_total: int | None
     highest_education_level_rank: int
     current_location: str
     normalization_status: str
@@ -188,28 +215,53 @@ def collect_esco_ids(candidates: list[dict[str, Any]]) -> list[str]:
     return ids
 
 
-def pick_industry_esco_id(occupation_candidates: list[dict[str, Any]]) -> str:
+def industry_source_occupation_candidates(
+    occupation_candidates: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
     rows = sorted_candidates(occupation_candidates)
     if not rows:
-        return ""
+        return []
 
-    primary = None
-    for row in rows:
+    primary_index: int | None = None
+    for index, row in enumerate(rows):
         if bool(row.get("is_primary")):
-            primary = row
+            primary_index = index
             break
-    if primary is None:
-        primary = rows[0]
+    if primary_index is None:
+        return rows
 
-    hierarchy = primary.get("hierarchy_json") or []
-    if not isinstance(hierarchy, list) or not hierarchy:
-        return ""
-
-    first_parent = hierarchy[0] if isinstance(hierarchy[0], dict) else {}
-    return normalize_spaces(str(first_parent.get("id") or ""))
+    primary = rows[primary_index]
+    others = [row for index, row in enumerate(rows) if index != primary_index]
+    return [primary] + others
 
 
-def derive_experience_total(experiences: list[dict[str, Any]]) -> int:
+def collect_industry_esco_ids(occupation_candidates: list[dict[str, Any]]) -> list[str]:
+    ids: list[str] = []
+    seen: set[str] = set()
+    for occupation_row in industry_source_occupation_candidates(occupation_candidates):
+        hierarchy = occupation_row.get("hierarchy_json") or []
+        if not isinstance(hierarchy, list):
+            continue
+        for row in hierarchy:
+            item = row if isinstance(row, dict) else {}
+            industry_esco_id = normalize_spaces(str(item.get("id") or ""))
+            if not industry_esco_id or industry_esco_id in seen:
+                continue
+            if not industry_esco_id.lower().startswith(ESCO_ISCO_PREFIX):
+                continue
+            seen.add(industry_esco_id)
+            ids.append(industry_esco_id)
+    return ids
+
+
+def pick_industry_esco_id(occupation_candidates: list[dict[str, Any]]) -> str | None:
+    ids = collect_industry_esco_ids(occupation_candidates)
+    if not ids:
+        return None
+    return ids[0]
+
+
+def derive_experience_total(experiences: list[dict[str, Any]]) -> int | None:
     durations: list[int] = []
     for row in experiences or []:
         if not isinstance(row, dict):
@@ -219,7 +271,7 @@ def derive_experience_total(experiences: list[dict[str, Any]]) -> int:
             continue
         durations.append(value)
     if not durations:
-        return UNKNOWN_INT
+        return None
     return sum(durations)
 
 
@@ -274,7 +326,7 @@ def degree_rank(degree: str, field_of_study: str) -> int:
 def derive_education_rank(educations: list[dict[str, Any]]) -> int:
     rows = educations or []
     if not rows:
-        return UNKNOWN_INT
+        return 0
 
     max_rank = 0
     for row in rows:
@@ -289,14 +341,92 @@ def derive_education_rank(educations: list[dict[str, Any]]) -> int:
     return max_rank
 
 
-def first_sentence(text: str, max_chars: int = 200) -> str:
+def truncate_text(text: str, max_chars: int = 200) -> str:
     value = normalize_spaces(text)
     if not value:
         return ""
-    sentence = re.split(r"(?<=[.!?])\s+", value)[0]
-    if len(sentence) > max_chars:
-        sentence = sentence[: max_chars - 3].rstrip() + "..."
-    return sentence
+    if len(value) > max_chars:
+        value = value[: max_chars - 3].rstrip() + "..."
+    return value
+
+
+def date_rank(value: Any) -> int:
+    text = normalize_spaces(str(value or ""))
+    if not text:
+        return 0
+
+    lowered = text.lower()
+    if lowered in PRESENT_DATE_TOKENS:
+        return 99991231
+
+    normalized = lowered.replace("/", "-").replace(".", "-")
+    ym_match = re.match(r"^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$", normalized)
+    if ym_match:
+        year = int(ym_match.group(1))
+        month = int(ym_match.group(2))
+        day = int(ym_match.group(3) or 1)
+        month = min(max(month, 1), 12)
+        day = min(max(day, 1), 31)
+        return year * 10000 + month * 100 + day
+
+    year_match = re.match(r"^(\d{4})$", normalized)
+    if year_match:
+        return int(year_match.group(1)) * 10000 + 101
+
+    any_year = re.search(r"(19|20)\d{2}", normalized)
+    if any_year:
+        return int(any_year.group(0)) * 10000 + 101
+
+    return 0
+
+
+def sorted_recent_experiences(experiences: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows = [row for row in (experiences or []) if isinstance(row, dict)]
+
+    def key(row: dict[str, Any]) -> tuple[int, int, int]:
+        return (
+            1 if bool(row.get("is_current")) else 0,
+            date_rank(row.get("end_date")),
+            date_rank(row.get("start_date")),
+        )
+
+    return sorted(rows, key=key, reverse=True)
+
+
+def split_sentences(text: str) -> list[str]:
+    value = normalize_spaces(text)
+    if not value:
+        return []
+    parts = re.split(r"(?<=[.!?])\s+", value)
+    out: list[str] = []
+    for part in parts:
+        sentence = normalize_spaces(part)
+        if sentence:
+            out.append(sentence)
+    return out
+
+
+def is_skill_bearing_sentence(sentence: str, skill_anchor_terms: set[str]) -> bool:
+    normalized_sentence = normalize_text(sentence)
+    if not normalized_sentence:
+        return False
+
+    for term in skill_anchor_terms:
+        if term and term in normalized_sentence:
+            return True
+
+    return any(hint in normalized_sentence for hint in SKILL_CONTEXT_HINTS)
+
+
+def pick_skill_bearing_snippet(
+    text: str,
+    skill_anchor_terms: set[str],
+    max_chars: int = 180,
+) -> str:
+    for sentence in split_sentences(text):
+        if is_skill_bearing_sentence(sentence, skill_anchor_terms):
+            return truncate_text(sentence, max_chars=max_chars)
+    return ""
 
 
 def source_skill_phrases(source_doc: dict[str, Any]) -> list[str]:
@@ -340,21 +470,28 @@ def build_skill_text(
 ) -> str:
     skill_candidates = normalized_doc.get("skill_candidates") or []
     occupation_candidates = normalized_doc.get("occupation_candidates") or []
-    experiences = normalized_doc.get("experiences") or []
+    experiences = sorted_recent_experiences(normalized_doc.get("experiences") or [])
 
     skill_labels = collect_candidate_labels(skill_candidates, "preferred_label", cap=12)
     skill_raw = collect_candidate_labels(skill_candidates, "raw_text", cap=12)
     source_skill_raw = source_skill_phrases(source_doc or {})[:20]
+    skill_anchor_terms: set[str] = set()
+    for value in skill_labels + skill_raw + source_skill_raw:
+        normalized_value = normalize_text(value)
+        if normalized_value:
+            skill_anchor_terms.add(normalized_value)
 
     exp_titles: list[str] = []
     exp_snippets: list[str] = []
     for row in experiences:
-        if not isinstance(row, dict):
-            continue
         title = normalize_spaces(str(row.get("title") or ""))
         if title:
             exp_titles.append(title)
-        snippet = first_sentence(str(row.get("description_raw") or ""), max_chars=180)
+        snippet = pick_skill_bearing_snippet(
+            str(row.get("description_raw") or ""),
+            skill_anchor_terms=skill_anchor_terms,
+            max_chars=180,
+        )
         if snippet:
             exp_snippets.append(snippet)
         if len(exp_titles) >= 3 and len(exp_snippets) >= 3:
@@ -389,7 +526,7 @@ def build_occupation_text(
     source_doc: dict[str, Any] | None,
 ) -> str:
     occupation_candidates = sorted_candidates(normalized_doc.get("occupation_candidates") or [])
-    experiences = normalized_doc.get("experiences") or []
+    experiences = sorted_recent_experiences(normalized_doc.get("experiences") or [])
 
     occ_labels = collect_candidate_labels(occupation_candidates, "preferred_label", cap=3)
     occ_raw = collect_candidate_labels(occupation_candidates, "raw_text", cap=3)
@@ -413,8 +550,6 @@ def build_occupation_text(
     exp_titles: list[str] = []
     exp_raw_titles: list[str] = []
     for row in experiences:
-        if not isinstance(row, dict):
-            continue
         title = normalize_spaces(str(row.get("title") or ""))
         raw_title = normalize_spaces(str(row.get("raw_title") or ""))
         if title:
@@ -512,7 +647,11 @@ def build_publish_records(
         "empty_occupation_esco_ids_docs": 0,
         "empty_skill_esco_ids_docs": 0,
         "empty_both_esco_ids_docs": 0,
+        "empty_industry_esco_ids_docs": 0,
         "missing_candidate_id_docs": 0,
+        "null_industry_esco_id_docs": 0,
+        "null_experience_months_total_docs": 0,
+        "unknown_education_rank_docs": 0,
     }
 
     for doc in db[normalized_collection].find({}, projection):
@@ -553,6 +692,19 @@ def build_publish_records(
         if not occupation_esco_ids and not skill_esco_ids:
             stats["empty_both_esco_ids_docs"] += 1
 
+        industry_esco_ids = collect_industry_esco_ids(occupation_candidates)
+        industry_esco_id = pick_industry_esco_id(occupation_candidates)
+        experience_months_total = derive_experience_total(experiences)
+        education_rank = derive_education_rank(educations)
+        if not industry_esco_ids:
+            stats["empty_industry_esco_ids_docs"] += 1
+        if industry_esco_id is None:
+            stats["null_industry_esco_id_docs"] += 1
+        if experience_months_total is None:
+            stats["null_experience_months_total_docs"] += 1
+        if education_rank == 0:
+            stats["unknown_education_rank_docs"] += 1
+
         vector_doc_id = f"{snapshot_version}:{candidate_id}"
         if vector_doc_id in seen_vector_doc_id:
             raise PublishError(f"Duplicate vector_doc_id generated: {vector_doc_id}")
@@ -571,11 +723,12 @@ def build_publish_records(
             skill_text=build_skill_text(doc, source_doc),
             occupation_text=build_occupation_text(doc, source_doc),
             category=normalize_spaces(str(doc.get("category") or "")),
-            industry_esco_id=pick_industry_esco_id(occupation_candidates),
+            industry_esco_id=industry_esco_id,
+            industry_esco_ids_json=industry_esco_ids,
             occupation_esco_ids_json=occupation_esco_ids,
             skill_esco_ids_json=skill_esco_ids,
-            experience_months_total=derive_experience_total(experiences),
-            highest_education_level_rank=derive_education_rank(educations),
+            experience_months_total=experience_months_total,
+            highest_education_level_rank=education_rank,
             current_location=normalize_spaces(str(doc.get("current_location") or "")),
             normalization_status=status,
         )
@@ -650,6 +803,7 @@ def create_candidate_collection(
             "occupation_vector",
             "category",
             "industry_esco_id",
+            "industry_esco_ids_json",
             "occupation_esco_ids_json",
             "skill_esco_ids_json",
             "experience_months_total",
@@ -661,6 +815,21 @@ def create_candidate_collection(
         if missing:
             raise PublishError(
                 f"Existing Milvus collection is missing required fields: {missing}"
+            )
+        field_by_name = {f.name: f for f in coll.schema.fields}
+        nullable_required = {
+            "industry_esco_id",
+            "experience_months_total",
+        }
+        not_nullable = sorted(
+            name
+            for name in nullable_required
+            if not bool(getattr(field_by_name.get(name), "nullable", False))
+        )
+        if not_nullable:
+            raise PublishError(
+                "Existing Milvus collection has non-nullable fields that must allow null values: "
+                f"{not_nullable}. Recreate collection (or use a new collection name) before publishing."
             )
         return coll
 
@@ -677,10 +846,11 @@ def create_candidate_collection(
         FieldSchema(name="skill_vector", dtype=DataType.FLOAT_VECTOR, dim=vector_dim),
         FieldSchema(name="occupation_vector", dtype=DataType.FLOAT_VECTOR, dim=vector_dim),
         FieldSchema(name="category", dtype=DataType.VARCHAR, max_length=128),
-        FieldSchema(name="industry_esco_id", dtype=DataType.VARCHAR, max_length=256),
+        FieldSchema(name="industry_esco_id", dtype=DataType.VARCHAR, max_length=256, nullable=True),
+        FieldSchema(name="industry_esco_ids_json", dtype=DataType.JSON),
         FieldSchema(name="occupation_esco_ids_json", dtype=DataType.JSON),
         FieldSchema(name="skill_esco_ids_json", dtype=DataType.JSON),
-        FieldSchema(name="experience_months_total", dtype=DataType.INT64),
+        FieldSchema(name="experience_months_total", dtype=DataType.INT64, nullable=True),
         FieldSchema(name="highest_education_level_rank", dtype=DataType.INT64),
         FieldSchema(name="current_location", dtype=DataType.VARCHAR, max_length=256),
     ]
@@ -766,6 +936,7 @@ def insert_batch(
     embedding_versions = [r.embedding_version for r in records]
     categories = [r.category for r in records]
     industry_esco_ids = [r.industry_esco_id for r in records]
+    industry_esco_ids_json = [r.industry_esco_ids_json for r in records]
     occupation_esco_ids = [r.occupation_esco_ids_json for r in records]
     skill_esco_ids = [r.skill_esco_ids_json for r in records]
     experience_totals = [r.experience_months_total for r in records]
@@ -787,6 +958,7 @@ def insert_batch(
             occupation_vectors,
             categories,
             industry_esco_ids,
+            industry_esco_ids_json,
             occupation_esco_ids,
             skill_esco_ids,
             experience_totals,
@@ -918,6 +1090,10 @@ def main() -> None:
         "empty_occupation_esco_ids_docs": build_stats["empty_occupation_esco_ids_docs"],
         "empty_skill_esco_ids_docs": build_stats["empty_skill_esco_ids_docs"],
         "empty_both_esco_ids_docs": build_stats["empty_both_esco_ids_docs"],
+        "empty_industry_esco_ids_docs": build_stats["empty_industry_esco_ids_docs"],
+        "null_industry_esco_id_docs": build_stats["null_industry_esco_id_docs"],
+        "null_experience_months_total_docs": build_stats["null_experience_months_total_docs"],
+        "unknown_education_rank_docs": build_stats["unknown_education_rank_docs"],
     }
     summary["preview"] = {
         "first_skill_text": records[0].skill_text[:500] if records else "",

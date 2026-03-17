@@ -15,8 +15,8 @@ Project candidate_search_collection_planned {
     Notes:
     - This DBML is a logical representation of a Milvus collection, not a SQL table.
     - `skill_vector` and `occupation_vector` are searched independently.
-    - `occupation_esco_ids_json` and `skill_esco_ids_json` are ordered ESCO ID arrays
-      derived from the ranked candidate lists in `normalized_candidates`.
+    - `industry_esco_ids_json`, `occupation_esco_ids_json`, and `skill_esco_ids_json`
+      are ordered ESCO ID arrays derived from `normalized_candidates`.
     - Education does not have a dedicated vector field in the current design.
       It is handled primarily via scalar metadata filtering and downstream scoring.
   '''
@@ -68,6 +68,7 @@ Table candidate_search_collection {
 
   category varchar [note: 'Copied from normalized_candidates.category for legacy/category guardrail filters.']
   industry_esco_id varchar [note: 'Immediate parent ESCO component of the primary occupation candidate; used as industry filter.']
+  industry_esco_ids_json jsonb [not null, note: 'Ordered ISCO parent-chain ESCO IDs derived from all occupation candidate hierarchies (primary first, then rank order). Each hierarchy is near parent -> far parent; final array is deduplicated. Keep only ISCO-group IDs (exclude occupation URIs). Use [] when unavailable.']
   occupation_esco_ids_json jsonb [not null, note: 'Ordered ESCO occupation IDs derived from occupation_candidates top N. Use [] when no occupation ESCO IDs are available.']
   skill_esco_ids_json jsonb [not null, note: 'Ordered ESCO skill IDs derived from skill_candidates top N. Use [] when no skill ESCO IDs are available.']
   experience_months_total int [note: 'Total experience months derived from normalized experiences where available.']

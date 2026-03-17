@@ -1,0 +1,221 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Any, Literal
+
+
+# ---- Common type contracts ----------------------------------------------------
+
+ConfidenceBand = Literal["high", "medium", "low"]
+EscoMatchMethod = Literal["exact", "alt", "fuzzy", "embedding"]
+EscoDomain = Literal["skill", "occupation", "industry"]
+
+
+@dataclass(slots=True)
+class StageCaps:
+    """Fixed FR1-3 stage sizes."""
+
+    vector_top_k: int = 100
+    keyword_top_k: int = 100
+    fusion_top_k: int = 50
+    cross_encoder_top_k: int = 50
+    rerank_top_k: int = 20
+
+
+# ---- Request/query understanding ---------------------------------------------
+
+@dataclass(slots=True)
+class ExperienceFilter:
+    """Months-based experience filter. Years input must be converted beforehand."""
+
+    min_months: int | None = None
+    max_months: int | None = None
+
+
+@dataclass(slots=True)
+class EducationFilter:
+    """
+    Education rank filter.
+    0 unknown, 1 secondary, 2 associate/diploma/certificate, 3 bachelor, 4 master, 5 doctorate.
+    """
+
+    min_rank: int | None = None
+    max_rank: int | None = None
+
+
+@dataclass(slots=True)
+class SearchQueryInput:
+    """API-level search input contract."""
+
+    query_text: str
+    requested_locations: list[str] = field(default_factory=list)
+    requested_skill_terms: list[str] = field(default_factory=list)
+    requested_occupation_terms: list[str] = field(default_factory=list)
+    requested_industry_terms: list[str] = field(default_factory=list)
+    requested_experience: ExperienceFilter = field(default_factory=ExperienceFilter)
+    requested_education: EducationFilter = field(default_factory=EducationFilter)
+
+
+@dataclass(slots=True)
+class QueryUnderstandingOutput:
+    """
+    Few-shot extraction output.
+    Terms here are lexical candidates; ESCO IDs are added in query normalization stage.
+    """
+
+    original_query: str
+    skill_terms: list[str] = field(default_factory=list)
+    occupation_terms: list[str] = field(default_factory=list)
+    industry_terms: list[str] = field(default_factory=list)
+    experience: ExperienceFilter = field(default_factory=ExperienceFilter)
+    education: EducationFilter = field(default_factory=EducationFilter)
+
+
+# ---- Query normalizer ---------------------------------------------------------
+
+@dataclass(slots=True)
+class EscoCandidate:
+    """
+    Mandatory output unit from query_normalizer.
+    """
+
+    domain: EscoDomain
+    esco_id: str
+    label: str
+    confidence: float
+    band: ConfidenceBand
+    method: EscoMatchMethod
+
+
+@dataclass(slots=True)
+class NormalizedEscoOutput:
+    """
+    Normalized ESCO candidates across skill/occupation/industry.
+    - All domains MUST be normalized to ESCO IDs.
+    - These IDs feed hard-filter (high) and rerank features (medium).
+    """
+
+    skill_candidates: list[EscoCandidate] = field(default_factory=list)
+    occupation_candidates: list[EscoCandidate] = field(default_factory=list)
+    industry_candidates: list[EscoCandidate] = field(default_factory=list)
+
+
+# ---- Conflict contract --------------------------------------------------------
+
+@dataclass(slots=True)
+class ConflictCheckResult:
+    """
+    FR-01-02 contract:
+    - `conflict_fields` and `conflict_reason` are required fields.
+    - when retry_required=True, response must return results=[].
+    """
+
+    retry_required: bool
+    conflict_fields: list[str]
+    conflict_reason: str
+
+
+# ---- Hard-filter and query builder contracts ---------------------------------
+
+@dataclass(slots=True)
+class HardFilterInput:
+    """
+    High-confidence-only input for hard filter.
+    Industry ESCO IDs are compiled for both vector and keyword paths.
+    """
+
+    skill_esco_ids_high: list[str] = field(default_factory=list)
+    occupation_esco_ids_high: list[str] = field(default_factory=list)
+    industry_esco_ids_high: list[str] = field(default_factory=list)
+    experience: ExperienceFilter = field(default_factory=ExperienceFilter)
+    education: EducationFilter = field(default_factory=EducationFilter)
+    locations: list[str] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class HardFilterCompiled:
+    milvus_expr: str
+    mongo_filter: dict[str, Any]
+
+
+@dataclass(slots=True)
+class QueryBuilderOutput:
+    """
+    Rephrased queries are synthesized from:
+    - original user query
+    - normalized ESCO outputs
+    """
+
+    skill_vector_query: str
+    occupation_vector_query: str
+    keyword_query: str
+
+
+# ---- Retrieval/fusion/rerank contracts ---------------------------------------
+
+@dataclass(slots=True)
+class VectorHit:
+    """
+    `candidate_id` is the canonical join key across all stages.
+    If one side is missing, vector_score adopts the available side as-is.
+    """
+
+    candidate_id: str
+    skill_vector_score_raw: float | None = None
+    skill_vector_score_norm: float | None = None
+    occupation_vector_score_raw: float | None = None
+    occupation_vector_score_norm: float | None = None
+    vector_score: float = 0.0
+
+
+@dataclass(slots=True)
+class KeywordHit:
+    candidate_id: str
+    keyword_score_raw: float
+    keyword_score: float
+
+
+@dataclass(slots=True)
+class FusionHit:
+    candidate_id: str
+    vector_score: float
+    keyword_score: float
+    fusion_score: float
+
+
+@dataclass(slots=True)
+class CrossEncoderHit:
+    candidate_id: str
+    fusion_score: float
+    cross_encoder_score: float
+
+
+@dataclass(slots=True)
+class CrossEncoderResult:
+    cross_encoder_applied: bool
+    fallback_reason: str | None
+    hits: list[CrossEncoderHit] = field(default_factory=list)
+
+
+@dataclass(slots=True)
+class RerankHit:
+    candidate_id: str
+    keyword_score: float
+    vector_score: float
+    fusion_score: float
+    cross_encoder_score: float
+    medium_esco_match_score: float = 0.0
+    final_score: float = 0.0
+
+
+@dataclass(slots=True)
+class RetrievalPipelineOutput:
+    """
+    Final FR1-3 output contract.
+    `results` should be empty when retry_required=True.
+    """
+
+    retry_required: bool
+    conflict_fields: list[str]
+    conflict_reason: str
+    results: list[RerankHit] = field(default_factory=list)
