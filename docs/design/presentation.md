@@ -5,7 +5,7 @@
 全体として、**「課題設定 → 設計思想 → システム構成 → 技術的工夫 → 価値」** が自然につながる構成にしてください。  
 デザインは**モダンでプロフェッショナル、AI/データプロダクトらしい雰囲気**にしてください。  
 文章は長くしすぎず、**1スライドあたり3〜5点程度の要点**で簡潔にまとめてください。  
-適切な箇所では、**アーキテクチャ図、検索フロー図、スコアリング構成図、ROI/KPI整理図**をいれるのでそこは空欄にしておいてください。
+適切な箇所では、図をいれるのでそこは空欄にしておいてください。
 
 ---
 
@@ -78,17 +78,17 @@ A simple product demo slide.
 - Retrieve and rank matched candidates
 - Review score explanations and source resume evidence
 
-見た目重視で、UIモック風にしてください。
+ここに実際のUIのスクリーンショットを入れるので空欄にしておいて下さい
 
 ---
 
 ## Slide 6. Enterprise Architecture
 **Architecture & Design | Enterprise Architecture**
 
-以下の構成要素を含むアーキテクチャ図を作成してください。
+以下の構成要素を含むアーキテクチャ図を挿入するので空欄開けておいて下さい
 
 - Frontend
-- Backend API
+- Backend API (/search, /retrieve, /candidates/{candidate_id},/candidates/{candidate_id}/resume,/suggest)
 - MongoDB
 - Milvus
 - Data Pipeline
@@ -108,17 +108,54 @@ A simple product demo slide.
 ## Slide 7. Trade-off Decisions
 **Architecture & Design | Trade-off Decisions**
 
-このユースケースの技術的なネックは、**長文ドキュメントをどう扱うか**です。  
-その観点で、Milvus を採用した理由を整理してください。
+このスライドでは、**MongoDB と Milvus を組み合わせて採用した理由**を、  
+**他のDB / Vector DBとの比較表**で説明してください。  
+テーマは、**長文の履歴書をどう効率よく保持・検索・再利用するか**です。
 
-含めたい論点:
-- Handling long-form resume data efficiently
-- Need for scalable vector retrieval
+スライド構成:
+- 上段: `MongoDB` を選んだ理由の比較表
+- 下段: `Milvus` を選んだ理由の比較表
+- 最後に 1 行で、**why a vector DB is necessary for this use case** を補足
+
+表の列として含めたい観点:
+- Option
+- Primary role
+- Strengths
+- Weaknesses / Trade-offs
+- Fit for this use case
+- Final decision
+
+### MongoDB comparison table
+比較対象の例:
+- MongoDB
+- PostgreSQL
+- Elasticsearch / OpenSearch
+
+MongoDB 側で強調したい論点:
+- Resumes and normalized candidate profiles are semi-structured and schema-flexible
+- Nested JSON-like documents fit multi-format resume data better than rigid relational schemas
+- Good system of record for raw resumes, normalized profiles, explanation evidence, and candidate detail APIs
+- Easier to evolve when extracted fields vary across datasets and candidates
+- Trade-off: not the best standalone engine for large-scale semantic vector retrieval
+
+### Milvus comparison table
+比較対象の例:
+- Milvus
+- PostgreSQL + pgvector
+- Pinecone or Weaviate
+
+Milvus 側で強調したい論点:
+- Handling long-form resume data efficiently via embeddings instead of sending full documents to the LLM at query time
+- Need for scalable vector retrieval across many candidates
 - High availability and reliability as a distributed vector database
-- Suitability for semantic search at scale
+- Strong fit for semantic search with metadata filtering at scale
+- Trade-off: introduces extra infrastructure complexity compared with keeping everything in one database
 
-必要であれば、  
-**why vector DB is necessary for this use case** も補足してください。
+最後の補足メッセージでは、以下を明確にしてください:
+- MongoDB is the system of record for raw and normalized candidate data
+- Milvus is the retrieval engine for semantic candidate search
+- A vector DB is necessary because keyword search or a general-purpose DB alone is weak against wording variation, transferable skills, and long-form resume semantics
+- Separating operational storage and vector retrieval improves extensibility and lowers switching cost in the future
 
 ---
 
@@ -151,8 +188,7 @@ A simple product demo slide.
 - Non-HTML data may require NLP-based title extraction or LLM-based parsing
 - Key fields such as Skill and Occupation are extracted as structured elements for downstream RAG
 
-このスライドでは、  
-**raw resume data → structured candidate profile** の流れを図で見せてください。
+パイプラインのデータフロー図を入れるので空欄を用意しておいてください。
 
 ---
 
@@ -217,7 +253,7 @@ https://arxiv.org/html/2503.02056v1
 - Fusion score calculation
 - Cross-encoder reranking
 
-このスライドは、**retrieval pipeline diagram** を含めてください。
+このスライドは、**retrieval pipeline diagram** を含めるので空欄を用意しておいてください。
 
 ---
 
@@ -237,7 +273,7 @@ https://arxiv.org/html/2503.02056v1
 - The Orchestrator can skip unnecessary agents depending on the query
   - for example, it may skip Education Match Agent when education is irrelevant
 
-このスライドでは、**A2A-style orchestration** を図で見せてください。
+このスライドでは、**A2A-style orchestration** を図で見せるので空欄を用意しておいてください。
 
 ---
 
