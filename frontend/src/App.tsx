@@ -585,6 +585,16 @@ function CandidateCard({
   onOpenCandidateDetail: (candidateId: string) => void
 }) {
   const agentEntries = useMemo(() => Object.entries(item.agent_scores), [item.agent_scores])
+  const retrievalComponentEntries = useMemo(
+    () =>
+      ([
+        ['Keyword', item.keyword_score],
+        ['Vector', item.vector_score],
+        ['Fusion', item.fusion_score],
+        ['Cross Encoder', item.cross_encoder_score],
+      ] as const),
+    [item.keyword_score, item.vector_score, item.fusion_score, item.cross_encoder_score]
+  )
 
   return (
     <Paper sx={{ p: 2.2, borderLeft: '4px solid', borderLeftColor: 'primary.main' }}>
@@ -626,6 +636,22 @@ function CandidateCard({
             </Stack>
           )}
 
+          <Stack spacing={0.8}>
+            <Typography variant="subtitle2" color="text.secondary">
+              Retrieval Scores
+            </Typography>
+            <Stack direction="row" gap={1} flexWrap="wrap">
+              {retrievalComponentEntries.map(([label, value]) => (
+                <Chip
+                  key={`${item.candidate_id}-${label}-retrieval-component`}
+                  label={`${label}: ${formatScore(value)}`}
+                  size="small"
+                  variant="outlined"
+                />
+              ))}
+            </Stack>
+          </Stack>
+
           {item.agent_errors.length > 0 && (
             <Alert severity="warning" variant="outlined">
               Agent warnings: {item.agent_errors.join(' | ')}
@@ -646,10 +672,6 @@ function CandidateCard({
 
           <MetricRow label="Retrieval" value={item.retrieval_final_score} />
           <MetricRow label="Agent score" value={item.fr04_overall_score} />
-          <MetricRow label="Keyword" value={item.keyword_score} />
-          <MetricRow label="Vector" value={item.vector_score} />
-          <MetricRow label="Fusion" value={item.fusion_score} />
-          <MetricRow label="Cross Encoder" value={item.cross_encoder_score} />
 
           <Button variant="contained" size="small" onClick={() => onOpenCandidateDetail(item.candidate_id)}>
             View Detail
