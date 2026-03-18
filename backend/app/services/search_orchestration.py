@@ -98,10 +98,7 @@ class SearchOrchestrationService:
             retrieval_hits=retrieval_hits,
             orchestrator_output=orchestrator_output,
         )
-        result_rows = [
-            _map_integrated_row(row, profile=profiles.get(row.candidate_id))
-            for row in integrated[:limit]
-        ]
+        result_rows = [_map_integrated_row(row) for row in integrated[:limit]]
         request_id = uuid4().hex
         audit_result = self.output_audit.audit(
             request_id=request_id,
@@ -136,25 +133,9 @@ class SearchOrchestrationService:
         )
 
 
-def _map_integrated_row(
-    row: IntegratedSearchCandidate,
-    *,
-    profile: CandidateProfile | None = None,
-) -> SearchOrchestrationResultItem:
+def _map_integrated_row(row: IntegratedSearchCandidate) -> SearchOrchestrationResultItem:
     skill = row.aggregated.agent_scores.get("skill_match")
     experience = row.aggregated.agent_scores.get("experience_match")
-    skill_matches = list((skill.details.get("matched_skills") if skill else []) or [])
-    transferable_skills = list((skill.details.get("transferable_skills") if skill else []) or [])
-    experience_matches = list((experience.details.get("experience_matches") if experience else []) or [])
-    major_gaps = list(row.aggregated.major_gaps)
-    recommendation_summary = _compose_grounded_summary(
-        fallback_summary=row.recommendation_summary,
-        profile=profile,
-        skill_matches=skill_matches,
-        transferable_skills=transferable_skills,
-        experience_matches=experience_matches,
-        major_gaps=major_gaps,
-    )
     agent_scores: dict[str, dict[str, object]] = {}
     for name, score in row.aggregated.agent_scores.items():
         agent_scores[name] = {
@@ -172,69 +153,14 @@ def _map_integrated_row(
         retrieval_final_score=row.retrieval_final_score,
         fr04_overall_score=row.fr04_overall_score,
         final_score=row.integrated_final_score,
-        recommendation_summary=recommendation_summary,
-        skill_matches=skill_matches,
-        transferable_skills=transferable_skills,
-        experience_matches=experience_matches,
-        major_gaps=major_gaps,
+        recommendation_summary=row.recommendation_summary,
+        skill_matches=list((skill.details.get("matched_skills") if skill else []) or []),
+        transferable_skills=list((skill.details.get("transferable_skills") if skill else []) or []),
+        experience_matches=list((experience.details.get("experience_matches") if experience else []) or []),
+        major_gaps=list(row.aggregated.major_gaps),
         agent_scores=agent_scores,
         agent_errors=list(row.aggregated.agent_errors),
     )
-
-
-def _compose_grounded_summary(
-    *,
-    fallback_summary: str,
-    profile: CandidateProfile | None,
-    skill_matches: Sequence[str],
-    transferable_skills: Sequence[str],
-    experience_matches: Sequence[str],
-    major_gaps: Sequence[str],
-) -> str:
-    segments: list[str] = []
-
-    normalized_skill_matches = _dedupe_non_empty(skill_matches)
-    normalized_transferable = _dedupe_non_empty(transferable_skills)
-    normalized_experience = _dedupe_non_empty(experience_matches)
-    normalized_gaps = _dedupe_non_empty(major_gaps)
-    occupation_labels = _dedupe_non_empty((profile.occupation_labels if profile else []) or [])
-
-    if normalized_skill_matches:
-        segments.append(f"Matched skills: {', '.join(normalized_skill_matches[:3])}.")
-    elif normalized_transferable:
-        segments.append(f"Transferable skills: {', '.join(normalized_transferable[:3])}.")
-
-    if normalized_experience:
-        segments.append(f"Relevant experience: {', '.join(normalized_experience[:2])}.")
-    elif occupation_labels:
-        segments.append(f"Role alignment: {', '.join(occupation_labels[:2])}.")
-
-    if normalized_gaps:
-        segments.append(f"Gaps to review: {', '.join(normalized_gaps[:2])}.")
-
-    summary = " ".join(segment.strip() for segment in segments if segment.strip())
-    if summary:
-        return summary[:500]
-
-    fallback = str(fallback_summary or "").strip()
-    if fallback:
-        return fallback[:500]
-    return "FR-04 agent evidence is unavailable. Retrieval score is used as fallback."
-
-
-def _dedupe_non_empty(values: Sequence[object]) -> list[str]:
-    out: list[str] = []
-    seen: set[str] = set()
-    for value in values:
-        text = " ".join(str(value or "").strip().split())
-        if not text:
-            continue
-        key = text.lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        out.append(text)
-    return out
 
 
 def _to_audit_row(row: SearchOrchestrationResultItem) -> dict[str, Any]:
