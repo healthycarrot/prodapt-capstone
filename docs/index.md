@@ -3,7 +3,7 @@
 `docs/` 配下のドキュメント一覧と用途です。新規追加・移動時はこのファイルを更新してください。
 
 ## 運用ルール
-- ドキュメントは用途別フォルダに配置する（`overview/`, `design/`, `pipeline/`, `schema/`, `issues/`, `reports/`, `test/`）。
+- ドキュメントは用途別フォルダに配置する（`overview/`, `design/`, `pipeline/`, `schema/`, `issues/`, `reports/`, `function/`, `test/`）。
 - 実行結果・評価レポートは各カテゴリ直下に最新を置き、旧版は同カテゴリの `old/` に移動する。
 - `docs/` 直下に新規ドキュメントを増やさない（例外: `docs/index.md`）。
 
@@ -26,6 +26,11 @@
 |---|---|
 | `docs/pipeline/MongoDB-Normalization-Pipeline.md` | `source_1st_resumes` から `normalized_candidates` までの現行正規化パイプライン仕様。 |
 | `docs/pipeline/Issue6-Script-IO-Map.md` | Issue #6以降の主要スクリプトの入力/出力/永続化先の対応表。 |
+
+## function
+| Path | 内容 |
+|---|---|
+| `docs/function/agent_scoring.md` | `/search` の `Keyword` / `Vector` / `Fusion` / `Cross Encoder` / `Retrieval` / `FR-04` / `Final` の固定算出ロジックを英語で整理した仕様メモ。 |
 
 ## schema
 | Path | 内容 |
