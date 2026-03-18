@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-17T16:13:06.072043+00:00",
+  "generated_at_utc": "2026-03-17T19:04:52.775744+00:00",
   "settings": {
     "enabled": true,
     "enforce_thresholds": false,
@@ -126,30 +126,29 @@
       "request": {
         "query_text": "frontend developer with React and TypeScript for modern web applications",
         "skill_terms": [
-          "React",
+          "JavaScript",
           "TypeScript",
           "CSS"
         ],
         "occupation_terms": [
-          "frontend developer",
           "web developer"
         ],
         "limit": 5
       },
-      "expected_output": "Relevant candidates should have frontend development experience, React and TypeScript skills, and evidence of building modern user-facing web applications.",
+      "expected_output": "Relevant candidates should have frontend or web development experience, JavaScript and TypeScript skills, and evidence of building modern user-facing web applications.",
       "retrieve": {
-        "status_code": 422,
-        "retry_required": null,
-        "conflict_reason": null,
-        "results_count": 0,
-        "error_detail": "invalid ESCO labels: skill_terms=['React']; occupation_terms=['frontend developer']"
+        "status_code": 200,
+        "retry_required": false,
+        "conflict_reason": "no conflict",
+        "results_count": 5,
+        "error_detail": null
       },
       "search": {
-        "status_code": 422,
-        "retry_required": null,
-        "conflict_reason": null,
-        "results_count": 0,
-        "error_detail": "invalid ESCO labels: skill_terms=['React']; occupation_terms=['frontend developer']"
+        "status_code": 200,
+        "retry_required": false,
+        "conflict_reason": "no conflict",
+        "results_count": 5,
+        "error_detail": null
       }
     },
     {
@@ -338,7 +337,7 @@
       "score": 0.8875,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 0.89 because most nodes in retrieval contexts that mention 'web developer' and skills like 'JavaScript' and 'CSS' relevant to frontend interactive web applications are ranked higher, such as the first, second, fourth, and fifth nodes. However, the third node, which focuses on Drupal development and backend site building rather than frontend interactive web applications, is ranked third, slightly lowering the score since an irrelevant node appears relatively high in the ranking."
+      "reason": "The score is 0.89 because most relevant nodes in the retrieval contexts are ranked higher, such as the first and second nodes which clearly mention frontend skills and interactive web application development. However, the third node, which is irrelevant due to its focus on backend Drupal development despite mentioning relevant skills, is ranked third, slightly lowering the score. Overall, the ranking effectively prioritizes relevant contexts, justifying the high but not perfect score."
     },
     {
       "endpoint": "retrieve",
@@ -349,7 +348,7 @@
       "score": 0.6176470588235294,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 0.62 because while many statements focus on backend and unrelated technologies, relevant information such as 'Skills: JavaScript, CSS' and 'Experience: Information Technology Intern (Test Automation Engineer)... frontend/web interface... AngularJS Framework' directly relate to frontend engineering and interactive web applications, justifying a moderate relevancy."
+      "reason": "The score is 0.62 because while the retrieval context includes relevant information such as 'Skills: JavaScript, CSS' and 'Experience: Information Technology Intern (Test Automation Engineer)... frontend/web interface... AngularJS Framework', much of the context is irrelevant, focusing on backend development, Java-based applications, and unrelated projects, as noted in reasons like 'This statement focuses on backend and full stack development, Java-based applications, and smart card technology' and 'The project description about tutoring sessions scheduling is not relevant to the input about frontend engineer focused on building interactive web applications.' This mix of relevant and irrelevant content justifies the moderate relevancy score."
     },
     {
       "endpoint": "search",
@@ -357,10 +356,10 @@
       "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
       "rank": 1,
       "metric": "faithfulness",
-      "score": 0.8333333333333334,
+      "score": 0.5,
       "threshold": 0.6,
-      "success": true,
-      "reason": "The score is 0.83 because there are no contradictions, indicating the actual output is largely faithful to the retrieval context with minor possible discrepancies."
+      "success": false,
+      "reason": "The score is 0.50 because the actual output incorrectly claims no experience with modern frontend frameworks, contradicting the context that explicitly mentions experience with AngularJS and ReactJS."
     },
     {
       "endpoint": "search",
@@ -368,142 +367,142 @@
       "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
       "rank": 1,
       "metric": "answer_relevancy",
+      "score": 1.0,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 1.00 because the response fully addresses the query about a frontend engineer focused on building interactive web applications, incorporating the specified skills and occupation terms without any irrelevant information."
+    },
+    {
+      "endpoint": "search",
+      "case": "frontend_web_developer",
+      "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
+      "rank": 1,
+      "metric": "skill_coverage",
+      "score": 0.8182425523806357,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output explicitly mentions the must-have skills JavaScript and CSS, and references frontend/web interface development, aligning well with the expected frontend or web development experience. It also credibly identifies skill gaps such as lack of modern frontend frameworks and limited evidence of interactive UI design, demonstrating honest acknowledgment of missing skills. However, it does not explicitly mention building user-facing web applications beyond basic frontend, which is part of the expected output, and the transferable skills are somewhat generic without detailed evidence from the retrieval context."
+    },
+    {
+      "endpoint": "search",
+      "case": "frontend_web_developer",
+      "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
+      "rank": 1,
+      "metric": "experience_fit",
+      "score": 0.7268941415510503,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output correctly identifies key skills (JavaScript, CSS) and relevant frontend/web interface development experience aligned with the query for a frontend engineer focused on interactive web applications. It also notes gaps such as the absence of modern frontend frameworks and limited evidence of interactive UI design, reflecting a nuanced understanding. However, it omits explicit mention of the candidate's seniority and recency of experience, which the retrieval context indicates includes over 3 years and use of modern frameworks like AngularJS and ReactJS. This omission and lack of emphasis on the candidate's demonstrated frontend framework experience slightly reduce alignment with the expected output and context."
+    },
+    {
+      "endpoint": "search",
+      "case": "frontend_web_developer",
+      "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
+      "rank": 1,
+      "metric": "bias",
+      "score": 0.0,
+      "threshold": 0.3,
+      "success": true,
+      "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "backend_software_engineer",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_precision",
+      "score": 0.8333333333333333,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.83 because the first node in retrieval contexts is relevant and appropriately ranked at the top, highlighting Python and SQL skills pertinent to backend engineering. However, the second node, which is irrelevant due to its focus on cloud infrastructure and network engineering, is ranked higher than some relevant nodes, such as the third node that details SQL and API-related development experience. This misplacement of irrelevant nodes lowers the score from a perfect 1."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "backend_software_engineer",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_relevancy",
+      "score": 0.3939393939393939,
+      "threshold": 0.5,
+      "success": false,
+      "reason": "The score is 0.39 because although the retrieval context includes relevant skills like 'Python' and 'SQL' and mentions 'software engineer' related roles, much of the content focuses on Drupal development and IT leadership roles unrelated to backend engineering with Python and API development, as highlighted by reasons such as 'The occupations listed do not include software engineer' and 'The qualifications focus on Drupal and related skills, not on Python or API development relevant to backend engineering.'"
+    },
+    {
+      "endpoint": "search",
+      "case": "backend_software_engineer",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+      "rank": 1,
+      "metric": "faithfulness",
+      "score": 0.5,
+      "threshold": 0.6,
+      "success": false,
+      "reason": "The score is 0.50 because the actual output fails to acknowledge the individual's explicit backend development skills in Drupal, despite the context clearly stating five years of experience in both frontend and backend development and theming."
+    },
+    {
+      "endpoint": "search",
+      "case": "backend_software_engineer",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+      "rank": 1,
+      "metric": "answer_relevancy",
+      "score": 1.0,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 1.00 because the response fully addresses the query by focusing on backend engineering with Python and API development, aligning well with the specified skills and occupation terms. There are no irrelevant statements, making the answer completely relevant and concise."
+    },
+    {
+      "endpoint": "search",
+      "case": "backend_software_engineer",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+      "rank": 1,
+      "metric": "skill_coverage",
+      "score": 0.6377540675801802,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output explicitly mentions Python skills and software developer roles, aligning with the expected requirement for Python and software engineering experience. It also honestly acknowledges the lack of explicit API development experience and limited backend skills beyond Drupal, addressing skill gaps. However, it omits mention of SQL skills, which are a must-have according to the expected output, and does not provide evidence of API or service development from the retrieval context. The response is specific and grounded in the context but incomplete regarding all required skills."
+    },
+    {
+      "endpoint": "search",
+      "case": "backend_software_engineer",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+      "rank": 1,
+      "metric": "experience_fit",
+      "score": 0.46505513470251775,
+      "threshold": 0.5,
+      "success": false,
+      "reason": "The actual output correctly identifies Python programming and software developer roles, aligning partially with the retrieval context and expected output. However, it omits mention of SQL skills and API or service development experience, which are key requirements. It also notes gaps in backend development beyond Drupal, reflecting some recency and seniority accurately but lacks explicit reference to the candidate's seniority level (Information Technology Specialist III). The absence of API development experience and limited backend skills are appropriately flagged, but the output does not fully capture the candidate's relevant qualifications or the full scope of the expected experience."
+    },
+    {
+      "endpoint": "search",
+      "case": "backend_software_engineer",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+      "rank": 1,
+      "metric": "bias",
+      "score": 0.0,
+      "threshold": 0.3,
+      "success": true,
+      "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "data_analyst_reporting",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_precision",
+      "score": 1.0,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 1.00 because all nodes in the retrieval contexts are relevant and ranked at the top positions, with reasons highlighting key skills like 'SQL' and 'Python' and experience in analyzing business data and building reports. There are no irrelevant nodes ranked higher, which perfectly aligns with the input requirements, resulting in an excellent ranking."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "data_analyst_reporting",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_relevancy",
       "score": 0.7142857142857143,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 0.71 because the response includes relevant information about frontend engineering with JavaScript and CSS, aligning with the query. However, it also contains irrelevant details about Java full stack development and Agile/Scrum experience, which do not directly pertain to the frontend engineer role focused on interactive web applications, preventing a higher score."
-    },
-    {
-      "endpoint": "search",
-      "case": "frontend_web_developer",
-      "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
-      "rank": 1,
-      "metric": "skill_coverage",
-      "score": 0.807585818263281,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output explicitly mentions the must-have skills JavaScript and CSS and relevant frontend/web development experience, aligning well with the expected output. It also references building user-facing web applications through test automation of a web interface, supported by the retrieval context describing work on a frontend AngularJS application. Transferable skills like Agile/Scrum are credibly supported by the retrieval context. However, the output does not explicitly acknowledge any skill gaps beyond noting somewhat dated experience and lack of a current frontend role, which is a minor shortcoming. Overall, the response is specific and grounded in the retrieval context without unsupported claims."
-    },
-    {
-      "endpoint": "search",
-      "case": "frontend_web_developer",
-      "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
-      "rank": 1,
-      "metric": "experience_fit",
-      "score": 0.8222700143984232,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output accurately identifies relevant frontend/web development experience and key skills like JavaScript and CSS, aligning well with the expected output. It correctly notes the candidate's experience with test automation for a web interface and Java full stack development, which is supported by the retrieval context. The mention of moderate recency due to the latest experience being from 2017 is appropriate and reflects the context. However, the output slightly generalizes the seniority by implying strong relevant background without explicitly clarifying the candidate is not currently in a frontend role, which could mislead about current seniority level. Overall, the response is well-grounded but could improve clarity on recency and current role status."
-    },
-    {
-      "endpoint": "search",
-      "case": "frontend_web_developer",
-      "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
-      "rank": 1,
-      "metric": "bias",
-      "score": 0.0,
-      "threshold": 0.3,
-      "success": true,
-      "reason": "The score is 0.00 because there are no reasons indicating bias in the actual output, reflecting a completely unbiased response."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "backend_software_engineer",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_precision",
-      "score": 0.8055555555555555,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.81 because the first node in retrieval contexts is relevant and appropriately ranked at the top, as it mentions 'Python (computer programming)' and 'SQL' skills along with backend development and API experience. However, the second node, which is irrelevant due to its focus on cloud infrastructure and lack of backend or API development, is ranked too high at position 2, lowering the score. The relevant nodes at ranks 3 and 4 correctly follow, but the presence of an irrelevant node at rank 2 prevents a perfect score."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "backend_software_engineer",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_relevancy",
-      "score": 0.42424242424242425,
-      "threshold": 0.5,
-      "success": false,
-      "reason": "The score is 0.42 because although the retrieval context includes relevant skills such as 'Python' and 'SQL' and mentions 'software engineer' in the resume excerpt, the reasons for irrelevancy highlight that the experience focuses mainly on front-end development and .NET technologies rather than backend engineering or API development with Python, which is the core of the input query."
-    },
-    {
-      "endpoint": "search",
-      "case": "backend_software_engineer",
-      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
-      "rank": 1,
-      "metric": "faithfulness",
-      "score": 0.8,
-      "threshold": 0.6,
-      "success": true,
-      "reason": "The score is 0.80 because there are no contradictions, indicating the actual output is largely faithful to the retrieval context, though there may be minor areas for improvement."
-    },
-    {
-      "endpoint": "search",
-      "case": "backend_software_engineer",
-      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
-      "rank": 1,
-      "metric": "answer_relevancy",
-      "score": 0.6,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.60 because the response includes relevant technical skills like Python and API development, but it also contains several irrelevant statements about leadership and soft skills that do not directly address the technical query, preventing a higher score."
-    },
-    {
-      "endpoint": "search",
-      "case": "backend_software_engineer",
-      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
-      "rank": 1,
-      "metric": "skill_coverage",
-      "score": 0.6182425523806356,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output correctly identifies Python and backend experience, referencing Drupal development and leadership roles, which aligns with the retrieval context. However, it fails to explicitly mention SQL and does not confirm API or service development experience, which are must-have skills in the expected output. The output honestly acknowledges the lack of explicit API development evidence, avoiding unsupported claims. The mention of leadership and communication skills is supported by the context, but the omission of SQL and API skills reduces alignment."
-    },
-    {
-      "endpoint": "search",
-      "case": "backend_software_engineer",
-      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
-      "rank": 1,
-      "metric": "experience_fit",
-      "score": 0.6222700149143158,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output correctly identifies the candidate's Python skill and backend experience in Drupal development, aligning with the retrieval context. However, it notes the absence of explicit API development experience, which is a key job requirement, showing appropriate caution. Leadership and seniority claims are moderate and supported by the lead developer role. The output misses mentioning SQL skills explicitly, which are part of the required skill terms, and does not fully address the software engineer occupation term, focusing more on Drupal developer roles. Overall, the response is mostly accurate but omits some important skill matches and occupation alignment."
-    },
-    {
-      "endpoint": "search",
-      "case": "backend_software_engineer",
-      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
-      "rank": 1,
-      "metric": "bias",
-      "score": 0.0,
-      "threshold": 0.3,
-      "success": true,
-      "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "data_analyst_reporting",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_precision",
-      "score": 1.0,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 1.00 because all nodes in the retrieval contexts are relevant and ranked at the top positions, with each node's reason clearly demonstrating alignment with the input query's requirements for a data analyst skilled in SQL and Python who can analyze business data and build reports. There are no irrelevant nodes ranked above any relevant ones, resulting in perfect contextual precision."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "data_analyst_reporting",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_relevancy",
-      "score": 0.7755102040816326,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.78 because while many statements are irrelevant, such as those focusing on 'Documentation Analyst experience' and unrelated education, there are numerous relevant statements highlighting 'Occupations: business analyst, data analyst', skills including 'SQL' and 'Python', and experiences like 'Data Analyst (Intern)' and 'Senior Digital Marketing Analyst' that involve data analysis and report building, aligning well with the input query."
+      "reason": "The score is 0.71 because while many statements are irrelevant, such as those focusing on documentation, administrative tasks, and unrelated education, there are several relevant statements including 'Occupations: business analyst, data analyst...' and skills like 'SQL' and 'Python (computer programming)', as well as detailed experiences in data analysis and report building, which align well with the input query for a data analyst skilled in SQL and Python."
     },
     {
       "endpoint": "search",
@@ -511,10 +510,10 @@
       "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
       "rank": 1,
       "metric": "faithfulness",
-      "score": 0.25,
+      "score": 0.5,
       "threshold": 0.6,
       "success": false,
-      "reason": "The score is 0.25 despite no listed contradictions, indicating the actual output likely contains inaccuracies or omissions not explicitly detailed here, leading to low faithfulness to the retrieval context."
+      "reason": "The score is 0.50 because there are no listed contradictions, suggesting partial faithfulness, but the score indicates some discrepancies not detailed here."
     },
     {
       "endpoint": "search",
@@ -522,10 +521,10 @@
       "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
       "rank": 1,
       "metric": "answer_relevancy",
-      "score": 0.8,
+      "score": 0.75,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 0.80 because the response mostly addresses the query about a data analyst with SQL and Python skills, but it includes an irrelevant statement 'Man' that does not contribute to the answer, preventing a higher score."
+      "reason": "The score is 0.75 because the response mostly addresses the query about a data analyst with skills in SQL and Python, but it includes a statement that does not relate directly to the skills or occupation, preventing a higher score."
     },
     {
       "endpoint": "search",
@@ -533,10 +532,10 @@
       "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
       "rank": 1,
       "metric": "skill_coverage",
-      "score": 0.8037326887076404,
+      "score": 0.4546460822625572,
       "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output explicitly mentions key must-have skills such as SQL, data analysis, report building, and dashboard creation, aligning well with the expected output. It references relevant occupations like business analyst and reporting analyst, consistent with the retrieval context. The transferable skills claimed (e.g., SQL, Business Objects, dashboard creation) are supported by detailed experience in the retrieval context. However, the output lacks explicit acknowledgment of any skill gaps and is somewhat generic in phrasing, which slightly reduces its completeness."
+      "success": false,
+      "reason": "The actual output mentions SQL and related skills like business intelligence and database management systems, which aligns partially with the expected SQL skill. However, it omits explicit mention of Python and report-building or dashboard experience, which are key must-have skills in the expected output. The transferable skills cited (SQL, business intelligence) are supported by the retrieval context, lending credibility. The output fails to acknowledge any significant skill gaps despite missing important skills like Python and explicit report/dashboard experience, and it contains generic praise ('very strong fit') without detailed justification. These shortcomings reduce alignment with the evaluation criteria."
     },
     {
       "endpoint": "search",
@@ -544,10 +543,10 @@
       "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
       "rank": 1,
       "metric": "experience_fit",
-      "score": 0.8952574123793102,
+      "score": 0.6053452281033875,
       "threshold": 0.5,
       "success": true,
-      "reason": "The actual output accurately reflects the candidate's experience relevant to the query for a data analyst skilled in SQL and report building, highlighting roles such as business analyst and reporting analyst with strong SQL and reporting skills. The retrieval context supports these claims with detailed experience in SQL, dashboard creation, and business intelligence, confirming recency and seniority without inflation. Minor omissions include not explicitly mentioning Python, but overall the alignment with expected experience and skills is strong."
+      "reason": "The actual output identifies relevant skills such as SQL and business intelligence and mentions related occupations like business analyst and reporting analyst, which aligns moderately with the expected data analyst role focused on data analysis and report building. However, it omits explicit mention of Python, a key skill term, and does not clearly state data analysis or report/dashboard building experience as emphasized in the expected output. The retrieval context supports SQL and reporting experience but does not confirm Python skills or a direct data analyst title, so the actual output avoids inflated claims but lacks completeness and specificity, leading to a moderate score."
     },
     {
       "endpoint": "search",
@@ -562,184 +561,30 @@
     },
     {
       "endpoint": "retrieve",
-      "case": "data_engineer_etl",
+      "case": "frontend_react_typescript",
       "candidate_id": null,
       "rank": null,
       "metric": "contextual_precision",
-      "score": 0.0,
+      "score": 0.3333333333333333,
       "threshold": 0.5,
       "success": false,
-      "reason": "The score is 0.00 because the first node in retrieval contexts is irrelevant, as it only mentions 'SQL' but lacks explicit references to 'data engineer', 'ETL pipelines', or 'analytics platforms'. Since there are no relevant nodes ranked higher, the score cannot be higher."
+      "reason": "The score is 0.33 because the first two nodes in retrieval contexts are irrelevant, as they lack mention of React or TypeScript, which are key for the query. The relevant node appears only at rank 3, indicating that irrelevant nodes are ranked higher than the relevant one, lowering the score."
     },
     {
       "endpoint": "retrieve",
-      "case": "data_engineer_etl",
+      "case": "frontend_react_typescript",
       "candidate_id": null,
       "rank": null,
       "metric": "contextual_relevancy",
-      "score": 0.2,
+      "score": 0.4857142857142857,
       "threshold": 0.5,
       "success": false,
-      "reason": "The score is 0.20 because the reasons for irrelevancy highlight that the retrieval context lacks mention of 'data engineer' and key skills like ETL pipelines, Spark, and analytics platforms, which are central to the input query. Although the relevant statement includes 'SQL', it does not cover the other critical skills or occupation terms, making the overall context largely irrelevant."
+      "reason": "The score is 0.49 because while the retrieval context includes relevant skills like JavaScript and CSS and mentions web developer occupations, it lacks specific references to React and TypeScript, which are key to the input query. Additionally, many reasons for irrelevancy highlight the focus on backend development and unrelated technologies, reducing overall relevance."
     },
     {
       "endpoint": "search",
-      "case": "data_engineer_etl",
-      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-      "rank": 1,
-      "metric": "faithfulness",
-      "score": 0.8333333333333334,
-      "threshold": 0.6,
-      "success": true,
-      "reason": "The score is 0.83 because there are no contradictions, indicating the actual output is largely faithful to the retrieval context with minor deviations."
-    },
-    {
-      "endpoint": "search",
-      "case": "data_engineer_etl",
-      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-      "rank": 1,
-      "metric": "answer_relevancy",
-      "score": 0.6666666666666666,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.67 because the response includes relevant technical skills related to data engineering for ETL pipelines and analytics platforms, such as Spark, ETL, and SQL. However, it also contains irrelevant information about IT management, teaching, and communication skills, which lowers the relevancy score."
-    },
-    {
-      "endpoint": "search",
-      "case": "data_engineer_etl",
-      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-      "rank": 1,
-      "metric": "skill_coverage",
-      "score": 0.3095349465541781,
-      "threshold": 0.5,
-      "success": false,
-      "reason": "The actual output mentions SQL explicitly but omits Spark and ETL skills, which are must-have according to the expected output. It acknowledges the lack of ETL pipeline and analytics platform experience, showing honesty about skill gaps. However, transferable skills like database migration and server management are claimed but only partially supported by the retrieval context, which lacks direct references to ETL or Spark. The response includes some relevant details but misses key required skills and does not fully align with the expected data engineering focus."
-    },
-    {
-      "endpoint": "search",
-      "case": "data_engineer_etl",
-      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-      "rank": 1,
-      "metric": "experience_fit",
-      "score": 0.4131381617589649,
-      "threshold": 0.5,
-      "success": false,
-      "reason": "The actual output correctly identifies the candidate's skills in SQL and management experience but fails to confirm ETL pipeline or analytics platform experience, which aligns with the retrieval context showing no explicit ETL or Spark skills. However, the output does not fully acknowledge the absence of Spark or direct data engineering experience as emphasized in the expected output, and it somewhat inflates seniority by highlighting strong management experience without clear relevance to the data engineer role. The retrieval context supports the candidate's IT management and SQL skills but lacks evidence for ETL or analytics platform expertise, which the actual output only partially addresses."
-    },
-    {
-      "endpoint": "search",
-      "case": "data_engineer_etl",
-      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-      "rank": 1,
-      "metric": "bias",
-      "score": 0.0,
-      "threshold": 0.3,
-      "success": true,
-      "reason": "The score is 0.00 because the actual output contains no biased content, demonstrating neutrality and fairness throughout."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "secretary_office_operations",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_precision",
-      "score": 1.0,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 1.00 because all nodes in the retrieval contexts are relevant and ranked at the top positions, with each node clearly supporting the input query by including occupations like 'secretary' and skills such as 'use microsoft office' and 'use word processing software'. There are no irrelevant nodes ranked above relevant ones, resulting in perfect contextual precision."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "secretary_office_operations",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_relevancy",
-      "score": 0.6041666666666666,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.60 because while many statements such as 'Education: Bachelor of Science | Business Administration' and 'Experience: Street Team Member' are irrelevant to secretary duties, relevant statements like 'Occupations: administrative assistant, secretary' and detailed 'Experience: ADMINISTRATIVE ASSISTANT' roles demonstrate coordination of office tasks and support daily administration, aligning with the input query."
-    },
-    {
-      "endpoint": "search",
-      "case": "secretary_office_operations",
-      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-      "rank": 1,
-      "metric": "faithfulness",
-      "score": 0.8,
-      "threshold": 0.6,
-      "success": true,
-      "reason": "The score is 0.80 because there are no contradictions, indicating the actual output is largely faithful to the retrieval context, though there may be minor areas for improvement."
-    },
-    {
-      "endpoint": "search",
-      "case": "secretary_office_operations",
-      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-      "rank": 1,
-      "metric": "answer_relevancy",
-      "score": 0.8333333333333334,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.83 because the response effectively addresses coordinating office tasks and supporting daily administration, but it includes irrelevant details about supervisory duties and vertical growth, which do not directly relate to the query."
-    },
-    {
-      "endpoint": "search",
-      "case": "secretary_office_operations",
-      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-      "rank": 1,
-      "metric": "skill_coverage",
-      "score": 0.7075858183155124,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output explicitly mentions strong coordination and administrative support experience aligned with the secretary role, fulfilling the must-have skills of office task coordination and daily administration. However, it does not explicitly mention the critical transferable skills of 'use microsoft office' and 'use word processing software' despite these being present in the retrieval context. The output avoids generic praise and demonstrates relevant experience but misses explicitly acknowledging these key software skills, which are essential per the expected output."
-    },
-    {
-      "endpoint": "search",
-      "case": "secretary_office_operations",
-      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-      "rank": 1,
-      "metric": "experience_fit",
-      "score": 0.8977022632222553,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output accurately reflects the candidate's extensive and recent administrative assistant experience coordinating office tasks, supported by the retrieval context showing a long tenure since 2013. It correctly identifies relevant skills and seniority without inflating claims. However, it could more explicitly mention the specific office software skills (Microsoft Office and word processing) emphasized in the expected output, which is a minor omission."
-    },
-    {
-      "endpoint": "search",
-      "case": "secretary_office_operations",
-      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-      "rank": 1,
-      "metric": "bias",
-      "score": 0.0,
-      "threshold": 0.3,
-      "success": true,
-      "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_precision",
-      "score": 1.0,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 1.00 because all nodes in retrieval contexts ranked before the irrelevant node (node 5) are highly relevant, with reasons highlighting 'bank manager' roles and key skills like 'financial analysis' and 'financial forecasting' in nodes 1 to 4. The irrelevant node 5, focusing on administrative roles with less emphasis on bank management or financial analysis, is correctly ranked last, ensuring perfect contextual precision."
-    },
-    {
-      "endpoint": "retrieve",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": null,
-      "rank": null,
-      "metric": "contextual_relevancy",
-      "score": 0.7777777777777778,
-      "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.78 because while many statements focus on unrelated roles such as Financial Service Associate and fraud coordination, relevant statements like 'Occupations: branch manager, bank manager' and detailed 'Experience: Branch Manager' descriptions demonstrate significant alignment with the input query about a bank manager with financial analysis and banking operations experience."
-    },
-    {
-      "endpoint": "search",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "case": "frontend_react_typescript",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
       "rank": 1,
       "metric": "faithfulness",
       "score": 1.0,
@@ -749,41 +594,41 @@
     },
     {
       "endpoint": "search",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "case": "frontend_react_typescript",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
       "rank": 1,
       "metric": "answer_relevancy",
       "score": 1.0,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 1.00 because the response fully addresses the query about a bank manager with financial analysis and banking operations experience, with no irrelevant statements present."
+      "reason": "The score is 1.00 because the response fully addresses the query by focusing on frontend development with React and TypeScript, matching the specified skills and occupation terms without any irrelevant information."
     },
     {
       "endpoint": "search",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "case": "frontend_react_typescript",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
       "rank": 1,
       "metric": "skill_coverage",
-      "score": 0.7320821300824607,
+      "score": 0.6952574124971175,
       "threshold": 0.5,
       "success": true,
-      "reason": "The actual output explicitly mentions financial analysis skills and strong alignment with bank manager roles, addressing key must-have skills from the expected output. It also references leadership, communication, teamwork, and adaptability with evidence from the retrieval context, supporting credible transferable skills. However, it omits explicit mention of financial forecasting and overseeing banking operations or client portfolios, which are important per the expected output. The response avoids generic praise but could better cover all required skills, leading to a moderate deduction."
+      "reason": "The actual output correctly identifies JavaScript and CSS skills and relevant web developer experience, aligning with the expected output's must-have skills. It also honestly acknowledges the absence of explicit React and TypeScript experience, reflecting an important skill gap. However, it misses mentioning TypeScript explicitly as a matched skill and does not highlight evidence of building modern user-facing web applications, which is a key requirement. The transferable skills referenced are supported by the retrieval context, but the output could be more comprehensive in covering all must-have skills."
     },
     {
       "endpoint": "search",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "case": "frontend_react_typescript",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
       "rank": 1,
       "metric": "experience_fit",
-      "score": 0.8977022632389815,
+      "score": 0.42325453923468637,
       "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output accurately reflects the candidate's relevant experience as a bank manager with strong financial analysis skills and recent leadership roles, which aligns well with the expected output. The retrieval context supports the claims of seniority (Branch Manager and related roles), recency (current role), and financial analysis expertise. Minor omissions include less explicit mention of financial forecasting and banking operations oversight, but overall the response is strongly aligned with the evaluation criteria."
+      "success": false,
+      "reason": "The actual output correctly identifies relevant skills like JavaScript and CSS and relevant occupations such as web developer and software developer, aligning partially with the expected output. However, it explicitly notes the absence of React and TypeScript experience, which are key to the query, indicating a gap. The retrieval context supports the presence of JavaScript and CSS skills but does not mention React or TypeScript, confirming the actual output's caution. The candidate's seniority and experience are accurately reflected without inflation. The main shortcoming is the omission of any positive evidence of TypeScript or React, which are critical for the query, leading to a moderate score."
     },
     {
       "endpoint": "search",
-      "case": "bank_manager_financial_analysis",
-      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "case": "frontend_react_typescript",
+      "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
       "rank": 1,
       "metric": "bias",
       "score": 0.0,
@@ -793,74 +638,74 @@
     },
     {
       "endpoint": "retrieve",
-      "case": "business_analyst_database_statistics",
+      "case": "data_engineer_etl",
       "candidate_id": null,
       "rank": null,
       "metric": "contextual_precision",
-      "score": 0.9166666666666666,
+      "score": 0.0,
       "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.92 because the first, second, and fourth nodes in retrieval contexts, which are highly relevant due to their clear mention of business analysis, database, statistics, and process improvement, are ranked near the top. However, the third and fifth nodes, which are less relevant as they focus on sales, brand management, customer service, or healthcare data analysis rather than core business analysis and process improvement, appear before or close to some relevant nodes, preventing a perfect score."
+      "success": false,
+      "reason": "The score is 0.00 because all nodes in the retrieval contexts are irrelevant, with the first node ranked highest despite not mentioning 'data engineer' or ETL pipelines, the second node mentioning only SQL but lacking Spark or ETL, and the third node focusing on unrelated IT management and network engineering roles. This ordering places irrelevant nodes above any relevant information, resulting in the lowest possible score."
     },
     {
       "endpoint": "retrieve",
-      "case": "business_analyst_database_statistics",
+      "case": "data_engineer_etl",
       "candidate_id": null,
       "rank": null,
       "metric": "contextual_relevancy",
-      "score": 0.7105263157894737,
+      "score": 0.1,
       "threshold": 0.5,
-      "success": true,
-      "reason": "The score is 0.71 because while many statements are irrelevant, such as those focusing on IT support, legal roles, and sales without mention of business analyst or database/statistics skills, there are several relevant statements including 'Occupations: ... business analyst', 'Skills: ... database, ... statistics, business intelligence, SQL, database management systems', and detailed 'Experience' entries describing business analyst roles involving database marketing programs and process improvement. This mix of relevant and irrelevant content justifies a moderate relevancy score."
+      "success": false,
+      "reason": "The score is 0.10 because the reasons for irrelevancy highlight that the experience and education focus on IT management, network engineering, and system administration rather than data engineering or ETL pipelines, while the only relevant statement mentions SQL but lacks specific references to ETL pipelines, Spark, or analytics platforms."
     },
     {
       "endpoint": "search",
-      "case": "business_analyst_database_statistics",
-      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "case": "data_engineer_etl",
+      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
       "rank": 1,
       "metric": "faithfulness",
-      "score": 0.8333333333333334,
+      "score": 0.6666666666666666,
       "threshold": 0.6,
       "success": true,
-      "reason": "The score is 0.83 because there are no contradictions, indicating the actual output is largely faithful to the retrieval context with minor deviations."
+      "reason": "The score is 0.67 despite no listed contradictions, suggesting some minor unlisted discrepancies or partial alignment with the retrieval context."
     },
     {
       "endpoint": "search",
-      "case": "business_analyst_database_statistics",
-      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "case": "data_engineer_etl",
+      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
       "rank": 1,
       "metric": "answer_relevancy",
       "score": 1.0,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 1.00 because the response fully addresses the query about a business analyst with database and statistics skills for process improvement, with no irrelevant statements present."
+      "reason": "The score is 1.00 because the response fully addresses the query about a data engineer for ETL pipelines and analytics platforms, incorporating the specified skills without any irrelevant information."
     },
     {
       "endpoint": "search",
-      "case": "business_analyst_database_statistics",
-      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "case": "data_engineer_etl",
+      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
       "rank": 1,
       "metric": "skill_coverage",
-      "score": 0.7962673113191322,
+      "score": 0.33208213073183834,
       "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output explicitly mentions the must-have skills of business analyst occupation, database, and statistics, aligning well with the expected output. It also honestly acknowledges a minor gap regarding the lack of explicit process improvement mention, demonstrating transparency. The transferable skills in database and statistics are supported by detailed retrieval context evidence, including relevant experience and technical skills. However, the output could improve by more explicitly linking the candidate's experience to process improvement or analytical translation of business needs, which is a key expected requirement."
+      "success": false,
+      "reason": "The actual output mentions SQL explicitly, which aligns with one must-have skill, but omits Spark entirely and only generically references 'database migration' without confirming ETL or analytics platform experience. It acknowledges gaps in ETL pipeline development and analytics platforms, showing some honesty about skill gaps. However, the transferable skills cited (SQL, database migration) are only partially supported by the retrieval context, which lacks clear evidence of Spark or ETL pipeline work. The response lacks specific evidence of building or operating data pipelines and does not fully meet the expected output requirements."
     },
     {
       "endpoint": "search",
-      "case": "business_analyst_database_statistics",
-      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "case": "data_engineer_etl",
+      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
       "rank": 1,
       "metric": "experience_fit",
-      "score": 0.7880797068590724,
+      "score": 0.28519528000888383,
       "threshold": 0.5,
-      "success": true,
-      "reason": "The actual output accurately identifies strong alignment with the business analyst occupation and relevant database and statistics skills, supported by the retrieval context showing extensive experience since 2014. The mention of progressive roles and leadership in multi-regional projects reflects appropriate seniority without inflation. However, the omission of explicit process improvement experience, a key aspect in the expected output, results in a minor deduction."
+      "success": false,
+      "reason": "The actual output identifies SQL and database migration skills but omits key required skills such as Spark and ETL pipeline development, which are central to the query and expected output. The retrieval context shows no evidence of Spark or explicit ETL pipeline experience, supporting the gaps noted in the actual output. However, the actual output fails to mention any data engineering occupation or relevant pipeline-building experience, which is a significant mismatch with the expected output. The response correctly flags missing skills but does not fully align with the expected candidate profile."
     },
     {
       "endpoint": "search",
-      "case": "business_analyst_database_statistics",
-      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "case": "data_engineer_etl",
+      "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
       "rank": 1,
       "metric": "bias",
       "score": 0.0,
@@ -870,36 +715,267 @@
     },
     {
       "endpoint": "retrieve",
-      "case": "accountant_financial_reporting",
+      "case": "secretary_office_operations",
       "candidate_id": null,
       "rank": null,
       "metric": "contextual_precision",
       "score": 1.0,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 1.00 because all nodes in the retrieval contexts are relevant and ranked at the top positions, with reasons such as 'The context explicitly mentions Financial Statement reporting' in the first node and similar detailed accounting and financial statement experience in subsequent nodes. There are no irrelevant nodes ranked above relevant ones, ensuring perfect contextual precision."
+      "reason": "The score is 1.00 because all nodes in the retrieval contexts are relevant and ranked at the top positions, with each node clearly supporting the input query through detailed descriptions of secretary roles and related skills such as Microsoft Office and administrative coordination. There are no irrelevant nodes ranked above relevant ones, resulting in perfect contextual precision."
     },
     {
       "endpoint": "retrieve",
-      "case": "accountant_financial_reporting",
+      "case": "secretary_office_operations",
       "candidate_id": null,
       "rank": null,
       "metric": "contextual_relevancy",
-      "score": 0.9148936170212766,
+      "score": 0.5957446808510638,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 0.91 because while some statements like 'Occupations: accountant, financial controller...' and detailed 'Experience' entries directly relate to accounting and financial statement reporting, several irrelevant statements such as 'Education: Master of Science | Finance Management and IT Progress' and roles like 'Resort Revenue Manager' dilute the overall relevancy."
+      "reason": "The score is 0.60 because while many statements such as 'Occupations: administrative assistant, secretary, statistical assistant' and 'Skills: use microsoft office, use word processing software' are relevant, a significant portion of the context is irrelevant, including education details like 'Bachelor of Science | Business Administration' and unrelated experiences such as 'Street Team Member' and 'Manager' roles that do not pertain to secretary duties or office administration."
     },
     {
       "endpoint": "search",
-      "case": "accountant_financial_reporting",
-      "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
+      "case": "secretary_office_operations",
+      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
       "rank": 1,
       "metric": "faithfulness",
-      "score": 0.3333333333333333,
+      "score": 0.5,
       "threshold": 0.6,
       "success": false,
-      "reason": "The score is 0.33 because the actual output incorrectly implies the individual's current role is ongoing and includes a recency score, which the context does not support."
+      "reason": "The score is 0.50 despite no listed contradictions, indicating that the actual output may partially align with the retrieval context but lacks full faithfulness or completeness."
+    },
+    {
+      "endpoint": "search",
+      "case": "secretary_office_operations",
+      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
+      "rank": 1,
+      "metric": "answer_relevancy",
+      "score": 1.0,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 1.00 because the response fully addresses the query about a secretary coordinating office tasks and supporting daily administration, incorporating the specified skills without any irrelevant information."
+    },
+    {
+      "endpoint": "search",
+      "case": "secretary_office_operations",
+      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
+      "rank": 1,
+      "metric": "skill_coverage",
+      "score": 0.7011993451671732,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output correctly identifies relevant skills such as 'secretary' and 'coordinate' and acknowledges gaps related to daily administration and office task coordination, aligning with the expected output's emphasis on day-to-day administrative coordination. However, it does not explicitly mention the required office software skills ('use microsoft office' and 'use word processing software') found in the retrieval context, missing a key must-have skill. The output avoids generic praise and honestly notes skill gaps, but the omission of explicit software skills reduces completeness."
+    },
+    {
+      "endpoint": "search",
+      "case": "secretary_office_operations",
+      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
+      "rank": 1,
+      "metric": "experience_fit",
+      "score": 0.8029312232871272,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output correctly identifies relevant experience as secretary and administrative assistant, aligning with the expected need for office support experience. It also notes gaps regarding explicit mention of daily administration and office task coordination, which matches the retrieval context where such details are implied but not explicitly stated. The output does not inflate seniority or experience and acknowledges missing specifics, demonstrating accurate comparison and appropriate caution."
+    },
+    {
+      "endpoint": "search",
+      "case": "secretary_office_operations",
+      "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
+      "rank": 1,
+      "metric": "bias",
+      "score": 0.0,
+      "threshold": 0.3,
+      "success": true,
+      "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_precision",
+      "score": 1.0,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 1.00 because all nodes in retrieval contexts that are relevant are ranked higher than the irrelevant node. The first four nodes explicitly mention 'bank manager' and 'financial analysis' skills with direct experience in bank management and financial forecasting, aligning well with the input query. The fifth node, ranked last, although mentioning 'bank manager' and 'financial analysis', focuses on administrative roles rather than leadership or operational oversight, justifying its lower rank."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_relevancy",
+      "score": 0.7058823529411765,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.71 because while many statements focus on roles unrelated to a bank manager with financial analysis and banking operations experience, such as 'Financial Service Associate/Licensed Banker duties' and 'Purchasing Agent experience,' there are substantial relevant details including 'Occupations: branch manager, bank manager,' and skills like 'financial analysis, financial forecasting,' as well as extensive experience descriptions for 'Branch Manager' and 'Banking Center Manager' roles that align well with the input query."
+    },
+    {
+      "endpoint": "search",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "rank": 1,
+      "metric": "faithfulness",
+      "score": 0.75,
+      "threshold": 0.6,
+      "success": true,
+      "reason": "The score is 0.75 because the actual output incorrectly suggests that banking operations experience is only implied, whereas the context explicitly states this experience through branch management and other banking roles."
+    },
+    {
+      "endpoint": "search",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "rank": 1,
+      "metric": "answer_relevancy",
+      "score": 0.8,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.80 because the response appropriately addresses the bank manager role with financial analysis and banking operations experience, but it includes irrelevant information about corporate banking experience, which was not mentioned in the input."
+    },
+    {
+      "endpoint": "search",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "rank": 1,
+      "metric": "skill_coverage",
+      "score": 0.6939913344776623,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output explicitly mentions key must-have skills such as bank manager and financial analysis, aligning with the expected output. It acknowledges gaps like the lack of advanced financial modeling and corporate banking experience, demonstrating honesty about skill gaps. However, it only implies banking operations experience through branch management roles rather than explicitly confirming it, which is a must-have skill per the expected output. Transferable skills are generally supported by the retrieval context, but the omission of explicit financial forecasting and direct banking operations experience reduces completeness. The output avoids generic praise and unsupported claims."
+    },
+    {
+      "endpoint": "search",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "rank": 1,
+      "metric": "experience_fit",
+      "score": 0.7222700133666384,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output correctly identifies relevant skills and roles such as bank manager, branch manager, and financial analysis, which align with the query and retrieval context. It acknowledges the absence of explicit mention of advanced financial modeling or banking operations but reasonably infers banking operations experience from branch management roles. However, it does not explicitly address financial forecasting, which is part of the skill terms, nor does it fully confirm oversight of banking operations as expected. The seniority and recency of experience are appropriately reflected without inflation. Overall, the response is mostly accurate but slightly incomplete regarding key expected skills."
+    },
+    {
+      "endpoint": "search",
+      "case": "bank_manager_financial_analysis",
+      "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+      "rank": 1,
+      "metric": "bias",
+      "score": 0.0,
+      "threshold": 0.3,
+      "success": true,
+      "reason": "The score is 0.00 because there are no reasons indicating bias in the actual output, reflecting a completely unbiased response."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_precision",
+      "score": 0.7,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.70 because the first node in retrieval contexts is relevant and appropriately ranked at the top, reflecting strong alignment with the input query. However, the second node, which is irrelevant, is ranked higher than some relevant nodes, as it mentions 'database' and 'business process improvement' but lacks explicit 'business analyst' occupation and detailed analytical experience, which lowers the score. Additionally, other irrelevant nodes ranked above relevant ones focus on roles like 'data analyst' or sales rather than the specific business analyst skills sought, preventing a higher score."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_relevancy",
+      "score": 0.6041666666666666,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.60 because while the retrieval context includes relevant statements such as 'Occupations: ... business analyst ...' and detailed experience and skills related to business analysis, database, and statistics, a significant portion of the context is irrelevant, focusing on unrelated roles like IT Support, Executive Associate, and education in unrelated fields, as noted in the reasons for irrelevancy. This mix of relevant and irrelevant information justifies a moderate relevancy score."
+    },
+    {
+      "endpoint": "search",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "rank": 1,
+      "metric": "faithfulness",
+      "score": 1.0,
+      "threshold": 0.6,
+      "success": true,
+      "reason": "The score is 1.00 because there are no contradictions; the actual output fully aligns with the retrieval context. Great job maintaining accuracy!"
+    },
+    {
+      "endpoint": "search",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "rank": 1,
+      "metric": "answer_relevancy",
+      "score": 0.75,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.75 because the response mostly addresses the query about a business analyst with database and statistics skills for process improvement, but it includes an irrelevant statement about a management role that does not pertain to the requested skills or occupation, preventing a higher score."
+    },
+    {
+      "endpoint": "search",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "rank": 1,
+      "metric": "skill_coverage",
+      "score": 0.7880797079542409,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output explicitly mentions the must-have skills of business analyst, database, and statistics, aligning well with the expected output. It references credible transferable skills supported by the retrieval context, such as business analyst occupation and database skills. Additionally, it honestly acknowledges gaps related to management roles and process improvement methodology, demonstrating transparency. However, it could improve by more explicitly connecting the skills to process improvement and the translation of business needs into analytical or process improvements, which are key in the expected output."
+    },
+    {
+      "endpoint": "search",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "rank": 1,
+      "metric": "experience_fit",
+      "score": 0.7010116896132603,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The actual output correctly identifies the relevant occupation (business analyst) and key skills (database, statistics) aligned with the query and retrieval context. It also notes gaps such as lack of explicit process improvement methodology and management roles, reflecting a nuanced understanding. However, it omits mention of the candidate's demonstrated experience in translating business needs into analytical or process improvements, which is emphasized in the expected output and supported by the retrieval context. This omission and the lack of explicit recency or seniority details slightly reduce alignment."
+    },
+    {
+      "endpoint": "search",
+      "case": "business_analyst_database_statistics",
+      "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+      "rank": 1,
+      "metric": "bias",
+      "score": 0.0,
+      "threshold": 0.3,
+      "success": true,
+      "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "accountant_financial_reporting",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_precision",
+      "score": 1.0,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 1.00 because all nodes in the retrieval contexts are highly relevant and ranked at the top positions, with each node's reason explicitly detailing accounting and financial statement reporting experience that perfectly matches the input query. There are no irrelevant nodes ranked above relevant ones, resulting in a flawless ranking."
+    },
+    {
+      "endpoint": "retrieve",
+      "case": "accountant_financial_reporting",
+      "candidate_id": null,
+      "rank": null,
+      "metric": "contextual_relevancy",
+      "score": 0.9111111111111111,
+      "threshold": 0.5,
+      "success": true,
+      "reason": "The score is 0.91 because while some statements like 'Experience: Staff Accountant | Full charge bookkeeper...' and 'Education: Bachelor of Science | Accounting' are highly relevant to the query about an accountant with accounting and financial statement reporting experience, several other statements such as 'Education: Master of Science | Finance Management and IT Progress' and 'Experience: Resort Revenue Manager' are unrelated, reducing overall relevancy."
+    },
+    {
+      "endpoint": "search",
+      "case": "accountant_financial_reporting",
+      "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
+      "rank": 1,
+      "metric": "faithfulness",
+      "score": 0.5,
+      "threshold": 0.6,
+      "success": false,
+      "reason": "The score is 0.50 but there are no listed contradictions, indicating the actual output may partially align with the retrieval context yet lacks full faithfulness for reasons not specified here."
     },
     {
       "endpoint": "search",
@@ -907,10 +983,10 @@
       "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
       "rank": 1,
       "metric": "answer_relevancy",
-      "score": 0.5714285714285714,
+      "score": 1.0,
       "threshold": 0.5,
       "success": true,
-      "reason": "The score is 0.57 because the response partially addresses the query by mentioning finance-related roles, but it includes irrelevant details about ongoing roles, management skills, and general leadership that do not specifically pertain to accounting or financial statement reporting experience."
+      "reason": "The score is 1.00 because the response fully addresses the query with relevant information about accounting and financial statement reporting experience, and there are no irrelevant statements present."
     },
     {
       "endpoint": "search",
@@ -918,10 +994,10 @@
       "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
       "rank": 1,
       "metric": "skill_coverage",
-      "score": 0.81824255215839,
+      "score": 0.7622459331201854,
       "threshold": 0.5,
       "success": true,
-      "reason": "The actual output explicitly mentions the must-have skills of accounting and financial statement preparation, aligning well with the expected output. It also references relevant experience as a Finance Manager, which is supported by the detailed retrieval context describing supervisory accounting roles and financial statement preparation. However, it does not explicitly acknowledge any skill gaps such as reporting, reconciliation, or financial close work, which are part of the expected output, and it includes some generic praise (e.g., 'very strong match') without detailed evidence for all required skills."
+      "reason": "The actual output explicitly mentions the must-have skills 'accounting' and 'financial statements' and references relevant experience with the 'accountant' occupation and 'financial statement reporting,' aligning well with the expected output. It also honestly acknowledges no significant skill gaps, which is appropriate given the retrieval context. However, it lacks mention of other expected skills such as reconciliation or financial close work, which are present in the retrieval context and expected output, resulting in a slight deduction."
     },
     {
       "endpoint": "search",
@@ -929,10 +1005,10 @@
       "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
       "rank": 1,
       "metric": "experience_fit",
-      "score": 0.8952574124802879,
+      "score": 0.7095349464899109,
       "threshold": 0.5,
       "success": true,
-      "reason": "The actual output accurately describes the candidate's extensive accounting and financial statement preparation experience, aligning well with the query for an accountant with accounting and financial statement reporting skills. It correctly reflects the seniority and recency of the candidate's current Finance Manager role, which is supported by the detailed retrieval context showing ongoing responsibilities in financial statement preparation and management. The output also highlights relevant skills such as audits and compliance, consistent with the retrieval context. The only minor shortcoming is the slight emphasis on management and leadership that, while supported, could be seen as beyond the basic accountant role, but this does not detract significantly from the overall alignment."
+      "reason": "The actual output correctly identifies relevant skills such as accounting and financial statement reporting and acknowledges the accountant occupation, aligning with the input query and expected output. However, it lacks detail on specific experience elements like reconciliation or financial close work explicitly mentioned in the expected output and supported by the retrieval context. The retrieval context shows senior roles with extensive accounting and reporting experience, but the actual output does not reflect this seniority or recency, nor does it mention any gaps or mismatches beyond stating none significant. This results in a somewhat generic summary that misses deeper alignment with the detailed experience and seniority evident in the context."
     },
     {
       "endpoint": "search",
@@ -949,34 +1025,34 @@
   "summary": {
     "retrieve": {
       "contextual_precision": {
-        "count": 8,
+        "count": 9,
         "threshold": 0.5,
-        "avg": 0.8262152777777778,
-        "median": 0.9583333333333333,
+        "avg": 0.750462962962963,
+        "median": 0.8875,
         "min": 0.0,
         "max": 1.0,
-        "below_threshold_count": 1,
+        "below_threshold_count": 2,
         "bottom_cases": [
           {
             "case": "data_engineer_etl",
             "candidate_id": null,
             "rank": null,
             "score": 0.0,
-            "reason": "The score is 0.00 because the first node in retrieval contexts is irrelevant, as it only mentions 'SQL' but lacks explicit references to 'data engineer', 'ETL pipelines', or 'analytics platforms'. Since there are no relevant nodes ranked higher, the score cannot be higher."
+            "reason": "The score is 0.00 because all nodes in the retrieval contexts are irrelevant, with the first node ranked highest despite not mentioning 'data engineer' or ETL pipelines, the second node mentioning only SQL but lacking Spark or ETL, and the third node focusing on unrelated IT management and network engineering roles. This ordering places irrelevant nodes above any relevant information, resulting in the lowest possible score."
           },
           {
-            "case": "backend_software_engineer",
+            "case": "frontend_react_typescript",
             "candidate_id": null,
             "rank": null,
-            "score": 0.8055555555555555,
-            "reason": "The score is 0.81 because the first node in retrieval contexts is relevant and appropriately ranked at the top, as it mentions 'Python (computer programming)' and 'SQL' skills along with backend development and API experience. However, the second node, which is irrelevant due to its focus on cloud infrastructure and lack of backend or API development, is ranked too high at position 2, lowering the score. The relevant nodes at ranks 3 and 4 correctly follow, but the presence of an irrelevant node at rank 2 prevents a perfect score."
+            "score": 0.3333333333333333,
+            "reason": "The score is 0.33 because the first two nodes in retrieval contexts are irrelevant, as they lack mention of React or TypeScript, which are key for the query. The relevant node appears only at rank 3, indicating that irrelevant nodes are ranked higher than the relevant one, lowering the score."
           },
           {
-            "case": "frontend_web_developer",
+            "case": "business_analyst_database_statistics",
             "candidate_id": null,
             "rank": null,
-            "score": 0.8875,
-            "reason": "The score is 0.89 because most nodes in retrieval contexts that mention 'web developer' and skills like 'JavaScript' and 'CSS' relevant to frontend interactive web applications are ranked higher, such as the first, second, fourth, and fifth nodes. However, the third node, which focuses on Drupal development and backend site building rather than frontend interactive web applications, is ranked third, slightly lowering the score since an irrelevant node appears relatively high in the ranking."
+            "score": 0.7,
+            "reason": "The score is 0.70 because the first node in retrieval contexts is relevant and appropriately ranked at the top, reflecting strong alignment with the input query. However, the second node, which is irrelevant, is ranked higher than some relevant nodes, as it mentions 'database' and 'business process improvement' but lacks explicit 'business analyst' occupation and detailed analytical experience, which lowers the score. Additionally, other irrelevant nodes ranked above relevant ones focus on roles like 'data analyst' or sales rather than the specific business analyst skills sought, preventing a higher score."
           }
         ],
         "top_cases": [
@@ -1001,113 +1077,113 @@
         ]
       },
       "contextual_relevancy": {
-        "count": 8,
+        "count": 9,
         "threshold": 0.5,
-        "avg": 0.6280955080503476,
-        "median": 0.6640866873065016,
-        "min": 0.2,
-        "max": 0.9148936170212766,
-        "below_threshold_count": 2,
+        "avg": 0.5698323627036603,
+        "median": 0.6041666666666666,
+        "min": 0.1,
+        "max": 0.9111111111111111,
+        "below_threshold_count": 3,
         "bottom_cases": [
           {
             "case": "data_engineer_etl",
             "candidate_id": null,
             "rank": null,
-            "score": 0.2,
-            "reason": "The score is 0.20 because the reasons for irrelevancy highlight that the retrieval context lacks mention of 'data engineer' and key skills like ETL pipelines, Spark, and analytics platforms, which are central to the input query. Although the relevant statement includes 'SQL', it does not cover the other critical skills or occupation terms, making the overall context largely irrelevant."
+            "score": 0.1,
+            "reason": "The score is 0.10 because the reasons for irrelevancy highlight that the experience and education focus on IT management, network engineering, and system administration rather than data engineering or ETL pipelines, while the only relevant statement mentions SQL but lacks specific references to ETL pipelines, Spark, or analytics platforms."
           },
           {
             "case": "backend_software_engineer",
             "candidate_id": null,
             "rank": null,
-            "score": 0.42424242424242425,
-            "reason": "The score is 0.42 because although the retrieval context includes relevant skills such as 'Python' and 'SQL' and mentions 'software engineer' in the resume excerpt, the reasons for irrelevancy highlight that the experience focuses mainly on front-end development and .NET technologies rather than backend engineering or API development with Python, which is the core of the input query."
+            "score": 0.3939393939393939,
+            "reason": "The score is 0.39 because although the retrieval context includes relevant skills like 'Python' and 'SQL' and mentions 'software engineer' related roles, much of the content focuses on Drupal development and IT leadership roles unrelated to backend engineering with Python and API development, as highlighted by reasons such as 'The occupations listed do not include software engineer' and 'The qualifications focus on Drupal and related skills, not on Python or API development relevant to backend engineering.'"
           },
           {
-            "case": "secretary_office_operations",
+            "case": "frontend_react_typescript",
             "candidate_id": null,
             "rank": null,
-            "score": 0.6041666666666666,
-            "reason": "The score is 0.60 because while many statements such as 'Education: Bachelor of Science | Business Administration' and 'Experience: Street Team Member' are irrelevant to secretary duties, relevant statements like 'Occupations: administrative assistant, secretary' and detailed 'Experience: ADMINISTRATIVE ASSISTANT' roles demonstrate coordination of office tasks and support daily administration, aligning with the input query."
+            "score": 0.4857142857142857,
+            "reason": "The score is 0.49 because while the retrieval context includes relevant skills like JavaScript and CSS and mentions web developer occupations, it lacks specific references to React and TypeScript, which are key to the input query. Additionally, many reasons for irrelevancy highlight the focus on backend development and unrelated technologies, reducing overall relevance."
           }
         ],
         "top_cases": [
           {
-            "case": "data_analyst_reporting",
-            "candidate_id": null,
-            "rank": null,
-            "score": 0.7755102040816326
-          },
-          {
             "case": "bank_manager_financial_analysis",
             "candidate_id": null,
             "rank": null,
-            "score": 0.7777777777777778
+            "score": 0.7058823529411765
+          },
+          {
+            "case": "data_analyst_reporting",
+            "candidate_id": null,
+            "rank": null,
+            "score": 0.7142857142857143
           },
           {
             "case": "accountant_financial_reporting",
             "candidate_id": null,
             "rank": null,
-            "score": 0.9148936170212766
+            "score": 0.9111111111111111
           }
         ]
       }
     },
     "search": {
       "answer_relevancy": {
-        "count": 8,
+        "count": 9,
         "threshold": 0.5,
-        "avg": 0.7732142857142856,
-        "median": 0.7571428571428571,
-        "min": 0.5714285714285714,
+        "avg": 0.9222222222222223,
+        "median": 1.0,
+        "min": 0.75,
         "max": 1.0,
         "below_threshold_count": 0,
         "bottom_cases": [
           {
-            "case": "accountant_financial_reporting",
-            "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
+            "case": "business_analyst_database_statistics",
+            "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
             "rank": 1,
-            "score": 0.5714285714285714,
-            "reason": "The score is 0.57 because the response partially addresses the query by mentioning finance-related roles, but it includes irrelevant details about ongoing roles, management skills, and general leadership that do not specifically pertain to accounting or financial statement reporting experience."
+            "score": 0.75,
+            "reason": "The score is 0.75 because the response mostly addresses the query about a business analyst with database and statistics skills for process improvement, but it includes an irrelevant statement about a management role that does not pertain to the requested skills or occupation, preventing a higher score."
           },
           {
-            "case": "backend_software_engineer",
-            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+            "case": "data_analyst_reporting",
+            "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
             "rank": 1,
-            "score": 0.6,
-            "reason": "The score is 0.60 because the response includes relevant technical skills like Python and API development, but it also contains several irrelevant statements about leadership and soft skills that do not directly address the technical query, preventing a higher score."
-          },
-          {
-            "case": "data_engineer_etl",
-            "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-            "rank": 1,
-            "score": 0.6666666666666666,
-            "reason": "The score is 0.67 because the response includes relevant technical skills related to data engineering for ETL pipelines and analytics platforms, such as Spark, ETL, and SQL. However, it also contains irrelevant information about IT management, teaching, and communication skills, which lowers the relevancy score."
-          }
-        ],
-        "top_cases": [
-          {
-            "case": "secretary_office_operations",
-            "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-            "rank": 1,
-            "score": 0.8333333333333334
+            "score": 0.75,
+            "reason": "The score is 0.75 because the response mostly addresses the query about a data analyst with skills in SQL and Python, but it includes a statement that does not relate directly to the skills or occupation, preventing a higher score."
           },
           {
             "case": "bank_manager_financial_analysis",
             "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
             "rank": 1,
+            "score": 0.8,
+            "reason": "The score is 0.80 because the response appropriately addresses the bank manager role with financial analysis and banking operations experience, but it includes irrelevant information about corporate banking experience, which was not mentioned in the input."
+          }
+        ],
+        "top_cases": [
+          {
+            "case": "frontend_react_typescript",
+            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+            "rank": 1,
             "score": 1.0
           },
           {
-            "case": "business_analyst_database_statistics",
-            "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+            "case": "frontend_web_developer",
+            "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
+            "rank": 1,
+            "score": 1.0
+          },
+          {
+            "case": "secretary_office_operations",
+            "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
             "rank": 1,
             "score": 1.0
           }
         ]
       },
       "bias": {
-        "count": 8,
+        "count": 9,
         "threshold": 0.3,
         "avg": 0.0,
         "median": 0.0,
@@ -1134,13 +1210,13 @@
             "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
             "rank": 1,
             "score": 0.0,
-            "reason": "The score is 0.00 because there are no reasons indicating any bias in the actual output, reflecting a completely unbiased response."
+            "reason": "The score is 0.00 because there are no reasons indicating bias in the actual output, reflecting a completely unbiased response."
           }
         ],
         "top_cases": [
           {
-            "case": "data_engineer_etl",
-            "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
+            "case": "frontend_react_typescript",
+            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
             "rank": 1,
             "score": 0.0
           },
@@ -1159,158 +1235,158 @@
         ]
       },
       "experience_fit": {
-        "count": 8,
+        "count": 9,
         "threshold": 0.5,
-        "avg": 0.7789596561564515,
-        "median": 0.8587637133888667,
-        "min": 0.4131381617589649,
-        "max": 0.8977022632389815,
-        "below_threshold_count": 1,
+        "avg": 0.6046102440397181,
+        "median": 0.7010116896132603,
+        "min": 0.28519528000888383,
+        "max": 0.8029312232871272,
+        "below_threshold_count": 3,
         "bottom_cases": [
           {
             "case": "data_engineer_etl",
             "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
             "rank": 1,
-            "score": 0.4131381617589649,
-            "reason": "The actual output correctly identifies the candidate's skills in SQL and management experience but fails to confirm ETL pipeline or analytics platform experience, which aligns with the retrieval context showing no explicit ETL or Spark skills. However, the output does not fully acknowledge the absence of Spark or direct data engineering experience as emphasized in the expected output, and it somewhat inflates seniority by highlighting strong management experience without clear relevance to the data engineer role. The retrieval context supports the candidate's IT management and SQL skills but lacks evidence for ETL or analytics platform expertise, which the actual output only partially addresses."
+            "score": 0.28519528000888383,
+            "reason": "The actual output identifies SQL and database migration skills but omits key required skills such as Spark and ETL pipeline development, which are central to the query and expected output. The retrieval context shows no evidence of Spark or explicit ETL pipeline experience, supporting the gaps noted in the actual output. However, the actual output fails to mention any data engineering occupation or relevant pipeline-building experience, which is a significant mismatch with the expected output. The response correctly flags missing skills but does not fully align with the expected candidate profile."
+          },
+          {
+            "case": "frontend_react_typescript",
+            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+            "rank": 1,
+            "score": 0.42325453923468637,
+            "reason": "The actual output correctly identifies relevant skills like JavaScript and CSS and relevant occupations such as web developer and software developer, aligning partially with the expected output. However, it explicitly notes the absence of React and TypeScript experience, which are key to the query, indicating a gap. The retrieval context supports the presence of JavaScript and CSS skills but does not mention React or TypeScript, confirming the actual output's caution. The candidate's seniority and experience are accurately reflected without inflation. The main shortcoming is the omission of any positive evidence of TypeScript or React, which are critical for the query, leading to a moderate score."
           },
           {
             "case": "backend_software_engineer",
             "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
             "rank": 1,
-            "score": 0.6222700149143158,
-            "reason": "The actual output correctly identifies the candidate's Python skill and backend experience in Drupal development, aligning with the retrieval context. However, it notes the absence of explicit API development experience, which is a key job requirement, showing appropriate caution. Leadership and seniority claims are moderate and supported by the lead developer role. The output misses mentioning SQL skills explicitly, which are part of the required skill terms, and does not fully address the software engineer occupation term, focusing more on Drupal developer roles. Overall, the response is mostly accurate but omits some important skill matches and occupation alignment."
-          },
-          {
-            "case": "business_analyst_database_statistics",
-            "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
-            "rank": 1,
-            "score": 0.7880797068590724,
-            "reason": "The actual output accurately identifies strong alignment with the business analyst occupation and relevant database and statistics skills, supported by the retrieval context showing extensive experience since 2014. The mention of progressive roles and leadership in multi-regional projects reflects appropriate seniority without inflation. However, the omission of explicit process improvement experience, a key aspect in the expected output, results in a minor deduction."
+            "score": 0.46505513470251775,
+            "reason": "The actual output correctly identifies Python programming and software developer roles, aligning partially with the retrieval context and expected output. However, it omits mention of SQL skills and API or service development experience, which are key requirements. It also notes gaps in backend development beyond Drupal, reflecting some recency and seniority accurately but lacks explicit reference to the candidate's seniority level (Information Technology Specialist III). The absence of API development experience and limited backend skills are appropriately flagged, but the output does not fully capture the candidate's relevant qualifications or the full scope of the expected experience."
           }
         ],
         "top_cases": [
-          {
-            "case": "accountant_financial_reporting",
-            "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
-            "rank": 1,
-            "score": 0.8952574124802879
-          },
-          {
-            "case": "secretary_office_operations",
-            "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-            "rank": 1,
-            "score": 0.8977022632222553
-          },
           {
             "case": "bank_manager_financial_analysis",
             "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
             "rank": 1,
-            "score": 0.8977022632389815
-          }
-        ]
-      },
-      "faithfulness": {
-        "count": 8,
-        "threshold": 0.6,
-        "avg": 0.7104166666666666,
-        "median": 0.8166666666666667,
-        "min": 0.25,
-        "max": 1.0,
-        "below_threshold_count": 2,
-        "bottom_cases": [
-          {
-            "case": "data_analyst_reporting",
-            "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
-            "rank": 1,
-            "score": 0.25,
-            "reason": "The score is 0.25 despite no listed contradictions, indicating the actual output likely contains inaccuracies or omissions not explicitly detailed here, leading to low faithfulness to the retrieval context."
-          },
-          {
-            "case": "accountant_financial_reporting",
-            "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
-            "rank": 1,
-            "score": 0.3333333333333333,
-            "reason": "The score is 0.33 because the actual output incorrectly implies the individual's current role is ongoing and includes a recency score, which the context does not support."
-          },
-          {
-            "case": "backend_software_engineer",
-            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
-            "rank": 1,
-            "score": 0.8,
-            "reason": "The score is 0.80 because there are no contradictions, indicating the actual output is largely faithful to the retrieval context, though there may be minor areas for improvement."
-          }
-        ],
-        "top_cases": [
-          {
-            "case": "data_engineer_etl",
-            "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
-            "rank": 1,
-            "score": 0.8333333333333334
+            "score": 0.7222700133666384
           },
           {
             "case": "frontend_web_developer",
             "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
             "rank": 1,
-            "score": 0.8333333333333334
+            "score": 0.7268941415510503
           },
+          {
+            "case": "secretary_office_operations",
+            "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
+            "rank": 1,
+            "score": 0.8029312232871272
+          }
+        ]
+      },
+      "faithfulness": {
+        "count": 9,
+        "threshold": 0.6,
+        "avg": 0.6574074074074073,
+        "median": 0.5,
+        "min": 0.5,
+        "max": 1.0,
+        "below_threshold_count": 5,
+        "bottom_cases": [
+          {
+            "case": "accountant_financial_reporting",
+            "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
+            "rank": 1,
+            "score": 0.5,
+            "reason": "The score is 0.50 but there are no listed contradictions, indicating the actual output may partially align with the retrieval context yet lacks full faithfulness for reasons not specified here."
+          },
+          {
+            "case": "backend_software_engineer",
+            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
+            "rank": 1,
+            "score": 0.5,
+            "reason": "The score is 0.50 because the actual output fails to acknowledge the individual's explicit backend development skills in Drupal, despite the context clearly stating five years of experience in both frontend and backend development and theming."
+          },
+          {
+            "case": "data_analyst_reporting",
+            "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
+            "rank": 1,
+            "score": 0.5,
+            "reason": "The score is 0.50 because there are no listed contradictions, suggesting partial faithfulness, but the score indicates some discrepancies not detailed here."
+          }
+        ],
+        "top_cases": [
           {
             "case": "bank_manager_financial_analysis",
             "candidate_id": "eaa995fb-470b-45f5-aa5d-ad66750cdd61",
+            "rank": 1,
+            "score": 0.75
+          },
+          {
+            "case": "business_analyst_database_statistics",
+            "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+            "rank": 1,
+            "score": 1.0
+          },
+          {
+            "case": "frontend_react_typescript",
+            "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
             "rank": 1,
             "score": 1.0
           }
         ]
       },
       "skill_coverage": {
-        "count": 8,
+        "count": 9,
         "threshold": 0.5,
-        "avg": 0.6991592272226538,
-        "median": 0.7641747207007965,
-        "min": 0.3095349465541781,
-        "max": 0.81824255215839,
-        "below_threshold_count": 1,
+        "avg": 0.6537220629079545,
+        "median": 0.6952574124971175,
+        "min": 0.33208213073183834,
+        "max": 0.8182425523806357,
+        "below_threshold_count": 2,
         "bottom_cases": [
           {
             "case": "data_engineer_etl",
             "candidate_id": "bc2a2473-8b5f-4b44-b4f4-8bd81fc1fc81",
             "rank": 1,
-            "score": 0.3095349465541781,
-            "reason": "The actual output mentions SQL explicitly but omits Spark and ETL skills, which are must-have according to the expected output. It acknowledges the lack of ETL pipeline and analytics platform experience, showing honesty about skill gaps. However, transferable skills like database migration and server management are claimed but only partially supported by the retrieval context, which lacks direct references to ETL or Spark. The response includes some relevant details but misses key required skills and does not fully align with the expected data engineering focus."
+            "score": 0.33208213073183834,
+            "reason": "The actual output mentions SQL explicitly, which aligns with one must-have skill, but omits Spark entirely and only generically references 'database migration' without confirming ETL or analytics platform experience. It acknowledges gaps in ETL pipeline development and analytics platforms, showing some honesty about skill gaps. However, the transferable skills cited (SQL, database migration) are only partially supported by the retrieval context, which lacks clear evidence of Spark or ETL pipeline work. The response lacks specific evidence of building or operating data pipelines and does not fully meet the expected output requirements."
+          },
+          {
+            "case": "data_analyst_reporting",
+            "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
+            "rank": 1,
+            "score": 0.4546460822625572,
+            "reason": "The actual output mentions SQL and related skills like business intelligence and database management systems, which aligns partially with the expected SQL skill. However, it omits explicit mention of Python and report-building or dashboard experience, which are key must-have skills in the expected output. The transferable skills cited (SQL, business intelligence) are supported by the retrieval context, lending credibility. The output fails to acknowledge any significant skill gaps despite missing important skills like Python and explicit report/dashboard experience, and it contains generic praise ('very strong fit') without detailed justification. These shortcomings reduce alignment with the evaluation criteria."
           },
           {
             "case": "backend_software_engineer",
             "candidate_id": "7d9be2eb-c0c2-4539-a62c-92cc2a930a09",
             "rank": 1,
-            "score": 0.6182425523806356,
-            "reason": "The actual output correctly identifies Python and backend experience, referencing Drupal development and leadership roles, which aligns with the retrieval context. However, it fails to explicitly mention SQL and does not confirm API or service development experience, which are must-have skills in the expected output. The output honestly acknowledges the lack of explicit API development evidence, avoiding unsupported claims. The mention of leadership and communication skills is supported by the context, but the omission of SQL and API skills reduces alignment."
-          },
-          {
-            "case": "secretary_office_operations",
-            "candidate_id": "d0e33ecc-43d8-45a6-8363-f8c5313e4de3",
-            "rank": 1,
-            "score": 0.7075858183155124,
-            "reason": "The actual output explicitly mentions strong coordination and administrative support experience aligned with the secretary role, fulfilling the must-have skills of office task coordination and daily administration. However, it does not explicitly mention the critical transferable skills of 'use microsoft office' and 'use word processing software' despite these being present in the retrieval context. The output avoids generic praise and demonstrates relevant experience but misses explicitly acknowledging these key software skills, which are essential per the expected output."
+            "score": 0.6377540675801802,
+            "reason": "The actual output explicitly mentions Python skills and software developer roles, aligning with the expected requirement for Python and software engineering experience. It also honestly acknowledges the lack of explicit API development experience and limited backend skills beyond Drupal, addressing skill gaps. However, it omits mention of SQL skills, which are a must-have according to the expected output, and does not provide evidence of API or service development from the retrieval context. The response is specific and grounded in the context but incomplete regarding all required skills."
           }
         ],
         "top_cases": [
           {
-            "case": "data_analyst_reporting",
-            "candidate_id": "b7d802c5-fa90-4e68-b0df-a32062b52eae",
+            "case": "accountant_financial_reporting",
+            "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
             "rank": 1,
-            "score": 0.8037326887076404
+            "score": 0.7622459331201854
+          },
+          {
+            "case": "business_analyst_database_statistics",
+            "candidate_id": "75c70480-357a-4360-a0e1-e2c2af96edfd",
+            "rank": 1,
+            "score": 0.7880797079542409
           },
           {
             "case": "frontend_web_developer",
             "candidate_id": "e6cd8668-bb1e-4dc4-ab62-b783b329b9f4",
             "rank": 1,
-            "score": 0.807585818263281
-          },
-          {
-            "case": "accountant_financial_reporting",
-            "candidate_id": "912312eb-2c44-4f70-bb7b-9fc963ac3aaa",
-            "rank": 1,
-            "score": 0.81824255215839
+            "score": 0.8182425523806357
           }
         ]
       }
