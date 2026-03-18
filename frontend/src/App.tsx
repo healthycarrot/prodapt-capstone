@@ -291,7 +291,7 @@ function ScoreDetailDialog({
     ? ([
         ['Final', candidate.final_score],
         ['Retrieval', candidate.retrieval_final_score],
-        ['FR-04', candidate.fr04_overall_score],
+        ['Agent score', candidate.fr04_overall_score],
         ['Keyword', candidate.keyword_score],
         ['Vector', candidate.vector_score],
         ['Fusion', candidate.fusion_score],
@@ -645,7 +645,7 @@ function CandidateCard({
           <Divider />
 
           <MetricRow label="Retrieval" value={item.retrieval_final_score} />
-          <MetricRow label="FR-04" value={item.fr04_overall_score} />
+          <MetricRow label="Agent score" value={item.fr04_overall_score} />
           <MetricRow label="Keyword" value={item.keyword_score} />
           <MetricRow label="Vector" value={item.vector_score} />
           <MetricRow label="Fusion" value={item.fusion_score} />
