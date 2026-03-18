@@ -202,9 +202,13 @@ retrieval ワークフローは4段階で構成されています。まず、ユ
 
 Retrieval gives us a good shortlist, but the final recommendation quality comes from agent-based scoring. We implemented five agents: skill match, experience match, education match, career progression, and soft skill. These agents run independently and in parallel. Then an orchestrator combines their outputs into one final score and explanation. The orchestrator can also skip agents that are not needed, for example when education is not important for the query.
 
+As one example, let me briefly explain how the Skill Match Agent works. It compares the user query with the skills and experience extracted from the resume, and then it calculates a match score. It also looks at the depth and range of skills, and checks the level of expertise. We define default weights for these factors, but if the query shows that some points are more important, the weights can change. If the query does not clearly mention skills, the agent can suggest related skills from the job role. It also finds transferable skills that do not match directly, and shows them to the user.
+
 **日本語訳**
 
 retrieval は強い候補者のショートリストを作ってくれますが、最終的な推薦品質を高めるのは agent-based scoring です。私たちは、skill match、experience match、education match、career progression、soft skill の5つの専門エージェントを実装しました。これらのエージェントは独立して並列実行され、オーケストレーターがその出力を集約して最終スコアと説明を作ります。また、education がクエリに関係ない場合のように、不要なエージェントをスキップすることもできます。
+
+例としてSkill match agentの内部処理を簡単に説明します。Skill match agentはユーザーのクエリと履歴書から抽出したスキル、経験を比較しマッチスコアを計算します。またスキルの深さと幅も評価し、熟練度も計測します。それぞれのデフォルトの重みをこのように定義しますが、クエリを分析して重視したい箇所が変わる場合は重みを変化させます。またスキルが明示されない場合、職種から関連するスキルを提示します。さらに、マッチしていないが転用可能なスキルも抽出して、ユーザーに提示します。
 
 ---
 
